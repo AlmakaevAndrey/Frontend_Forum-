@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "noImplicitAny": true,
+    "module": "ESNext",
+    "target": "es2020",
+    "jsx": "react-jsx",
+    "allowJs": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true, // позволяет работать с пакетами, которые использую common js как с обычными с помощью import
+    "esModuleInterop": true, // нужен для библиотек котрое не имеют дефолтный импорт
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+    }
+  },
+    "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS"
+    },
+  },
+  "include": ["src", "global.d.ts"],
+}
