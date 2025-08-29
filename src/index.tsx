@@ -8,6 +8,8 @@ import SignInPage from './pages/sign-in/ui/SignInPage';
 import ArticleEditPage from './pages/article-edit/ui/ArticleEditPage';
 import ArticleReadPage from './pages/article-read/ui/ArticleReadPage';
 import SettingPage from './pages/settings/ui/SettingPage';
+import { ThemeProvider } from 'styled-components';
+import theme from './styles/theme';
 
 const router = createBrowserRouter([
   {

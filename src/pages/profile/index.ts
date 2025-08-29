@@ -1,1 +1,1 @@
-import ProfilePage from '@/pages/profile/ui/ProfilePage';
+import ProfilePage from './ui/ProfilePage';

@@ -1,1 +1,1 @@
-import FeedPage from '@/pages/feed/ui/FeedPage';
+import FeedPage from './ui/FeedPage';
