@@ -1,4 +1,4 @@
-import React, { FC, ReactNode } from 'react';
+import { FC } from 'react';
 import styled from 'styled-components';
 
 interface IconGitHubProps {
@@ -10,7 +10,7 @@ interface IconGitHubProps {
 const GitHubLink = styled.a`
   display: flex;
   align-items: center;
-
+  color: ${({ theme }) => theme.colors.text};
   text-decoration: none;
 
   &:hover {
@@ -18,6 +18,7 @@ const GitHubLink = styled.a`
   }
 
   &:active {
+    color: rgba(241, 16, 0, 1);
   }
 `;
 

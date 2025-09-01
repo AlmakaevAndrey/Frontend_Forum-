@@ -1,13 +1,14 @@
 import React, { ReactNode } from 'react';
 import { IconGitHub } from '../../assets/svg/GitHubLogo';
+import { FooterWrapper } from './Footer.styled';
 
 const Footer: React.FC = () => {
   const currentDate = new Date().getFullYear();
   return (
-    <footer>
+    <FooterWrapper>
       <IconGitHub href="https://github.com/AlmakaevAndrey" />
       Almakaev Andrey | {currentDate}
-    </footer>
+    </FooterWrapper>
   );
 };
 
