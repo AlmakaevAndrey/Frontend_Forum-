@@ -5,6 +5,7 @@ export const lightTheme = {
     primary: '#F7DF1E',
     secondary: '#6366f1',
     border: '#e5e7ed',
+    svg: '#3178C6',
   },
 };
 
@@ -15,6 +16,7 @@ export const darkTheme = {
     primary: '#3178C6',
     secondary: '#1E4E8C',
     border: '#374151',
+    svg: '#F7DF1E',
   },
 };
 

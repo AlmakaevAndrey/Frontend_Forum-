@@ -1,22 +1,32 @@
 import React, { useState } from 'react';
-import { Outlet, Link } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import Header from './Header/Header';
 import Footer from './Footer/Footer';
 import { darkTheme, lightTheme } from '../styles/theme';
 import styled, { ThemeProvider } from 'styled-components';
 import { GlobalStyle } from '../styles/GlobalStyle';
-import MyButton from './Button/Button';
+
+const AppContainer = styled.div`
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+`;
 
 const MainContainer = styled.div`
-  min-height: 100vh;
-  background-color: ${({ theme }) => theme.colors.background};
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: ${({ theme }) => theme.colors.background};
 `;
 
 const Content = styled.main`
   flex: 1;
+  width: 100%;
 `;
 
 const App: React.FC = () => {
@@ -25,17 +35,19 @@ const App: React.FC = () => {
   return (
     <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
       <GlobalStyle />
-      <MainContainer>
+      <AppContainer>
         <Header
           isDarkProps={isDark}
           toggleTheme={() => setIsDark(!isDark)}
           children={''}
         ></Header>
         <Content>
-          <Outlet />
+          <MainContainer>
+            <Outlet />
+          </MainContainer>
         </Content>
         <Footer />
-      </MainContainer>
+      </AppContainer>
     </ThemeProvider>
   );
 };
