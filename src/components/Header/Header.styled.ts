@@ -10,6 +10,11 @@ export const HeaderWrapper = styled.header`
   gap: 10px;
   padding: 20px;
   background: ${({ theme }) => theme.colors.primary};
+
+  @media (max-width: 443px) {
+    padding: 10px;
+    gap: 0;
+  }
 `;
 
 export const HeaderDivider = styled.div`
@@ -23,6 +28,10 @@ export const HeaderDivider = styled.div`
 export const ButtonDivWrapper = styled.div`
   display: flex;
   gap: 16px;
+
+  @media (max-width: 423px) {
+    gap: 0px;
+  }
 `;
 
 export const Navigation = styled.nav`
@@ -35,6 +44,12 @@ export const Navigation = styled.nav`
     text-decoration: none;
     color: ${({ theme }) => theme.colors.text};
     transition: color 0.2s ease;
+
+    @media (max-width: 413px) {
+      padding: 10px;
+      display: flex;
+      align-items: center;
+    }
 
     &:hover {
       opacity: 0.9;
