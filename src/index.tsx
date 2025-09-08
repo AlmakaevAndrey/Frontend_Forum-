@@ -8,8 +8,6 @@ import SignInPage from './pages/sign-in/ui/SignInPage';
 import ArticleEditPage from './pages/article-edit/ui/ArticleEditPage';
 import ArticleReadPage from './pages/article-read/ui/ArticleReadPage';
 import SettingPage from './pages/settings/ui/SettingPage';
-import { ThemeProvider } from 'styled-components';
-import theme from './styles/theme';
 
 const router = createBrowserRouter([
   {
@@ -17,6 +15,7 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       { index: true, element: <FeedPage /> },
+      { path: '/', element: <FeedPage /> },
       { path: '/profile/:id', element: <ProfilePage /> },
       { path: '/signin', element: <SignInPage /> },
       { path: '/article_edit/:id', element: <ArticleEditPage /> },

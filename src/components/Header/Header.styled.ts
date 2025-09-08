@@ -9,10 +9,11 @@ export const HeaderWrapper = styled.header`
   align-items: center;
   gap: 10px;
   padding: 20px;
+  margin: 0 0 20px 0;
   background: ${({ theme }) => theme.colors.primary};
 
-  @media (max-width: 443px) {
-    padding: 10px;
+  @media (max-width: 480px) {
+    padding: 5px;
     gap: 0;
   }
 `;
@@ -27,9 +28,10 @@ export const HeaderDivider = styled.div`
 
 export const ButtonDivWrapper = styled.div`
   display: flex;
-  gap: 16px;
+  align-items: center;
+  gap: 10px;
 
-  @media (max-width: 423px) {
+  @media (max-width: 520px) {
     gap: 0px;
   }
 `;
@@ -39,17 +41,14 @@ export const Navigation = styled.nav`
   gap: 10px;
 
   a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 10px 15px;
     font-weight: 500;
     text-decoration: none;
     color: ${({ theme }) => theme.colors.text};
     transition: color 0.2s ease;
-
-    @media (max-width: 413px) {
-      padding: 10px;
-      display: flex;
-      align-items: center;
-    }
 
     &:hover {
       opacity: 0.9;
@@ -58,6 +57,15 @@ export const Navigation = styled.nav`
     &:active {
       transform: scale(1.1);
       color: ${({ theme }) => theme.colors.secondary};
+    }
+  }
+
+  @media (max-width: 520px) {
+    display: flex;
+    gap: 0;
+
+    a:first-child {
+      display: none;
     }
   }
 `;

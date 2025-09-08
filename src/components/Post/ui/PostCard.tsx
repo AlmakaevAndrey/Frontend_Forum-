@@ -6,6 +6,7 @@ type Post = {
   excerpt: string;
   author: string;
   date: string;
+  likes: number;
 };
 
 interface PostProps {
@@ -18,8 +19,9 @@ export const PostCard = ({ post }: PostProps) => {
       <S.Title>{post.title}</S.Title>
       <S.Excerpt>{post.excerpt}</S.Excerpt>
       <S.Footer>
-        <span>{post.author}</span>
-        <span>{post.date}</span>
+        <span>🪪{post.author}</span>
+        <span>📅{post.date}</span>
+        <span>🩷 {post.likes}</span>
       </S.Footer>
     </S.Card>
   );

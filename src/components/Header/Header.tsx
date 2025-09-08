@@ -23,9 +23,12 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <HeaderWrapper>
       <HeaderDivider>
-        <Logo />
+        <Link to="/">
+          <Logo />
+        </Link>
         <ButtonDivWrapper>
           <Navigation>
+            <Link to="/">Home</Link>
             <Link to="/setting">Settings</Link>
             <Link to="/signin">Sign in</Link>
           </Navigation>
