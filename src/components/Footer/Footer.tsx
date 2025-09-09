@@ -6,7 +6,7 @@ const Footer: React.FC = () => {
   const currentDate = new Date().getFullYear();
   return (
     <FooterWrapper>
-      <IconGitHub href="https://github.com/AlmakaevAndrey" />
+      <IconGitHub href='https://github.com/AlmakaevAndrey' />
       Almakaev Andrey | {currentDate}
     </FooterWrapper>
   );

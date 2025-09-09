@@ -49,7 +49,7 @@ export const ContainerForArticle = styled.div`
   border-radius: 20px;
 
   background: ${({ theme }) => theme.colors.background};
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 16px ${({ theme }) => theme.colors.border};
 
   display: flex;
   flex-direction: column;
@@ -61,7 +61,7 @@ export const ContainerForArticle = styled.div`
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 6px 20px ${({ theme }) => theme.colors.border};
   }
 `;
 
@@ -84,7 +84,7 @@ export const InputInArticle = styled.input`
 
   input:focus {
     border-color: #0070f3;
-    box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.2);
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors.border};
   }
 
   input::placeholder {
@@ -115,7 +115,7 @@ export const SelectInArticle = styled.select`
 
   &:focus {
     border-color: #0070f3;
-    box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.2);
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors.border};
   }
 
   &:hover {
@@ -146,7 +146,7 @@ export const ContainerForLinks = styled.div`
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 6px 20px ${({ theme }) => theme.colors.border};
   }
 `;
 

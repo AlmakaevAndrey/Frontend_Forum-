@@ -2,15 +2,7 @@ import React, { useEffect, useState } from 'react';
 import * as S from './FeedPage.styles';
 import { PostList } from '../../../components/PostList/ui/PostList';
 import { usefulLinks } from '../../../components/Links/usefulLinks';
-
-type Post = {
-  id: string;
-  title: string;
-  excerpt: string;
-  author: string;
-  date: string;
-  likes: number;
-};
+import { Post } from 'components/Post/types';
 
 const categories = {
   docs: '📚 Документация',
@@ -57,7 +49,7 @@ const FeedPage: React.FC = () => {
     }
 
     setPosts(filtered);
-  });
+  }, [query, sort]);
 
   return (
     <S.ContentWrapper>
@@ -66,16 +58,16 @@ const FeedPage: React.FC = () => {
           <h2>Настройки поиска статей</h2>
           <S.WrapperForArticleDiv>
             <S.InputInArticle
-              type="text"
-              placeholder="Поиск..."
+              type='text'
+              placeholder='Поиск...'
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
             <S.SelectInArticle
               onChange={(e) => setSort(e.target.value as 'date' | 'likes')}
             >
-              <S.OptionInArticle value="date">По дате</S.OptionInArticle>
-              <S.OptionInArticle value="likes">По лайкам</S.OptionInArticle>
+              <S.OptionInArticle value='date'>По дате</S.OptionInArticle>
+              <S.OptionInArticle value='likes'>По лайкам</S.OptionInArticle>
             </S.SelectInArticle>
           </S.WrapperForArticleDiv>
         </S.SettingsForArticle>
@@ -83,6 +75,7 @@ const FeedPage: React.FC = () => {
       <S.Section>
         <S.ContainerForArticle>
           <h3>✍ Посты</h3>
+          {/* Сделать на MongoDB список постов */}
           <PostList posts={posts}></PostList>
         </S.ContainerForArticle>
       </S.Section>
@@ -105,8 +98,8 @@ const FeedPage: React.FC = () => {
                         <S.LinkItem key={link.url}>
                           <S.LinkAnchor
                             href={link.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                            target='_blank'
+                            rel='noopener noreferrer'
                           >
                             <Icon size={18} />
                             {link.title}
@@ -118,6 +111,7 @@ const FeedPage: React.FC = () => {
                 </S.DividerLinksList>
               );
             })}
+            {/* Еще подумать где сделать блок с мемами(может сбоку) */}
           </S.WrapperGridLinksList>
         </S.ContainerForLinks>
       </S.Section>

@@ -5,6 +5,8 @@ import Footer from './Footer/Footer';
 import { darkTheme, lightTheme } from '../styles/theme';
 import styled, { ThemeProvider } from 'styled-components';
 import { GlobalStyle } from '../styles/GlobalStyle';
+import { Provider } from 'react-redux';
+import { store } from '../api/store';
 
 const AppContainer = styled.div`
   min-height: 100vh;
@@ -32,22 +34,24 @@ const App: React.FC = () => {
   const [isDark, setIsDark] = useState(false);
 
   return (
-    <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
-      <GlobalStyle />
-      <AppContainer>
-        <Header
-          isDarkProps={isDark}
-          toggleTheme={() => setIsDark(!isDark)}
-          children={''}
-        ></Header>
-        <Content>
-          <MainContainer>
-            <Outlet />
-          </MainContainer>
-        </Content>
-        <Footer />
-      </AppContainer>
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+        <GlobalStyle />
+        <AppContainer>
+          <Header
+            isDarkProps={isDark}
+            toggleTheme={() => setIsDark(!isDark)}
+            children={''}
+          ></Header>
+          <Content>
+            <MainContainer>
+              <Outlet />
+            </MainContainer>
+          </Content>
+          <Footer />
+        </AppContainer>
+      </ThemeProvider>
+    </Provider>
   );
 };
 

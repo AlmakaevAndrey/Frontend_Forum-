@@ -1,19 +1,17 @@
+import { useState } from 'react';
 import * as S from './PostCard.styles';
-
-type Post = {
-  id: string;
-  title: string;
-  excerpt: string;
-  author: string;
-  date: string;
-  likes: number;
-};
+import { Post } from '../types';
 
 interface PostProps {
   post: Post;
 }
 
 export const PostCard = ({ post }: PostProps) => {
+  const [likes, setLikes] = useState(post.likes);
+
+  const handleLikes = () => {
+    setLikes((prev) => prev + 1);
+  };
   return (
     <S.Card>
       <S.Title>{post.title}</S.Title>
@@ -21,7 +19,8 @@ export const PostCard = ({ post }: PostProps) => {
       <S.Footer>
         <span>🪪{post.author}</span>
         <span>📅{post.date}</span>
-        <span>🩷 {post.likes}</span>
+        {/* Сделать через редакс лайки в глобальном сторедже */}
+        <span onClick={handleLikes}>🩷 {likes}</span>
       </S.Footer>
     </S.Card>
   );

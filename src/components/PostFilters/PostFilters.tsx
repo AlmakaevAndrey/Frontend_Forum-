@@ -32,15 +32,15 @@ export const PostFilters: React.FC<{
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div>
-        <input {...register('query')} placeholder="Поиск постов" />
+        <input {...register('query')} placeholder='Поиск постов' />
         {errors.query && <span>{errors.query.message}</span>}
       </div>
       <select {...register('sort')}>
-        <option value="date">По дате</option>
-        <option value="likes">По лайкам</option>
+        <option value='date'>По дате</option>
+        <option value='likes'>По лайкам</option>
       </select>
 
-      <button type="submit">Найти</button>
+      <button type='submit'>Найти</button>
     </form>
   );
 };

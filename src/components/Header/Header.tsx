@@ -23,14 +23,14 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <HeaderWrapper>
       <HeaderDivider>
-        <Link to="/">
+        <Link to='/'>
           <Logo />
         </Link>
         <ButtonDivWrapper>
           <Navigation>
-            <Link to="/">Home</Link>
-            <Link to="/setting">Settings</Link>
-            <Link to="/signin">Sign in</Link>
+            <Link to='/'>Home</Link>
+            <Link to='/setting'>Settings</Link>
+            <Link to='/signin'>Sign in</Link>
           </Navigation>
           <MyButton onClick={toggleTheme}>
             {isDarkProps ? 'Light' : 'Dark'}
