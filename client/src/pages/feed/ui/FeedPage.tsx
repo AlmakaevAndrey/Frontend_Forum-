@@ -1,9 +1,28 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import * as S from './FeedPage.styles';
 import { PostList } from '../../../components/PostList/ui/PostList';
 import { usefulLinks } from '../../../components/Links/usefulLinks';
-import { Post } from 'components/Post/types';
+import { useGetPostsQuery } from '../../../api/apiSlice';
+import { useToast } from '../../../shared/lib/toast';
 
+// const mockPosts: Post[] = [
+//   {
+//     id: '1',
+//     title: 'React + TypeScript: быстрый старт',
+//     excerpt: 'Разбираем основы работы с React и TS...',
+//     author: 'Alex',
+//     date: '2025-09-01',
+//     likes: 2,
+//   },
+//   {
+//     id: '2',
+//     title: 'Что нового в ES2025?',
+//     excerpt: 'Новые фичи JavaScript и как их применять...',
+//     author: 'Maria',
+//     date: '2025-09-02',
+//     likes: 9,
+//   },
+// ];
 const categories = {
   docs: '📚 Документация',
   practice: '🛠 Практика',
@@ -11,48 +30,35 @@ const categories = {
   community: '📰 Сообщества',
 } as const;
 
-const mockPosts: Post[] = [
-  {
-    id: '1',
-    title: 'React + TypeScript: быстрый старт',
-    excerpt: 'Разбираем основы работы с React и TS...',
-    author: 'Alex',
-    date: '2025-09-01',
-    likes: 2,
-  },
-  {
-    id: '2',
-    title: 'Что нового в ES2025?',
-    excerpt: 'Новые фичи JavaScript и как их применять...',
-    author: 'Maria',
-    date: '2025-09-02',
-    likes: 9,
-  },
-];
-
 const FeedPage: React.FC = () => {
   const [query, setQuery] = useState('');
   const [sort, setSort] = useState<'date' | 'likes'>('date');
-  const [posts, setPosts] = useState<Post[]>(mockPosts);
 
+  const { data: posts = [], isLoading, isError} = useGetPostsQuery();
+  const { showInfo, showError} = useToast();
+ 
   useEffect(() => {
-    let filtered = mockPosts.filter((post) =>
+    if (isLoading) return showInfo('Загрузка')
+      if (isError) return showError('Ошибка при загрузке')
+      }, [isLoading, isError, showInfo, showError]);
+
+  const filteredPosts = useMemo(() => {
+    let filtered = posts.filter((post) =>
       post.title.toLowerCase().includes(query.toLowerCase())
+  );
+  
+  if (sort === 'date') {
+    return [...filtered].sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
 
-    if (sort === 'date') {
-      filtered = [...filtered].sort(
-        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-      );
-    } else if (sort === 'likes') {
-      filtered = [...filtered].sort((a, b) => b.likes - a.likes);
-    }
+  } else {
+    return [...filtered].sort((a, b) => b.likes - a.likes);
+  }
+}, [posts, query, sort]);
 
-    setPosts(filtered);
-  }, [query, sort]);
-
-  return (
-    <S.ContentWrapper>
+return (
+  <S.ContentWrapper>
       <S.Section>
         <S.SettingsForArticle>
           <h2>Настройки поиска статей</h2>
@@ -62,10 +68,10 @@ const FeedPage: React.FC = () => {
               placeholder='Поиск...'
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-            />
+              />
             <S.SelectInArticle
               onChange={(e) => setSort(e.target.value as 'date' | 'likes')}
-            >
+              >
               <S.OptionInArticle value='date'>По дате</S.OptionInArticle>
               <S.OptionInArticle value='likes'>По лайкам</S.OptionInArticle>
             </S.SelectInArticle>
@@ -76,7 +82,7 @@ const FeedPage: React.FC = () => {
         <S.ContainerForArticle>
           <h3>✍ Посты</h3>
           {/* Сделать на MongoDB список постов */}
-          <PostList posts={posts}></PostList>
+          <PostList posts={filteredPosts}></PostList>
         </S.ContainerForArticle>
       </S.Section>
       <S.Section>
@@ -86,8 +92,8 @@ const FeedPage: React.FC = () => {
           <S.WrapperGridLinksList>
             {Object.entries(categories).map(([key, label]) => {
               const filtered = usefulLinks
-                .filter((l) => l.category === key)
-                .slice(0, 3);
+              .filter((l) => l.category === key)
+              .slice(0, 3);
               return (
                 <S.DividerLinksList key={key}>
                   <h5>{label}</h5>

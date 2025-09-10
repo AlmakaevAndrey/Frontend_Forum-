@@ -7,6 +7,7 @@ import styled, { ThemeProvider } from 'styled-components';
 import { GlobalStyle } from '../styles/GlobalStyle';
 import { Provider } from 'react-redux';
 import { store } from '../api/store';
+import { ToastContainer } from 'react-toastify';
 
 const AppContainer = styled.div`
   min-height: 100vh;
@@ -36,6 +37,7 @@ const App: React.FC = () => {
   return (
     <Provider store={store}>
       <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+        <ToastContainer />
         <GlobalStyle />
         <AppContainer>
           <Header

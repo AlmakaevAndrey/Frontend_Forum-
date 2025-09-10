@@ -1,4 +1,5 @@
 export const lightTheme = {
+  mode: 'light' as const,
   colors: {
     background: '#fff',
     text: '#111',
@@ -10,6 +11,7 @@ export const lightTheme = {
 };
 
 export const darkTheme = {
+  mode: 'dark' as const,
   colors: {
     background: '#1f2937',
     text: '#f9f9f9',

@@ -9,9 +9,9 @@
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true, // позволяет работать с пакетами, которые использую common js как с обычными с помощью import
     "esModuleInterop": true, // нужен для библиотек котрое не имеют дефолтный импорт
-    "baseUrl": "./src",
+    "baseUrl": "src",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["src/*"]
     }
   },
   "ts-node": {
