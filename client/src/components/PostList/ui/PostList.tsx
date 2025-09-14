@@ -12,7 +12,7 @@ export const PostList = ({ posts }: PostProps) => {
   return (
     <S.List>
       {posts.map((post) => (
-        <PostCard key={post.id} post={post} />
+        <PostCard key={post._id} post={post} />
       ))}
     </S.List>
   );

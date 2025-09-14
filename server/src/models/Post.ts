@@ -9,7 +9,6 @@ export interface IPost extends Document {
 }
 
 const PostSchema = new Schema<IPost>({
-  id: { type: String, require: true },
   title: { type: String, require: true },
   excerpt: { type: String, require: true },
   author: { type: String, require: true },
@@ -17,4 +16,19 @@ const PostSchema = new Schema<IPost>({
   likes: { type: Number, default: 0 },
 });
 
-export default mongoose.model<IPost>('Post', PostSchema);
+const Post = mongoose.model<IPost>('Post', PostSchema);
+
+async function test() {
+  await Post.create({
+    title: 'Первый пост',
+    excerpt: 'Ура, подключение работает!',
+    author: 'System',
+  });
+  console.log('✅ Пост добавлен!');
+  const all = await Post.find();
+  console.log('📂 Все посты:', all);
+}
+
+test();
+
+export default Post;

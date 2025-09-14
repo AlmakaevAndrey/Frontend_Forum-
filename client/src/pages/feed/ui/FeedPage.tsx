@@ -5,24 +5,6 @@ import { usefulLinks } from '../../../components/Links/usefulLinks';
 import { useGetPostsQuery } from '../../../api/apiSlice';
 import { useToast } from '../../../shared/lib/toast';
 
-// const mockPosts: Post[] = [
-//   {
-//     id: '1',
-//     title: 'React + TypeScript: быстрый старт',
-//     excerpt: 'Разбираем основы работы с React и TS...',
-//     author: 'Alex',
-//     date: '2025-09-01',
-//     likes: 2,
-//   },
-//   {
-//     id: '2',
-//     title: 'Что нового в ES2025?',
-//     excerpt: 'Новые фичи JavaScript и как их применять...',
-//     author: 'Maria',
-//     date: '2025-09-02',
-//     likes: 9,
-//   },
-// ];
 const categories = {
   docs: '📚 Документация',
   practice: '🛠 Практика',
@@ -38,8 +20,11 @@ const FeedPage: React.FC = () => {
   const { showInfo, showError} = useToast();
  
   useEffect(() => {
-    if (isLoading) return showInfo('Загрузка')
-      if (isError) return showError('Ошибка при загрузке')
+    if (isLoading) {
+       showInfo('Загрузка');
+    } else if (isError) {
+        showError('Ошибка при загрузке')
+      }
       }, [isLoading, isError, showInfo, showError]);
 
   const filteredPosts = useMemo(() => {

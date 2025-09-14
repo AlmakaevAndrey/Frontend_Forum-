@@ -20,11 +20,13 @@ const axiosBaseQuery =
 
 export const ApiSlice = createApi({
   reducerPath: 'api',
-  baseQuery: axiosBaseQuery({ baseUrl: 'http://localhost:3001/api' }),
+  baseQuery: axiosBaseQuery({ baseUrl: 'http://localhost:5000' }),
   tagTypes: ['Posts'],
   endpoints: (builder) => ({
+    
     getPosts: builder.query<Post[], void>({
       query: () => ({ url: '/posts', method: 'get' }),
+      transformResponse: (response: any) => response.data,
       providesTags: ['Posts'],
     }),
 
