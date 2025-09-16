@@ -13,6 +13,7 @@ export const register = async (req: Request, res: Response) => {
   try {
     const parsed = registerSchema.parse(req.body);
     const exists = await User.findOne({ email: parsed.email });
+    console.log('Found user', exists);
     if (exists)
       return res.status(400).json({ message: 'Email already in use' });
 
@@ -28,10 +29,14 @@ export const register = async (req: Request, res: Response) => {
 };
 
 export const login = async (req: Request, res: Response) => {
+  console.log('Login', req.body);
   try {
     const parsed = loginSchema.parse(req.body);
     const user = await User.findOne({ email: parsed.email });
-    if (!user || !(await user.comparePassword(parsed.password))) {
+    console.log('User found:', user);
+    const isMatch = user ? await user.comparePassword(parsed.password) : false;
+    console.log('Password match:', isMatch);
+    if (!user || isMatch) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
@@ -48,6 +53,7 @@ export const login = async (req: Request, res: Response) => {
 
     res.json({
       user: { id: user._id, username: user.username, role: user.role },
+      token,
     });
   } catch (err: any) {
     res.status(400).json({ message: err?.message || 'Validation failed' });

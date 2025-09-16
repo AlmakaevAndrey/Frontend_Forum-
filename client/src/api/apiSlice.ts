@@ -1,12 +1,14 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import axios from 'axios';
 import { Post } from '../components/Post/types';
+import { email } from 'zod';
 
 const axiosBaseQuery =
   ({ baseUrl }: { baseUrl: string }) =>
   async ({ url, method, data }: {url: string; method: string; data?: any}) => {
     try {
-      const result = await axios({ url: baseUrl + url, method, data });
+      const token = localStorage.getItem('token');
+      const result = await axios({ url: baseUrl + url, method, data, headers: token ? { Authorization: `Bearer ${token}`} : {}, });
       return { data: result.data };
     } catch (axiosError: any) {
       return {
@@ -21,8 +23,27 @@ const axiosBaseQuery =
 export const ApiSlice = createApi({
   reducerPath: 'api',
   baseQuery: axiosBaseQuery({ baseUrl: 'http://localhost:5000' }),
-  tagTypes: ['Posts'],
+  tagTypes: ['Posts', 'Auth'],
   endpoints: (builder) => ({
+
+    register:builder.mutation<any, {username: string; email: string, password: string}>({
+        query: (user) => ({
+          url: '/auth/register',
+          method: 'post',
+          data: user,
+          withCredentials: true,
+
+    })
+    }),
+
+    login: builder.mutation<any, {email: string; password: string}>({
+      query: (credentials) => ({
+        url: '/auth/login',
+        method: 'post',
+        data: credentials,
+        withCredentials: true,
+      }),
+    }),
     
     getPosts: builder.query<Post[], void>({
       query: () => ({ url: '/posts', method: 'get' }),
@@ -32,7 +53,7 @@ export const ApiSlice = createApi({
 
     addPost: builder.mutation<Post, Partial<Post>>({
       query: (newPost) => ({
-        url: '/posts',
+        url: '/posts', 
         method: 'post',
         data: newPost,
       }),
@@ -50,4 +71,4 @@ export const ApiSlice = createApi({
   }),
 });
 
-export const { useAddPostMutation, useGetPostsQuery, useLikePostMutation } = ApiSlice;
+export const { useRegisterMutation, useLoginMutation, useAddPostMutation, useGetPostsQuery, useLikePostMutation } = ApiSlice;

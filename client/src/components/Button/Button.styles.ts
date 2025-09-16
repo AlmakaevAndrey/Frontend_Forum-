@@ -11,8 +11,8 @@ export const MyCustomButton = styled.button`
   align-items: center;
   justify-content: center;
 
-  background: ${({ theme }) => theme.colors.secondary};
-  color: ${({ theme }) => theme.colors.text};
+  background: ${({ theme }) => theme.colors.svg};
+  color: ${({ theme }) => theme.colors.textSvg};
 
   &:hover {
     opacity: 0.9;

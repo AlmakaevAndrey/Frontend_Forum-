@@ -8,6 +8,7 @@ export const ContentWrapper = styled.div`
   flex-direction: column;
   gap: 20px;
   padding: 0 20px;
+  background-color: ${({ theme }) => theme.colors.backgroundSecond};
   // align-items: center;
 `;
 
@@ -31,7 +32,7 @@ export const SettingsForArticle = styled.div`
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 6px 20px ${({ theme }) => theme.colors.border};
   }
 `;
 
@@ -49,7 +50,7 @@ export const ContainerForArticle = styled.div`
   border-radius: 20px;
 
   background: ${({ theme }) => theme.colors.background};
-  box-shadow: 0 4px 16px ${({ theme }) => theme.colors.border};
+  box-shadow: 0 2px 8px ${({ theme }) => theme.colors.border};
 
   display: flex;
   flex-direction: column;

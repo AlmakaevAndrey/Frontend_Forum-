@@ -23,10 +23,11 @@ export const useToast = () => {
       theme: themeMode,
     });
   };
-
+  const lastShown: Record<string, number> = {};
   const showError = (message: string) => {
-    if (shownToasts.current.has(message)) return;
-    shownToasts.current.add(message);
+    const now = Date.now();
+    if (lastShown[message] && now - lastShown[message] < 2000) return; // блокируем часто
+    lastShown[message] = now;
 
     toast.error(message, {
       position: 'top-right',

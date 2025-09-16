@@ -36,5 +36,9 @@ export const Footer = styled.div`
     display: flex;
     // align-items: center;/
     gap: 4px;
+
+    first:child {
+      display: flex;
+    }
   }
 `;

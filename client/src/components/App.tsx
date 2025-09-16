@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import Header from './Header/Header';
 import Footer from './Footer/Footer';
 import { darkTheme, lightTheme } from '../styles/theme';
 import styled, { ThemeProvider } from 'styled-components';
 import { GlobalStyle } from '../styles/GlobalStyle';
-import { Provider } from 'react-redux';
-import { store } from '../api/store';
+import { useDispatch } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
+import { loadUser } from '../auth/authSlice';
 
 const AppContainer = styled.div`
   min-height: 100vh;
@@ -33,27 +33,30 @@ const Content = styled.main`
 
 const App: React.FC = () => {
   const [isDark, setIsDark] = useState(false);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(loadUser());
+  }, [dispatch]);
 
   return (
-    <Provider store={store}>
-      <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
-        <ToastContainer />
-        <GlobalStyle />
-        <AppContainer>
-          <Header
-            isDarkProps={isDark}
-            toggleTheme={() => setIsDark(!isDark)}
-            children={''}
-          ></Header>
-          <Content>
-            <MainContainer>
-              <Outlet />
-            </MainContainer>
-          </Content>
-          <Footer />
-        </AppContainer>
-      </ThemeProvider>
-    </Provider>
+    <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+      <ToastContainer />
+      <GlobalStyle />
+      <AppContainer>
+        <Header
+          isDarkProps={isDark}
+          toggleTheme={() => setIsDark(!isDark)}
+          children={''}
+        ></Header>
+        <Content>
+          <MainContainer>
+            <Outlet />
+          </MainContainer>
+        </Content>
+        <Footer />
+      </AppContainer>
+    </ThemeProvider>
   );
 };
 

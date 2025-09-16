@@ -20,7 +20,8 @@ body {
     padding: 0;
     font-family:'Inter', sans-serif;
     width: 100%;
-    background-color: ${({ theme }) => theme.colors.background};
+    background-color: ${({ theme }) => theme.colors.backgroundSecond};
     color: ${({ theme }) => theme.colors.text};
+    font-family: 'Roboto', sans-serif;
 }
 `;

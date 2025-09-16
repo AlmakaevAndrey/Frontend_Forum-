@@ -8,6 +8,8 @@ import SignInPage from './pages/sign-in/ui/SignInPage';
 import ArticleEditPage from './pages/article-edit/ui/ArticleEditPage';
 import ArticleReadPage from './pages/article-read/ui/ArticleReadPage';
 import SettingPage from './pages/settings/ui/SettingPage';
+import { store } from './api/store';
+import { Provider } from 'react-redux';
 
 const router = createBrowserRouter([
   {
@@ -28,6 +30,8 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   </React.StrictMode>
 );

@@ -1,26 +1,35 @@
 import { useState } from 'react';
 import * as S from './PostCard.styles';
 import { Post } from '../types';
+import { useLikePostMutation } from '../../../api/apiSlice';
 
 interface PostProps {
   post: Post;
 }
 
 export const PostCard = ({ post }: PostProps) => {
-  const [likes, setLikes] = useState(post.likes);
+  const [likePost] = useLikePostMutation();
 
   const handleLikes = () => {
-    setLikes((prev) => prev + 1);
+    likePost(post._id);
   };
+
   return (
     <S.Card>
       <S.Title>{post.title}</S.Title>
       <S.Excerpt>{post.excerpt}</S.Excerpt>
       <S.Footer>
-        <span>🪪{post.author}</span>
-        <span>📅{post.date}</span>
+        <span>👨‍💻 {post.author}</span>
+        <span>
+          📅
+          {new Date(post.date).toLocaleDateString('ru-RU', {
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric',
+          })}
+        </span>
         {/* Сделать через редакс лайки в глобальном сторедже */}
-        <span onClick={handleLikes}>🩷 {likes}</span>
+        <span onClick={handleLikes}>🩷 {post.likes}</span>
       </S.Footer>
     </S.Card>
   );
