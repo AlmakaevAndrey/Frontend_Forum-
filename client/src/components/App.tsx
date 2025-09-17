@@ -47,7 +47,6 @@ const App: React.FC = () => {
         <Header
           isDarkProps={isDark}
           toggleTheme={() => setIsDark(!isDark)}
-          children={''}
         ></Header>
         <Content>
           <MainContainer>

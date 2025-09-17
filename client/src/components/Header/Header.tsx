@@ -6,20 +6,31 @@ import {
   HeaderDivider,
 } from './Header.styled';
 import MyButton from '../Button/Button';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Logo } from '../../assets/svg/Frontend_Forum';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../auth/authSlice';
+import { RootState } from 'api/store';
 
 interface HeaderProps {
-  children: ReactNode;
   isDarkProps: boolean;
   toggleTheme: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({
-  children,
-  isDarkProps,
-  toggleTheme,
-}) => {
+const Header: React.FC<HeaderProps> = ({ isDarkProps, toggleTheme }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { token } = useSelector((state: RootState) => state.auth);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/signin');
+  };
+
+  const handleLogin = () => {
+    navigate('/signin');
+  };
+
   return (
     <HeaderWrapper>
       <HeaderDivider>
@@ -29,13 +40,19 @@ const Header: React.FC<HeaderProps> = ({
         <ButtonDivWrapper>
           <Navigation>
             <Link to='/'>Home</Link>
-            <Link to='/setting'>Settings</Link>
-            <Link to='/signin'>Sign in</Link>
+            {token && <Link to='/setting'>Settings</Link>}
+            {!token ? (
+              <>
+                <Link to='/signin'>Sign in</Link>
+                <MyButton onClick={handleLogin}>Login</MyButton>
+              </>
+            ) : (
+              <MyButton onClick={handleLogout}>Logout</MyButton>
+            )}
           </Navigation>
           <MyButton onClick={toggleTheme}>
             {isDarkProps ? 'Light' : 'Dark'}
           </MyButton>
-          {children}
         </ButtonDivWrapper>
       </HeaderDivider>
     </HeaderWrapper>

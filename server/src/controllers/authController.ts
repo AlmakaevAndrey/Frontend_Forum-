@@ -24,7 +24,7 @@ export const register = async (req: Request, res: Response) => {
       .status(201)
       .json({ id: user._id, username: user.username, email: user.email });
   } catch (err: any) {
-    res.status(400).json({ message: err?.massage || 'Validation failed' });
+    res.status(400).json({ message: err?.message || 'Validation failed' });
   }
 };
 
@@ -36,7 +36,7 @@ export const login = async (req: Request, res: Response) => {
     console.log('User found:', user);
     const isMatch = user ? await user.comparePassword(parsed.password) : false;
     console.log('Password match:', isMatch);
-    if (!user || isMatch) {
+    if (!user || !isMatch) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 

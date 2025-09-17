@@ -5,7 +5,7 @@ import { loginSuccess } from '../../../auth/authSlice';
 import { toast } from 'react-toastify';
 import { useToast } from '../../../shared/lib/toast';
 import Button from '../../../components/Button/Button';
-import * as S from './SignIn.styles';
+import * as S from './SignInPage.styles';
 
 const SignInPage: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -28,7 +28,7 @@ const SignInPage: React.FC = () => {
   return (
     <S.ContentWrapper>
       <S.SignInForm action='action' onSubmit={handleLogin}>
-        <S.TitleText>Регистрация на Форуме</S.TitleText>
+        <S.TitleText>Авторизация на Форуме</S.TitleText>
         <S.SignInInput
           type='email'
           placeholder='Email'
