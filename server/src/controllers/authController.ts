@@ -20,9 +20,13 @@ export const register = async (req: Request, res: Response) => {
     const user = new User(parsed);
     await user.save();
 
-    const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, {
-      expiresIn: JWT_EXPIRES_IN,
-    } as SignOptions);
+    const token = jwt.sign(
+      { id: user._id, username: user.username, role: user.role },
+      JWT_SECRET,
+      {
+        expiresIn: JWT_EXPIRES_IN,
+      } as SignOptions
+    );
 
     res.cookie('token', token, {
       httpOnly: true,

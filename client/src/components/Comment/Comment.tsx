@@ -1,7 +1,6 @@
 import { useAddCommentMutation, useGetCommentsQuery } from '../../api/apiSlice';
 import { useState } from 'react';
 import { useToast } from '../../shared/lib/toast';
-import MyButton from '../Button/Button';
 import * as S from './Comment.styled';
 
 type Props = { postId: string };
@@ -15,11 +14,18 @@ const CommentsDiv: React.FC<Props> = ({ postId }) => {
   const handleAddComment = async () => {
     if (!text.trim()) return;
     try {
-      await addComment({ id: postId, text }).unwrap();
+      console.log('Adding comment:', { id: postId, text });
+      const result = await addComment({ id: postId, text }).unwrap();
+      console.log('Comment added:', result);
       setText('');
       showInfo('Комментарий добавлен!!');
     } catch (error) {
-      showError(error?.data?.message || 'Ошибка при добавлении коментария');
+      console.error('Add comment error:', error);
+      showError(
+        error?.data?.message ||
+          error?.error?.data?.message ||
+          'Ошибка при добавлении комментария'
+      );
     }
   };
 
@@ -31,7 +37,7 @@ const CommentsDiv: React.FC<Props> = ({ postId }) => {
 
       <S.CommentsList>
         {comments.map((c, idx) => (
-          <S.CommentWrapper key={c.createdAt ?? idx}>
+          <S.CommentWrapper key={`${c.userId}-${c.createdAt ?? idx}`}>
             <S.CommentHeader>
               <S.Username>{c.username}</S.Username>
               <S.DateText>

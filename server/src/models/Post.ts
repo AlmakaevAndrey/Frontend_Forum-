@@ -37,17 +37,4 @@ const PostSchema = new Schema<IPost>({
 
 const Post = mongoose.model<IPost>('Post', PostSchema);
 
-async function test() {
-  await Post.create({
-    title: 'Первый пост',
-    excerpt: 'Ура, подключение работает!',
-    author: 'System',
-  });
-  console.log('✅ Пост добавлен!');
-  const all = await Post.find();
-  console.log('📂 Все посты:', all);
-}
-
-test();
-
 export default Post;

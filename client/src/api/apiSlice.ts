@@ -75,11 +75,16 @@ export const ApiSlice = createApi({
     }),
 
     getComments: builder.query<Comment[], string>({
-      query: (id) => ({
-        url: `/posts/${id}/comments`,
+      query: (postId) => ({
+        url: `/posts/${postId}/comments`,
         method: 'get',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+        },
       }),
-      providesTags: (result, error, id) => [{ type: 'Comments', id }],
+      providesTags: (result, error, postId) => [
+        { type: 'Comments', id: postId },
+      ],
     }),
 
     addComment: builder.mutation<Comment, { id: string; text: string }>({
@@ -87,6 +92,9 @@ export const ApiSlice = createApi({
         url: `/posts/${id}/comments`,
         method: 'post',
         data: { text },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+        },
       }),
       invalidatesTags: (result, error, { id }) => [{ type: 'Comments', id }],
     }),

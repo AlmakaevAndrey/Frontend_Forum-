@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import Post from '../models/Post';
 import { postCreateSchema } from '../utils/validators';
 import mongoose, { SortOrder } from 'mongoose';
+import User, { IUser } from '../models/User';
 
 export const getPosts = async (req: Request, res: Response) => {
   try {
@@ -83,23 +84,52 @@ export const likePost = async (req: Request, res: Response) => {
 
 export const commentPost = async (req: Request, res: Response) => {
   try {
+    if (!req.user) {
+      console.log('Unauthorized: no req.user');
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+    console.log('req.user', req.user);
+
     const { text } = req.body;
+    if (!text || !text.trim()) {
+      console.log('Validation failed: empty text');
+      return res.status(400).json({ message: 'Text is required' });
+    }
+
+    const user = (await User.findById(req.user.id).select(
+      'username'
+    )) as IUser & { _id: string };
+    if (!user) {
+      console.log('User not found for id', req.user.id);
+      return res.status(404).json({ message: 'User not found' });
+    }
+    if (!user.username) {
+      console.log('User has no username for id', req.user.id);
+      return res.status(500).json({ message: 'User has no username' });
+    }
+
     const post = await Post.findById(req.params.id);
-    if (!post) return res.status(404).json({ message: 'Post not found' });
+    if (!post) {
+      console.log('Post not found for id', req.params.id);
+      return res.status(404).json({ message: 'Post not found' });
+    }
 
     const comment = {
-      userId: req.user!.id,
-      username: req.user!.username,
+      userId: user._id.toString(),
+      username: user.username,
       text,
       createdAt: new Date(),
     };
+    console.log('Comment to add', comment);
 
     post.comments.push(comment);
+
     await post.save();
+    console.log('Comment added successfully');
 
     res.status(201).json(comment);
   } catch (err) {
-    console.error(err);
+    console.error('Error in comment Post', err);
     res.status(500).json({ message: 'Server error' });
   }
 };
@@ -109,7 +139,11 @@ export const commentGetPost = async (req: Request, res: Response) => {
     const post = await Post.findById(req.params.id);
     if (!post) return res.status(404).json({ message: 'Post not found' });
 
-    res.json(post.comments);
+    const sortedComments = post.comments.sort(
+      (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+    );
+
+    res.json(sortedComments);
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error' });
