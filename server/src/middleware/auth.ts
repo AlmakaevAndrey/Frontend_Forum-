@@ -8,7 +8,11 @@ const JWT_SECRET = process.env.JWT_SECRET || 'secret';
 declare global {
   namespace Express {
     interface Request {
-      user?: { id: string; role: string };
+      user?: {
+        username: string;
+        id: string;
+        role: string;
+      };
     }
   }
 }
@@ -25,6 +29,7 @@ export const authenticate = (
     const decoded = jwt.verify(token, JWT_SECRET) as {
       id: string;
       role: string;
+      username: string;
     };
     req.user = decoded;
     next();

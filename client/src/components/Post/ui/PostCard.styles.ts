@@ -8,6 +8,7 @@ export const Card = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
+  cursor: pointer;
 
   &:hover {
     transform: translateY(-4px);

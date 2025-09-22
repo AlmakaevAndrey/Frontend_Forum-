@@ -4,5 +4,13 @@ export type Post = {
   excerpt: string;
   author: string;
   date: string;
-  likes: number;
+  likes: [{ likes: String; ref: 'User' }];
+  comments: Comment;
+};
+
+export type Comment = {
+  userId: string;
+  username: string;
+  text: string;
+  createdAt: string;
 };

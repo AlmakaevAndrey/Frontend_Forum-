@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import Post from '../models/Post';
 import { postCreateSchema } from '../utils/validators';
-import { SortOrder } from 'mongoose';
+import mongoose, { SortOrder } from 'mongoose';
 
 export const getPosts = async (req: Request, res: Response) => {
   try {
@@ -58,11 +58,60 @@ export const createPost = async (req: Request, res: Response) => {
 export const likePost = async (req: Request, res: Response) => {
   try {
     const post = await Post.findById(req.params.id);
-    if (!post) return res.status(404).json({ message: 'post not found' });
-    post.likes += 1;
+    if (!post) return res.status(404).json({ message: 'Post not found' });
+
+    const userId = req.user?.id;
+    if (!userId) return res.status(401).json({ message: 'Unauthorized' });
+
+    const userObjectId = new mongoose.Types.ObjectId(userId);
+
+    const hasLiked = post.likes.some((id) => id.toString() === userId);
+
+    if (hasLiked) {
+      post.likes = post.likes.filter((id) => id.toString() !== userId);
+    } else {
+      post.likes.push(userObjectId);
+    }
+
     await post.save();
-    res.json(post);
+
+    res.json({ likes: post.likes, liked: !hasLiked, count: post.likes.length });
   } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+export const commentPost = async (req: Request, res: Response) => {
+  try {
+    const { text } = req.body;
+    const post = await Post.findById(req.params.id);
+    if (!post) return res.status(404).json({ message: 'Post not found' });
+
+    const comment = {
+      userId: req.user!.id,
+      username: req.user!.username,
+      text,
+      createdAt: new Date(),
+    };
+
+    post.comments.push(comment);
+    await post.save();
+
+    res.status(201).json(comment);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+export const commentGetPost = async (req: Request, res: Response) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) return res.status(404).json({ message: 'Post not found' });
+
+    res.json(post.comments);
+  } catch (err) {
+    console.error(err);
     res.status(500).json({ message: 'Server error' });
   }
 };

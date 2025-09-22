@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import { useLoginMutation } from '../../../api/apiSlice';
 import { useDispatch } from 'react-redux';
 import { loginSuccess } from '../../../auth/authSlice';
-import { toast } from 'react-toastify';
 import { useToast } from '../../../shared/lib/toast';
-import Button from '../../../components/Button/Button';
 import * as S from './SignInPage.styles';
 
 const SignInPage: React.FC = () => {
@@ -19,7 +17,9 @@ const SignInPage: React.FC = () => {
     try {
       const res = await login({ email, password }).unwrap();
       console.log(res);
-      dispatch(loginSuccess({ user: res.user, token: res.token }));
+      dispatch(
+        loginSuccess({ user: res.user, token: res.token, role: res.user.role })
+      );
       showInfo('Загрузка вашего запроса');
     } catch (err: any) {
       showError(err?.data?.message || 'Ошибка при загрузке');

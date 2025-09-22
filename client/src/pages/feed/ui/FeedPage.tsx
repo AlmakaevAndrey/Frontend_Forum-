@@ -16,34 +16,39 @@ const FeedPage: React.FC = () => {
   const [query, setQuery] = useState('');
   const [sort, setSort] = useState<'date' | 'likes'>('date');
 
-  const { data: posts = [], isLoading, isError} = useGetPostsQuery();
-  const { showInfo, showError} = useToast();
- 
+  const { data: posts = [], isLoading, isError } = useGetPostsQuery();
+  const { showInfo, showError } = useToast();
+
   useEffect(() => {
     if (isLoading) {
-       showInfo('Загрузка');
+      showInfo('Загрузка');
     } else if (isError) {
-        showError('Ошибка при загрузке')
-      }
-      }, [isLoading, isError, showInfo, showError]);
+      showError('Ошибка при загрузке');
+    }
+  }, [isLoading, isError, showInfo, showError]);
 
   const filteredPosts = useMemo(() => {
+    const lowerQuery = query.toLowerCase();
+
     let filtered = posts.filter((post) =>
-      post.title.toLowerCase().includes(query.toLowerCase())
-  );
-  
-  if (sort === 'date') {
-    return [...filtered].sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+      post.title.toLowerCase().includes(lowerQuery)
     );
 
-  } else {
-    return [...filtered].sort((a, b) => b.likes - a.likes);
-  }
-}, [posts, query, sort]);
+    if (sort === 'date') {
+      return [...filtered].sort(
+        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+      );
+    }
 
-return (
-  <S.ContentWrapper>
+    if (sort === 'likes') {
+      return [...filtered].sort((a, b) => b.likes.length - a.likes.length);
+    }
+
+    return filtered;
+  }, [posts, query, sort]);
+
+  return (
+    <S.ContentWrapper>
       <S.Section>
         <S.SettingsForArticle>
           <h2>Настройки поиска статей</h2>
@@ -53,10 +58,10 @@ return (
               placeholder='Поиск...'
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              />
+            />
             <S.SelectInArticle
               onChange={(e) => setSort(e.target.value as 'date' | 'likes')}
-              >
+            >
               <S.OptionInArticle value='date'>По дате</S.OptionInArticle>
               <S.OptionInArticle value='likes'>По лайкам</S.OptionInArticle>
             </S.SelectInArticle>
@@ -77,8 +82,8 @@ return (
           <S.WrapperGridLinksList>
             {Object.entries(categories).map(([key, label]) => {
               const filtered = usefulLinks
-              .filter((l) => l.category === key)
-              .slice(0, 3);
+                .filter((l) => l.category === key)
+                .slice(0, 3);
               return (
                 <S.DividerLinksList key={key}>
                   <h5>{label}</h5>

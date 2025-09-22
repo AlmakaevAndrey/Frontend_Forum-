@@ -20,9 +20,21 @@ export const register = async (req: Request, res: Response) => {
     const user = new User(parsed);
     await user.save();
 
-    res
-      .status(201)
-      .json({ id: user._id, username: user.username, email: user.email });
+    const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, {
+      expiresIn: JWT_EXPIRES_IN,
+    } as SignOptions);
+
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+
+    res.status(201).json({
+      user: { id: user._id, username: user.username, role: user.role },
+      token,
+    });
   } catch (err: any) {
     res.status(400).json({ message: err?.message || 'Validation failed' });
   }

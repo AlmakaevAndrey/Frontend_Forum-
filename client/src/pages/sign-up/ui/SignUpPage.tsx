@@ -15,8 +15,8 @@ const SignUnPage: React.FC = () => {
   const [register, { isLoading: isRegister }] = useRegisterMutation();
   const [login, { isLoading: isLoggingIn }] = useLoginMutation();
   const dispatch = useDispatch();
-  const { showInfo, showError } = useToast();
   const navigate = useNavigate();
+  const { showInfo, showError } = useToast();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,8 +24,16 @@ const SignUnPage: React.FC = () => {
     try {
       await register({ username, email, password }).unwrap();
       showInfo('Регистрация прошла успешно!');
+
       const res = await login({ email, password }).unwrap();
-      dispatch(loginSuccess({ user: res.user, token: res.token }));
+      localStorage.setItem('token', res.token);
+      dispatch(
+        loginSuccess({
+          user: res.user,
+          token: res.user.token,
+          role: res.user.role,
+        })
+      );
 
       showInfo('Вы успешно вошли!');
       console.log('навигация на главную страницу');

@@ -5,9 +5,10 @@ import { useLikePostMutation } from '../../../api/apiSlice';
 
 interface PostProps {
   post: Post;
+  onClick?: () => void;
 }
 
-export const PostCard = ({ post }: PostProps) => {
+export const PostCard = ({ post, onClick }: PostProps) => {
   const [likePost] = useLikePostMutation();
 
   const handleLikes = () => {
@@ -15,7 +16,7 @@ export const PostCard = ({ post }: PostProps) => {
   };
 
   return (
-    <S.Card>
+    <S.Card onClick={onClick}>
       <S.Title>{post.title}</S.Title>
       <S.Excerpt>{post.excerpt}</S.Excerpt>
       <S.Footer>
@@ -28,8 +29,8 @@ export const PostCard = ({ post }: PostProps) => {
             year: 'numeric',
           })}
         </span>
-        {/* Сделать через редакс лайки в глобальном сторедже */}
-        <span onClick={handleLikes}>🩷 {post.likes}</span>
+        {/* Сделать через редакс лайки в глобальном сторедже, сделать лайки чтобы 1 человек мог ставить"! */}
+        <span onClick={handleLikes}>🩷 {post.likes?.length ?? 0}</span>
       </S.Footer>
     </S.Card>
   );
