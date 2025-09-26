@@ -35,3 +35,8 @@ export const Content = styled.div`
   margin-bottom: 30px;
   word-break: break-word;
 `;
+
+export const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;

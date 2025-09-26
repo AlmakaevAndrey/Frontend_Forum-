@@ -107,6 +107,21 @@ export const ApiSlice = createApi({
       }),
       invalidatesTags: ['Posts'],
     }),
+
+    updatePost: builder.mutation<
+      any,
+      { id: string; data: { title: string; excerpt: string } }
+    >({
+      query: ({ id, data }) => ({
+        url: `/posts/${id}`,
+        method: 'put',
+        data,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+        },
+      }),
+      invalidatesTags: ['Posts'],
+    }),
   }),
 });
 
@@ -118,4 +133,5 @@ export const {
   useLikePostMutation,
   useGetCommentsQuery,
   useAddCommentMutation,
+  useUpdatePostMutation,
 } = ApiSlice;

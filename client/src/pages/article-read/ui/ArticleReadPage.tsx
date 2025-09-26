@@ -45,12 +45,10 @@ const ArticleReadPage: React.FC = () => {
     if (!id) return;
     try {
       const updated = await likePost(id).unwrap();
-
       setArticle((prev: any) => ({
         ...prev,
         likes: updated.likes,
       }));
-
       showInfo(updated.likes ? 'Вы лайкнули!' : 'Вы убрали лайк!');
     } catch (err) {
       if (err?.status === 401) {
@@ -74,7 +72,8 @@ const ArticleReadPage: React.FC = () => {
     return <div>Статья не найдена</div>;
   }
 
-  const canEdit = token && (role === 'admin' || user?.id === article.authorId);
+  // const canEdit = token && (role === 'admin' || user?.id === article.authorId);
+  const canEdit = true;
 
   return (
     <S.ArticleWrapper>
@@ -84,11 +83,15 @@ const ArticleReadPage: React.FC = () => {
           By {article.author} | {new Date(article.date).toLocaleDateString()}
         </S.Author>
         <S.Content>{article.excerpt}</S.Content>
-        <MyButton onClick={handleLike}>
-          {hasLiked ? '❤️' : '💔'}({article.likes.length})
-        </MyButton>
+        <S.ButtonWrapper>
+          <MyButton onClick={handleLike}>
+            {article.liked ? '❤️' : '💔'}({article.likes.length})
+          </MyButton>
 
-        {canEdit && <MyButton onClick={handleEdit}>Edit</MyButton>}
+          {/* {canEdit && <MyButton onClick={handleEdit}>Edit</MyButton>} */}
+          <MyButton onClick={handleEdit}>Edit</MyButton>
+          {/* Сделать админку */}
+        </S.ButtonWrapper>
 
         <CommentsDiv postId={article._id} />
       </S.ArticleDiv>

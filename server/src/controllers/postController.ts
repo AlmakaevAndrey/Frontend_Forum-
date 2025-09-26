@@ -149,3 +149,28 @@ export const commentGetPost = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+export const updatePost = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { title, excerpt } = req.body;
+
+    const post = await Post.findById(id);
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+
+    if (req.user?.role !== 'admin' && req.user?.username !== post.author) {
+      return res.status(403).json({ message: 'Forbidden' });
+    }
+
+    if (title) post.title = title;
+    if (excerpt) post.excerpt = excerpt;
+
+    const updated = await post.save();
+    res.json(updated);
+  } catch (error) {
+    console.error('Error updating post', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};

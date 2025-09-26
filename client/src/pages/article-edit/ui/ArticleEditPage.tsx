@@ -1,11 +1,107 @@
-import React from 'react';
+import { RootState } from '../../../api/store';
+import {
+  useGetPostsQuery,
+  useLikePostMutation,
+  useUpdatePostMutation,
+} from '../../../api/apiSlice';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useToast } from '../../../shared/lib/toast';
+import * as S from './ArticleEditPage.styled';
+import MyButton from '../../../components/Button/Button';
+import CommentsDiv from '../../../components/Comment/Comment';
 
 const ArticleEditPage: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const { token, role, user } = useSelector((state: RootState) => state.auth);
+  const navigate = useNavigate();
+
+  const { data: posts, isLoading, error } = useGetPostsQuery();
+  const [updatedPost] = useUpdatePostMutation();
+  const { showInfo, showError } = useToast();
+
+  const [article, setArticle] = useState<any>(null);
+  const [title, setTitle] = useState('');
+  const [excerpt, setExcerpt] = useState('');
+
+  // useEffect(() => {
+  //   if (isLoading) {
+  //     showInfo('Loading article...');
+  //   }
+  // }, [isLoading]);
+
+  useEffect(() => {
+    if (posts && id) {
+      const found = posts.find((p) => p._id === id);
+
+      if (found) {
+        setArticle(found);
+        setTitle(found.title);
+        setExcerpt(found.excerpt);
+      }
+    }
+  }, [posts, id]);
+
+  const handleSave = async () => {
+    if (!id) return;
+    try {
+      const updated = await updatedPost({
+        id,
+        data: { title, excerpt },
+      }).unwrap();
+
+      showInfo('Статья успешно обновлена!');
+      navigate(`/article_read/${id}`);
+    } catch (err) {
+      if (err?.status === 401) {
+        showError('Вы не авторизированы!');
+        navigate('/signin');
+      } else {
+        showError('Ошибка при обновслении статьи!');
+      }
+    }
+  };
+
+  const handleCancel = () => {
+    navigate(`/article_edit/${id}`);
+  };
+
+  if (isLoading) {
+    return <div>Загрузка...</div>;
+  }
+
+  if (error) {
+    return <div>Ошибка загрузки статьи</div>;
+  }
+
+  if (!article) {
+    return <div>Статья не найдена</div>;
+  }
+
+  const canEdit = token && (role === 'admin' || user?.id === article.authorId);
+  if (!canEdit) return <div>У вас нет прав на редактирование</div>;
+
   return (
-    <div>
-      <h1>Article Edit Page</h1>
-      <p>This for article edit for users</p>
-    </div>
+    <S.EditWrapper>
+      <S.EditForm>
+        <S.Title>Редактирование статьи</S.Title>
+
+        <S.Label>Заголовок</S.Label>
+        <S.Input value={title} onChange={(e) => setTitle(e.target.value)} />
+
+        <S.Label>Текст</S.Label>
+        <S.TextArea
+          value={excerpt}
+          onChange={(e) => setExcerpt(e.target.value)}
+        />
+
+        <S.ButtonWrapper>
+          <S.MyButton onClick={handleSave}>Сохранить</S.MyButton>
+          <S.MyButton onClick={handleCancel}>Отмена</S.MyButton>
+        </S.ButtonWrapper>
+      </S.EditForm>
+    </S.EditWrapper>
   );
 };
 

@@ -6,6 +6,7 @@ import {
   likePost,
   commentPost,
   commentGetPost,
+  updatePost,
 } from '../controllers/postController';
 import { authenticate, authorize } from '../middleware/auth';
 
@@ -18,5 +19,6 @@ router.get('/:id/comments', authenticate, commentGetPost);
 router.post('/', authenticate, authorize('user', 'admin'), createPost);
 router.post('/:id/comments', authenticate, commentPost);
 router.patch('/:id/like', authenticate, likePost);
+router.put('/:id', authenticate, updatePost);
 
 export default router;
