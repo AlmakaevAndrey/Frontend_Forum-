@@ -1,6 +1,6 @@
 import { RootState } from '../../../api/store';
-import { useGetPostsQuery, useLikePostMutation } from '../../../api/apiSlice';
-import React, { useEffect, useState } from 'react';
+import { useGetPostQuery, useLikePostMutation } from '../../../api/apiSlice';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useToast } from '../../../shared/lib/toast';
@@ -13,29 +13,13 @@ const ArticleReadPage: React.FC = () => {
   const { token, role, user } = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
 
-  const { data: posts, isLoading, error } = useGetPostsQuery();
+  const { data: article, isLoading, error } = useGetPostQuery(id!);
   const [likePost] = useLikePostMutation();
-  const [article, setArticle] = useState<any>(null);
-  const hasLiked = article?.likes?.includes?.(user?.id) ?? false;
+
+  const hasLiked =
+    article?.likes?.some((like) => like.toString() === user?.id) ?? false;
 
   const { showInfo, showError } = useToast();
-
-  useEffect(() => {
-    if (isLoading) {
-      showInfo('Loading article...');
-    }
-  }, [isLoading]);
-
-  useEffect(() => {
-    if (posts && id) {
-      const found = posts.find((p) => p._id === id);
-      setArticle(found);
-
-      if (found) {
-        showInfo('Article found!');
-      }
-    }
-  }, [posts, id]);
 
   const handleEdit = () => {
     navigate(`/article_edit/${id}`);
@@ -45,10 +29,6 @@ const ArticleReadPage: React.FC = () => {
     if (!id) return;
     try {
       const updated = await likePost(id).unwrap();
-      setArticle((prev: any) => ({
-        ...prev,
-        likes: updated.likes,
-      }));
       showInfo(updated.likes ? 'Вы лайкнули!' : 'Вы убрали лайк!');
     } catch (err) {
       if (err?.status === 401) {
@@ -72,8 +52,7 @@ const ArticleReadPage: React.FC = () => {
     return <div>Статья не найдена</div>;
   }
 
-  // const canEdit = token && (role === 'admin' || user?.id === article.authorId);
-  const canEdit = true;
+  const canEdit = token && (role === 'admin' || user?.id === article.author);
 
   return (
     <S.ArticleWrapper>
@@ -84,13 +63,11 @@ const ArticleReadPage: React.FC = () => {
         </S.Author>
         <S.Content>{article.excerpt}</S.Content>
         <S.ButtonWrapper>
-          <MyButton onClick={handleLike}>
-            {article.liked ? '❤️' : '💔'}({article.likes.length})
+          <MyButton onClick={handleLike} disabled={!article}>
+            {hasLiked ? '❤️' : '💔'}({article.likes?.length ?? 0})
           </MyButton>
-
-          {/* {canEdit && <MyButton onClick={handleEdit}>Edit</MyButton>} */}
-          <MyButton onClick={handleEdit}>Edit</MyButton>
-          {/* Сделать админку */}
+          {canEdit && <MyButton onClick={handleEdit}>Edit</MyButton>}
+          {/* сделать админку */}
         </S.ButtonWrapper>
 
         <CommentsDiv postId={article._id} />

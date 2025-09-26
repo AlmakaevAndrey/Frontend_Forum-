@@ -2,6 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import axios from 'axios';
 import { Comment, Post } from '../components/Post/types';
 import { email } from 'zod';
+import { error } from 'console';
 
 const axiosBaseQuery =
   ({ baseUrl }: { baseUrl: string }) =>
@@ -63,6 +64,11 @@ export const ApiSlice = createApi({
       query: () => ({ url: '/posts', method: 'get' }),
       transformResponse: (response: any) => response.data,
       providesTags: ['Posts'],
+    }),
+
+    getPost: builder.query<Post, string>({
+      query: (id) => ({ url: `/posts/${id}`, method: 'get' }),
+      providesTags: (result, error, id) => [{ type: 'Posts', id }],
     }),
 
     addPost: builder.mutation<Post, Partial<Post>>({
@@ -130,6 +136,7 @@ export const {
   useLoginMutation,
   useAddPostMutation,
   useGetPostsQuery,
+  useGetPostQuery,
   useLikePostMutation,
   useGetCommentsQuery,
   useAddCommentMutation,
