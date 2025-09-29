@@ -1,8 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import axios from 'axios';
 import { Comment, Post } from '../components/Post/types';
-import { email } from 'zod';
-import { error } from 'console';
 
 const axiosBaseQuery =
   ({ baseUrl }: { baseUrl: string }) =>
@@ -10,10 +8,12 @@ const axiosBaseQuery =
     url,
     method,
     data,
+    headers,
   }: {
     url: string;
     method: string;
     data?: any;
+    headers?: Record<string, string>;
   }) => {
     try {
       const token = localStorage.getItem('token');
@@ -21,7 +21,11 @@ const axiosBaseQuery =
         url: baseUrl + url,
         method,
         data,
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        headers: {
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          ...headers,
+        },
+        withCredentials: true,
       });
       return { data: result.data };
     } catch (axiosError: any) {
@@ -37,7 +41,7 @@ const axiosBaseQuery =
 export const ApiSlice = createApi({
   reducerPath: 'api',
   baseQuery: axiosBaseQuery({ baseUrl: 'http://localhost:5000' }),
-  tagTypes: ['Posts', 'Auth', 'Comments'],
+  tagTypes: ['Posts', 'Auth', 'Comments', 'User'],
   endpoints: (builder) => ({
     register: builder.mutation<
       any,
@@ -84,9 +88,6 @@ export const ApiSlice = createApi({
       query: (postId) => ({
         url: `/posts/${postId}/comments`,
         method: 'get',
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
-        },
       }),
       providesTags: (result, error, postId) => [
         { type: 'Comments', id: postId },
@@ -98,9 +99,6 @@ export const ApiSlice = createApi({
         url: `/posts/${id}/comments`,
         method: 'post',
         data: { text },
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
-        },
       }),
       invalidatesTags: (result, error, { id }) => [{ type: 'Comments', id }],
     }),
@@ -128,6 +126,49 @@ export const ApiSlice = createApi({
       }),
       invalidatesTags: ['Posts'],
     }),
+
+    updateUser: builder.mutation<any, { username?: string; avatar?: string }>({
+      query: (data) => ({
+        url: '/auth/update',
+        method: 'put',
+        data,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+        },
+      }),
+      invalidatesTags: ['Auth'],
+    }),
+
+    uploadAvatar: builder.mutation<
+      { avatar: string; message: string },
+      FormData
+    >({
+      query: (formData) => ({
+        url: '/upload/avatar',
+        method: 'post',
+        data: formData,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+        },
+      }),
+      invalidatesTags: ['User'],
+    }),
+    // Доделать после а то не работает загрузка аватара в профиль
+
+    updateUserPost: builder.mutation<
+      any,
+      { username?: string; avatar?: string }
+    >({
+      query: (data) => ({
+        url: '/auth/update',
+        method: 'put',
+        data,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+        },
+      }),
+      invalidatesTags: ['Auth'],
+    }),
   }),
 });
 
@@ -141,4 +182,6 @@ export const {
   useGetCommentsQuery,
   useAddCommentMutation,
   useUpdatePostMutation,
+  useUploadAvatarMutation,
+  useUpdateUserPostMutation,
 } = ApiSlice;

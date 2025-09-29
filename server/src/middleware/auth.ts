@@ -12,6 +12,7 @@ declare global {
         username: string;
         id: string;
         role: string;
+        avatar: string;
       };
     }
   }
@@ -26,10 +27,12 @@ export const authenticate = (
   if (!token) return res.status(401).json({ message: 'No token' });
 
   try {
+    console.log('Token', token);
     const decoded = jwt.verify(token, JWT_SECRET) as {
       id: string;
       role: string;
       username: string;
+      avatar: string;
     };
     req.user = decoded;
     next();

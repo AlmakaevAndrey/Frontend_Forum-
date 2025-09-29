@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 
 import authRoutes from './routes/auth';
 import postsRoutes from './routes/posts';
+import uploadRoutes from './routes/upload';
 import path from 'path';
 
 dotenv.config();
@@ -15,14 +16,18 @@ app.use(
   cors({
     origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
     credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
 
 app.use(cookieParser());
 app.use(express.json());
 
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+
 app.use('/auth', authRoutes);
 app.use('/posts', postsRoutes);
+app.use('/upload', uploadRoutes);
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../../client/build')));

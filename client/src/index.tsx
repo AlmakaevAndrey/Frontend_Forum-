@@ -51,6 +51,14 @@ const router = createBrowserRouter([
         ),
       },
       {
+        path: '/profile',
+        element: (
+          <ProtectedRoute roles={['user', 'admin']}>
+            <ProfilePage />
+          </ProtectedRoute>
+        ),
+      },
+      {
         path: '/article_edit/:id',
         element: (
           <ProtectedRoute roles={['user', 'admin']}>

@@ -32,7 +32,6 @@ export const Label = styled.label`
 
 export const Input = styled.input`
   width: 100%;
-  padding: 12px;
   font-size: 16px;
   border-radius: 8px;
   border: 1px solid #ccc;
@@ -62,7 +61,7 @@ export const TextArea = styled.textarea`
 
 export const ButtonWrapper = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content:;
   gap: 12px;
   margin-top: 20px;
 `;

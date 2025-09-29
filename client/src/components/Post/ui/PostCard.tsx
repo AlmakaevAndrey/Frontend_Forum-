@@ -20,7 +20,15 @@ export const PostCard = ({ post, onClick }: PostProps) => {
       <S.Title>{post.title}</S.Title>
       <S.Excerpt>{post.excerpt}</S.Excerpt>
       <S.Footer>
-        <span>👨‍💻 {post.author}</span>
+        <span>
+          {post.authorAvatar ? (
+            <img src={post.authorAvatar} alt={post.author} />
+          ) : (
+            '👨‍💻'
+          )}
+          {/* Доделать логику аватара, после того ка сделаю добавление аватара и создание статьи */}
+          {post.author}
+        </span>
         <span>
           📅
           {new Date(post.date).toLocaleDateString('ru-RU', {
@@ -29,7 +37,6 @@ export const PostCard = ({ post, onClick }: PostProps) => {
             year: 'numeric',
           })}
         </span>
-        {/* Сделать через редакс лайки в глобальном сторедже, сделать лайки чтобы 1 человек мог ставить"! */}
         <span onClick={handleLikes}>🩷 {post.likes?.length ?? 0}</span>
       </S.Footer>
     </S.Card>

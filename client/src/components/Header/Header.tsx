@@ -30,7 +30,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkProps, toggleTheme }) => {
   const handleLogin = () => {
     navigate('/signin');
   };
-
+  // Сделать NAV
   return (
     <HeaderWrapper>
       <HeaderDivider>
@@ -40,7 +40,9 @@ const Header: React.FC<HeaderProps> = ({ isDarkProps, toggleTheme }) => {
         <ButtonDivWrapper>
           <Navigation>
             <Link to='/'>Home</Link>
+
             {token && <Link to='/setting'>Settings</Link>}
+            {token && <Link to='/profile'>Profile</Link>}
             {!token ? (
               <>
                 <Link to='/signin'>Sign in</Link>

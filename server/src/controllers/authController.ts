@@ -21,7 +21,12 @@ export const register = async (req: Request, res: Response) => {
     await user.save();
 
     const token = jwt.sign(
-      { id: user._id, username: user.username, role: user.role },
+      {
+        id: user._id,
+        username: user.username,
+        role: user.role,
+        avatar: user.avatar,
+      },
       JWT_SECRET,
       {
         expiresIn: JWT_EXPIRES_IN,
@@ -56,9 +61,13 @@ export const login = async (req: Request, res: Response) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, {
-      expiresIn: JWT_EXPIRES_IN,
-    } as SignOptions);
+    const token = jwt.sign(
+      { id: user._id, role: user.role, avatar: user.avatar },
+      JWT_SECRET,
+      {
+        expiresIn: JWT_EXPIRES_IN,
+      } as SignOptions
+    );
 
     res.cookie('token', token, {
       httpOnly: true,
