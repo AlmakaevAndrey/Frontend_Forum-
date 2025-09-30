@@ -71,7 +71,7 @@ export const AddCommentButton = styled.button`
   align-self: flex-end;
   padding: 8px 16px;
   background-color: ${({ theme }) => theme.colors.primary};
-  color: ${({ theme }) => theme.colors.textSvg};
+  color: ${({ theme }) => theme.colors.textBlack};
   font-weight: 600;
   border: none;
   border-radius: 8px;

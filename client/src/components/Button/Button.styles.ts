@@ -10,9 +10,10 @@ export const MyCustomButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1;
 
   background: ${({ theme }) => theme.colors.svg};
-  color: ${({ theme }) => theme.colors.textSvg};
+  color: ${({ theme }) => theme.colors.textBlack};
 
   &:hover {
     opacity: 0.9;

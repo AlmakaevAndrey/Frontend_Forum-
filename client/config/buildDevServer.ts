@@ -8,9 +8,11 @@ export function buildDevServer(option: BuildOptions): DevServerConfiguration {
     // Если раздавать статистику через nginx то нужно делать проксироваение на Index.html
     historyApiFallback: true,
     hot: true,
-    proxy: {
-      auth: 'http://localhost:5000',
-      posts: 'http://localhost:5000',
-    },
+    proxy: [
+      {
+        context: ['/auth', '/posts'],
+        target: 'http://localhost:5000',
+      },
+    ],
   };
 }

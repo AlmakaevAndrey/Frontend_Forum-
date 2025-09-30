@@ -60,7 +60,7 @@ export const MySignUpButton = styled.button`
   justify-content: center;
 
   background: ${({ theme }) => theme.colors.svg};
-  color: ${({ theme }) => theme.colors.textSvg};
+  color: ${({ theme }) => theme.colors.textBlack};
 
   &:hover {
     opacity: 0.9;

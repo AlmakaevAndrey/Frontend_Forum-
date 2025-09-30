@@ -12,6 +12,7 @@ import SignUpPage from './pages/sign-up/ui/SignUpPage';
 import { store } from './api/store';
 import { Provider } from 'react-redux';
 import ProtectedRoute from './routes/ProtectionRoute';
+import ArticleWriting from './pages/article-writing/ui/ArticleWritingPage';
 
 const router = createBrowserRouter([
   {
@@ -55,6 +56,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute roles={['user', 'admin']}>
             <ProfilePage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: '/article_writing',
+        element: (
+          <ProtectedRoute roles={['user', 'admin']}>
+            <ArticleWriting />
           </ProtectedRoute>
         ),
       },

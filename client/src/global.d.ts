@@ -5,6 +5,7 @@ declare module '*.module.scss' {
   const classNames: IClassNames;
   export = classNames;
 }
+declare module 'quill-image-resize-module';
 
 declare module '*.png';
 declare module '*.jpg';

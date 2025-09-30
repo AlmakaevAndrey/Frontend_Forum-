@@ -43,6 +43,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkProps, toggleTheme }) => {
 
             {token && <Link to='/setting'>Settings</Link>}
             {token && <Link to='/profile'>Profile</Link>}
+            {token && <Link to='/article_writing'>New Article</Link>}
             {!token ? (
               <>
                 <Link to='/signin'>Sign in</Link>
