@@ -1,16 +1,12 @@
 import { RootState } from '../../../api/store';
-import {
-  useGetPostsQuery,
-  useLikePostMutation,
-  useUpdatePostMutation,
-} from '../../../api/apiSlice';
+import { useGetPostsQuery, useUpdatePostMutation } from '../../../api/apiSlice';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useToast } from '../../../shared/lib/toast';
 import * as S from './ArticleEditPage.styled';
-import MyButton from '../../../components/Button/Button';
-import CommentsDiv from '../../../components/Comment/Comment';
+import Editor from '../../../components/Editor/Editor';
+import DOMPurify from 'dompurify';
 
 const ArticleEditPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -24,12 +20,7 @@ const ArticleEditPage: React.FC = () => {
   const [article, setArticle] = useState<any>(null);
   const [title, setTitle] = useState('');
   const [excerpt, setExcerpt] = useState('');
-
-  // useEffect(() => {
-  //   if (isLoading) {
-  //     showInfo('Loading article...');
-  //   }
-  // }, [isLoading]);
+  const [excerptHTML, setExcerptHtml] = useState('');
 
   useEffect(() => {
     if (posts && id) {
@@ -91,9 +82,16 @@ const ArticleEditPage: React.FC = () => {
         <S.Input value={title} onChange={(e) => setTitle(e.target.value)} />
 
         <S.Label>Текст</S.Label>
-        <S.TextArea
+        {/* <S.TextArea
           value={excerpt}
           onChange={(e) => setExcerpt(e.target.value)}
+        /> */}
+        <Editor
+          value={excerptHTML}
+          onChange={(plainText, html) => {
+            setExcerpt(plainText);
+            setExcerptHtml(html);
+          }}
         />
 
         <S.ButtonWrapper>

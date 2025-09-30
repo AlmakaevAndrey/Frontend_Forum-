@@ -13,7 +13,6 @@ export const register = async (req: Request, res: Response) => {
   try {
     const parsed = registerSchema.parse(req.body);
     const exists = await User.findOne({ email: parsed.email });
-    console.log('Found user', exists);
     if (exists)
       return res.status(400).json({ message: 'Email already in use' });
 
