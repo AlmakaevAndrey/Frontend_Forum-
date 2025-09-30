@@ -43,8 +43,20 @@ export const getPost = async (req: Request, res: Response) => {
 
 export const createPost = async (req: Request, res: Response) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    const user = await User.findById(req.user?.id).select('username');
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
     const parsed = postCreateSchema.parse(req.body);
-    const newPost = new Post(parsed);
+    const newPost = new Post({
+      ...parsed,
+      author: user.username,
+      userId: req.user.id,
+    });
+
     const saved = await newPost.save();
     res.status(201).json(saved);
   } catch (err) {

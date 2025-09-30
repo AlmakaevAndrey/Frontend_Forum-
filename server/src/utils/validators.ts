@@ -14,5 +14,4 @@ export const loginSchema = z.object({
 export const postCreateSchema = z.object({
   title: z.string().min(1),
   excerpt: z.string().min(1),
-  author: z.string().min(1),
 });

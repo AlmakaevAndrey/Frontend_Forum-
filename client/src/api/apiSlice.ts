@@ -80,6 +80,10 @@ export const ApiSlice = createApi({
         url: '/posts',
         method: 'post',
         data: newPost,
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+        },
       }),
       invalidatesTags: ['Posts'],
     }),
