@@ -9,7 +9,7 @@ export const EditWrapper = styled.div`
 export const EditForm = styled.article`
   max-width: 800px;
   width: 100%;
-  margin: 40px auto;
+  margin: 160px auto;
   padding: 20px;
   background: ${({ theme }) => theme.colors.primary};
   border-radius: 12px;

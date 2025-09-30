@@ -6,22 +6,21 @@ export const ContentWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  padding: 0 20px;
+  padding: 60px 20px;
   background-color: ${({ theme }) => theme.colors.backgroundSecond};
-  // align-items: center;
 `;
 
 export const Section = styled.section`
   display: flex;
   flex-direction: column;
+  margin: 40px 0 0 0;
 `;
 
 export const SettingsForArticle = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  padding: 20px;
+  padding: 30px;
   border-radius: 16px;
   background: ${({ theme }) => theme.colors.background};
   box-shadow: 0 2px 8px ${({ theme }) => theme.colors.border};
@@ -38,7 +37,7 @@ export const SettingsForArticle = styled.div`
 
 export const WrapperForArticleDiv = styled.div`
   display: flex;
-  padding: 20px;
+  padding: 0 20px;
   background: ${({ theme }) => theme.colors.background};
 `;
 

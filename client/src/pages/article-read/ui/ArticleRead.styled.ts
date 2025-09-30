@@ -4,10 +4,11 @@ export const ArticleWrapper = styled.div`
   display: flex;
   justify-content: center;
   padding: 20px;
+  margin: 160px auto;
 `;
 
 export const ArticleDiv = styled.article`
-    max-width: 800px
+  max-width: 800px
   background: ${({ theme }) => theme.colors.primary};
   margin: 40px auto;
   padding: 20px;

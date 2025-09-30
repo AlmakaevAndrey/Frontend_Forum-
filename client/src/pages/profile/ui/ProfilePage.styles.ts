@@ -4,7 +4,7 @@ import styled from 'styled-components';
 export const ProfileWrapper = styled.div`
   padding: 20px;
   max-width: 900px;
-  margin: 0 auto;
+  margin: 160px auto;
 `;
 
 export const ProfileCard = styled.div`

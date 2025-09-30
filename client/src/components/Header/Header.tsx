@@ -11,6 +11,7 @@ import { Logo } from '../../assets/svg/Frontend_Forum';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../auth/authSlice';
 import { RootState } from 'api/store';
+import ArticleLogo from '../../assets/svg/ArticleLogo';
 
 interface HeaderProps {
   isDarkProps: boolean;
@@ -43,7 +44,11 @@ const Header: React.FC<HeaderProps> = ({ isDarkProps, toggleTheme }) => {
 
             {token && <Link to='/setting'>Settings</Link>}
             {token && <Link to='/profile'>Profile</Link>}
-            {token && <Link to='/article_writing'>New Article</Link>}
+            {token && (
+              <Link to='/article_writing'>
+                <ArticleLogo />
+              </Link>
+            )}
             {!token ? (
               <>
                 <Link to='/signin'>Sign in</Link>

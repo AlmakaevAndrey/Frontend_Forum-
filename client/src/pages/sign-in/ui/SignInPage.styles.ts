@@ -23,7 +23,7 @@ export const SignInForm = styled.form`
   height: 500px;
   display: flex;
   flex-direction: column;
-  margin: 50px 0;
+  margin: 150px 0;
   gap: 20px;
   font-weight: 500;
   font-size: 16px;

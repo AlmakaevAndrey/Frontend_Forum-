@@ -7,7 +7,9 @@ export const HeaderWrapper = styled.header`
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  position: fixed;
   gap: 10px;
+  // margin: 20px 20px;
   padding: 20px;
   margin: 0 0 20px 0;
   background: ${({ theme }) => theme.colors.primary};
@@ -38,6 +40,7 @@ export const ButtonDivWrapper = styled.div`
 
 export const Navigation = styled.nav`
   display: flex;
+  align-items: center;
   gap: 10px;
 
   a {

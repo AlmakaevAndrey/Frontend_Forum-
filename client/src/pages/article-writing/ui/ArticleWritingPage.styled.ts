@@ -4,6 +4,7 @@ export const ArticleWrapper = styled.div`
   display: flex;
   justify-content: center;
   padding: 20px;
+  margin: 160px auto;
 `;
 
 export const ArticleForm = styled.form`
