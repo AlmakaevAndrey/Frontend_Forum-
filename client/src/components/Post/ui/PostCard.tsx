@@ -20,7 +20,7 @@ export const PostCard = ({ post, onClick }: PostProps) => {
       <S.Title>{post.title}</S.Title>
       <S.Excerpt>{post.excerpt}</S.Excerpt>
       <S.Footer>
-        <span>
+        <S.SpanItem>
           {post.authorAvatar ? (
             <img src={post.authorAvatar} alt={post.author} />
           ) : (
@@ -28,16 +28,18 @@ export const PostCard = ({ post, onClick }: PostProps) => {
           )}
           {/* Доделать логику аватара, после того ка сделаю добавление аватара и создание статьи */}
           {post.author}
-        </span>
-        <span>
+        </S.SpanItem>
+        <S.SpanItem>
           📅
           {new Date(post.date).toLocaleDateString('ru-RU', {
             day: '2-digit',
             month: 'long',
             year: 'numeric',
           })}
-        </span>
-        <span onClick={handleLikes}>🩷 {post.likes?.length ?? 0}</span>
+        </S.SpanItem>
+        <S.SpanItem onClick={handleLikes}>
+          🩷 {post.likes?.length ?? 0}
+        </S.SpanItem>
       </S.Footer>
     </S.Card>
   );

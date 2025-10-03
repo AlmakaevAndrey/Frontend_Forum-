@@ -61,7 +61,7 @@ export const TextArea = styled.textarea`
 
 export const ButtonWrapper = styled.div`
   display: flex;
-  justify-content:;
+  justify-content: space-between;
   gap: 12px;
   margin-top: 20px;
 `;

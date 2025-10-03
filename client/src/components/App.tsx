@@ -47,6 +47,12 @@ const App: React.FC = () => {
         <Header
           isDarkProps={isDark}
           toggleTheme={() => setIsDark(!isDark)}
+          handleLogout={function (): void {
+            throw new Error('Function not implemented.');
+          }}
+          handleLogin={function (): void {
+            throw new Error('Function not implemented.');
+          }}
         ></Header>
         <Content>
           <MainContainer>

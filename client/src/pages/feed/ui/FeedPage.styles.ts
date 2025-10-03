@@ -16,13 +16,18 @@ export const Section = styled.section`
   margin: 40px 0 0 0;
 `;
 
+export const WrapperForArticleDiv = styled.div`
+  display: flex;
+  background: ${({ theme }) => theme.colors.primary};
+`;
+
 export const SettingsForArticle = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  padding: 30px;
+  padding: 20px;
   border-radius: 16px;
-  background: ${({ theme }) => theme.colors.background};
+  background: ${({ theme }) => theme.colors.primary};
   box-shadow: 0 2px 8px ${({ theme }) => theme.colors.border};
 
   transition:
@@ -35,12 +40,6 @@ export const SettingsForArticle = styled.div`
   }
 `;
 
-export const WrapperForArticleDiv = styled.div`
-  display: flex;
-  padding: 0 20px;
-  background: ${({ theme }) => theme.colors.background};
-`;
-
 export const ContainerForArticle = styled.div`
   width: 100%;
   display: flex;
@@ -48,7 +47,7 @@ export const ContainerForArticle = styled.div`
   padding: 0 24px;
   border-radius: 20px;
 
-  background: ${({ theme }) => theme.colors.background};
+  background: ${({ theme }) => theme.colors.primary};
   box-shadow: 0 2px 8px ${({ theme }) => theme.colors.border};
 
   display: flex;
@@ -80,6 +79,7 @@ export const InputInArticle = styled.input`
 
   @media (max-width: 515px) {
     width: 200px;
+    padding: 10px 14px;
   }
 
   input:focus {
@@ -137,7 +137,7 @@ export const ContainerForLinks = styled.div`
   align-items: center;
   padding: 0 0 20px 0;
   border-radius: 16px;
-  background: ${({ theme }) => theme.colors.background};
+  background: ${({ theme }) => theme.colors.primary};
   box-shadow: 0 2px 8px ${({ theme }) => theme.colors.border};
 
   transition:

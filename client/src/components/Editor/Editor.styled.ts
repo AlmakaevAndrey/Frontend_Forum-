@@ -1,17 +1,26 @@
 import styled from 'styled-components';
 
 export const ArticleForm = styled.form`
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 12px;
+
   .ql-container {
-    max-width: 900px;
-    width: 500px;
+    width: 100%;
+    min-height: 300px;
+    border-radius: 0 0 8px 8px;
+    border: 1px solid #ddd;
+    background: ${({ theme }) => theme.colors.backgroundInput};
+    color: ${({ theme }) => theme.colors.textBlack};
+    font-size: 16px;
   }
 
   .ql-editor {
     white-space: pre-wrap;
     word-wrap: break-word;
     overflow-wrap: break-word;
-    background: ${({ theme }) => theme.colors.backgroundInput};
-    color: ${({ theme }) => theme.colors.textBlack};
+    line-height: 1.6;
   }
 
   img {
@@ -27,6 +36,35 @@ export const ArticleForm = styled.form`
     background: #ffffff;
     border-radius: 8px 8px 0 0;
     border: 1px solid #ddd;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0 8px;
+
+    .ql-container {
+      min-height: 200px;
+      font-size: 14px;
+    }
+
+    .ql-toolbar {
+      button {
+        padding: 4px;
+        svg {
+          width: 14px;
+          height: 14px;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    .ql-toolbar {
+      justify-content: center;
+    }
   }
 `;
+
 export const Content = styled.form``;

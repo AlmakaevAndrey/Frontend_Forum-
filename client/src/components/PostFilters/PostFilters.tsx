@@ -1,8 +1,8 @@
 import React from 'react';
-import { useFormAction } from 'react-router-dom';
 import z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import * as S from './PostFilters.styled';
 
 type SortOption = 'date' | 'likes';
 
@@ -30,17 +30,17 @@ export const PostFilters: React.FC<{
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div>
-        <input {...register('query')} placeholder='Поиск постов' />
+    <S.SearchForm onSubmit={handleSubmit(onSubmit)}>
+      <S.FormGroup>
+        <S.Input {...register('query')} placeholder='Поиск постов' />
         {errors.query && <span>{errors.query.message}</span>}
-      </div>
-      <select {...register('sort')}>
+      </S.FormGroup>
+      <S.Select {...register('sort')}>
         <option value='date'>По дате</option>
         <option value='likes'>По лайкам</option>
-      </select>
+      </S.Select>
 
       <button type='submit'>Найти</button>
-    </form>
+    </S.SearchForm>
   );
 };

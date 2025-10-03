@@ -19,18 +19,34 @@ export const TitleText = styled.h2`
 `;
 
 export const SignInForm = styled.form`
-  width: 460px;
+  max-width: 460px;
   height: 500px;
   display: flex;
   flex-direction: column;
+  align-items: center;
   margin: 150px 0;
   gap: 20px;
   font-weight: 500;
   font-size: 16px;
   padding: 20px;
-  border-radius: 16px;
-  background: ${({ theme }) => theme.colors.background};
-  box-shadow: 0 2px 8px ${({ theme }) => theme.colors.border};
+  background: ${({ theme }) => theme.colors.primary};
+  border: 2px solid ${({ theme }) => theme.colors.border};
+  border-radius: 8px;
+  outline: none;
+  transition: all 0.3s ease;
+
+  @media (max-width: 446px) {
+    width: 350px;
+  }
+
+  input:focus {
+    border-color: #0070f3;
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors.border};
+  }
+
+  input::placeholder {
+    color: #888;
+  }
 `;
 
 export const SignInInput = styled.input`
@@ -41,6 +57,10 @@ export const SignInInput = styled.input`
   font-size: 16px;
   background-color: ${({ theme }) => theme.colors.backgroundInput};
   border-color: ${({ theme }) => theme.colors.text};
+
+  @media (max-width: 446px) {
+    width: 300px;
+  }
 
   &:focus {
     border-color: ${({ theme }) => theme.colors.background};
@@ -61,6 +81,10 @@ export const MySignInButton = styled.button`
 
   background: ${({ theme }) => theme.colors.svg};
   color: ${({ theme }) => theme.colors.textBlack};
+
+  @media (max-width: 446px) {
+    width: 300px;
+  }
 
   &:hover {
     opacity: 0.9;

@@ -6,7 +6,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useToast } from '../../../shared/lib/toast';
 import * as S from './ArticleEditPage.styled';
 import Editor from '../../../components/Editor/Editor';
-import DOMPurify from 'dompurify';
 
 const ArticleEditPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -82,10 +81,7 @@ const ArticleEditPage: React.FC = () => {
         <S.Input value={title} onChange={(e) => setTitle(e.target.value)} />
 
         <S.Label>Текст</S.Label>
-        {/* <S.TextArea
-          value={excerpt}
-          onChange={(e) => setExcerpt(e.target.value)}
-        /> */}
+
         <Editor
           value={excerptHTML}
           onChange={(plainText, html) => {

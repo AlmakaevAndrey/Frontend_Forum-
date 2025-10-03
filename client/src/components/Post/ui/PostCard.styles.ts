@@ -23,8 +23,28 @@ export const Title = styled.h3`
 `;
 
 export const Excerpt = styled.p`
+  width: 100%;
   font-size: 16px;
   color: ${({ theme }) => theme.colors.text};
+  overflow-wrap: break-word;
+`;
+
+export const SpanItem = styled.span`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: normal;
+
+  img {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.primary || '#007bff'};
+  }
 `;
 
 export const Footer = styled.div`
@@ -33,9 +53,14 @@ export const Footer = styled.div`
   font-size: 14px;
   color: ${({ theme }) => theme.colors.text};
 
+  @media (max-width: 460px) {
+    display: flex;
+    flex-direction: column;
+  }
+
   span {
     display: flex;
-    // align-items: center;/
+    align-items: center;/
     gap: 4px;
 
     first:child {

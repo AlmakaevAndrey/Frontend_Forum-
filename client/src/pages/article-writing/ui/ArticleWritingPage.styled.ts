@@ -11,6 +11,19 @@ export const ArticleForm = styled.form`
   .ql-container {
     max-width: 900px;
     width: 500px;
+    border: 1px solid #ddd;
+
+    @media (max-width: 620px) {
+      max-width: 400px;
+    }
+
+    @media (max-width: 500px) {
+      max-width: 300px;
+    }
+
+    @media (max-width: 410px) {
+      max-width: 270px;
+    }
   }
 
   .ql-editor {
@@ -19,6 +32,18 @@ export const ArticleForm = styled.form`
     overflow-wrap: break-word;
     background: ${({ theme }) => theme.colors.backgroundInput};
     color: ${({ theme }) => theme.colors.textBlack};
+
+    @media (max-width: 620px) {
+      max-width: 400px;
+    }
+
+    @media (max-width: 500px) {
+      max-width: 300px;
+    }
+
+    @media (max-width: 410px) {
+      max-width: 270px;
+    }
   }
 
   img {
@@ -34,6 +59,18 @@ export const ArticleForm = styled.form`
     background: #ffffff;
     border-radius: 8px 8px 0 0;
     border: 1px solid #ddd;
+
+    @media (max-width: 620px) {
+      max-width: 400px;
+    }
+
+    @media (max-width: 500px) {
+      max-width: 300px;
+    }
+
+    @media (max-width: 410px) {
+      max-width: 270px;
+    }
   }
 `;
 
@@ -55,13 +92,27 @@ export const Text = styled.h1`
 `;
 
 export const Input = styled.input`
-  width: 100%;
-  height: 30px;
+  width: 500px;
+  height: 40px;
+  border-radius: 8px;
+  font-weight: 500;
   font-size: 16px;
-  border-radius: 6px;
-  border: 1px solid #fff;
-  margin-bottom: 20px;
-  outline: none;
+  margin: 20px 0;
+
+  @media (max-width: 620px) {
+    width: 400px;
+  }
+
+  @media (max-width: 500px) {
+    max-width: 300px;
+  }
+
+  @media (max-width: 410px) {
+    max-width: 270px;
+  }
+
+  background-color: ${({ theme }) => theme.colors.backgroundInput};
+  border-color: white;
   &:focus {
     border-color: ${({ theme }) => theme.colors.text};
     box-shadow: 0px 0px 4px ${({ theme }) => theme.colors.text};

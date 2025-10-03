@@ -8,6 +8,7 @@ export const HeaderWrapper = styled.header`
   justify-content: center;
   align-items: center;
   position: fixed;
+  z-index: 999;
   gap: 10px;
   // margin: 20px 20px;
   padding: 20px;
@@ -15,8 +16,8 @@ export const HeaderWrapper = styled.header`
   background: ${({ theme }) => theme.colors.primary};
 
   @media (max-width: 480px) {
-    padding: 5px;
-    gap: 0;
+    padding: 10px;
+    gap: 6px;
   }
 `;
 
@@ -32,10 +33,6 @@ export const ButtonDivWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
-
-  @media (max-width: 520px) {
-    gap: 0px;
-  }
 `;
 
 export const Navigation = styled.nav`
@@ -66,9 +63,7 @@ export const Navigation = styled.nav`
   @media (max-width: 520px) {
     display: flex;
     gap: 0;
-
-    a:first-child {
-      display: none;
-    }
   }
 `;
+
+export const Linked = styled.link``;
