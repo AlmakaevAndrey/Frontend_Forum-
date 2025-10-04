@@ -36,7 +36,6 @@ const SignUnPage: React.FC = () => {
       );
 
       showInfo('Вы успешно вошли!');
-      console.log('навигация на главную страницу');
       navigate('/', { replace: true });
     } catch (err: any) {
       showError(err?.data?.message || 'Ошибка при регистрации');

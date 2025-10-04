@@ -49,7 +49,6 @@ export const register = async (req: Request, res: Response) => {
 };
 
 export const login = async (req: Request, res: Response) => {
-  console.log('Login', req.body);
   try {
     const parsed = loginSchema.parse(req.body);
     const user = await User.findOne({ email: parsed.email });

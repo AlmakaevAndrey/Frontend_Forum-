@@ -1,3 +1,4 @@
+import { Input } from './../../article-edit/ui/ArticleEditPage.styled';
 import styled from 'styled-components';
 
 export const ContentWrapper = styled.div`
@@ -45,8 +46,8 @@ export const SignUpInput = styled.input`
   border-radius: 8px;
   font-weight: 500;
   font-size: 16px;
-  background-color: ${({ theme }) => theme.colors.text};
-  border-color: ${({ theme }) => theme.colors.text};
+  background-color: ${({ theme }) => theme.colors.backgroundInput};
+  border-color: ${({ theme }) => theme.colors.backgroundInput};
 
   @media (max-width: 476px) {
     width: 300px;

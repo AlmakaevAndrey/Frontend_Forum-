@@ -13,20 +13,38 @@ interface NavProps {
 const Nav: React.FC<NavProps> = ({ token, children }) => {
   const [isOpen, setIsOpen] = useState(false);
 
+  const closeMenu = () => setIsOpen(false);
+  const toggleMenu = () => setIsOpen((prev) => !prev);
+
   return (
     <S.NavWrapper>
       <S.BurgerButton onClick={() => setIsOpen(!isOpen)}>
         {' '}
         {children}
       </S.BurgerButton>
-      <S.Navigation $isOpen={isOpen}>
-        <Link to='/'>Home</Link>
-        <Link to='/signin'>Sign in</Link>
 
-        {token && <Link to='/setting'>Settings</Link>}
-        {token && <Link to='/profile'>Profile</Link>}
+      <S.Overlay $isOpen={isOpen} onClick={closeMenu} />
+
+      <S.Navigation $isOpen={isOpen}>
+        <Link to='/' onClick={closeMenu}>
+          Home
+        </Link>
+        <Link to='/signin' onClick={closeMenu}>
+          Sign in
+        </Link>
+
         {token && (
-          <Link to='/article_writing'>
+          <Link to='/setting' onClick={closeMenu}>
+            Settings
+          </Link>
+        )}
+        {token && (
+          <Link to='/profile' onClick={closeMenu}>
+            Profile
+          </Link>
+        )}
+        {token && (
+          <Link to='/article_writing' onClick={closeMenu}>
             <ArticleLogo />
           </Link>
         )}

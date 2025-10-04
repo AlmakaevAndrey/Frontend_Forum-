@@ -103,6 +103,7 @@ export const Input = styled.input`
     width: 400px;
   }
 
+  
   @media (max-width: 500px) {
     max-width: 300px;
   }

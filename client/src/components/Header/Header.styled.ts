@@ -27,12 +27,25 @@ export const HeaderDivider = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  @media (max-width: 770px) {
+    a {
+      :first-child {
+        // display: none;
+      }
+    }
+  }
 `;
 
 export const ButtonDivWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
+
+  @media (min-width: 769px) {
+    position: static;
+    align-items: center;
+  }
 `;
 
 export const Navigation = styled.nav`
