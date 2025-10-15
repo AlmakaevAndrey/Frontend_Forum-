@@ -2,6 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import axios from 'axios';
 import { Comment, Post } from '../components/Post/types';
 import { User } from '../components/User1/userTypes';
+import { NavigateFunction } from 'react-router-dom';
 
 const axiosBaseQuery =
   ({ baseUrl }: { baseUrl: string }) =>
@@ -30,6 +31,13 @@ const axiosBaseQuery =
       });
       return { data: result.data };
     } catch (axiosError: any) {
+      const status = axiosError.response?.status;
+
+      if (status === 401 || status === 403) {
+        console.warn('Token was unvalid');
+        localStorage.removeItem('token');
+        window.location.href = '/signin';
+      }
       return {
         error: {
           status: axiosError.response?.status,
