@@ -4,7 +4,6 @@ export const ArticleForm = styled.form`
   width: 100%;
   max-width: 900px;
   margin: 0 auto;
-  padding: 0 12px;
 
   .ql-container {
     width: 100%;

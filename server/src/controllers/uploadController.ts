@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import User from '../models/User';
-import path from 'path';
 
 export const uploadAvatar = async (req: Request, res: Response) => {
   try {
@@ -12,9 +11,6 @@ export const uploadAvatar = async (req: Request, res: Response) => {
     }
 
     const filePath = `/uploads/${req.file.filename}`;
-    // const filePath = `${req.protocol}://${req.get('host')}/uploads/${
-    //   req.file.filename
-    // }`;
 
     const user = await User.findByIdAndUpdate(
       req.user.id,

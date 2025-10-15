@@ -23,30 +23,40 @@ export const authenticate = (
   res: Response,
   next: NextFunction
 ) => {
+  console.log('Incoming request headers:', req.headers);
   const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
+  console.log('Token:', token);
+
   if (!token) return res.status(401).json({ message: 'No token' });
 
   try {
-    console.log('Token', token);
     const decoded = jwt.verify(token, JWT_SECRET) as {
       id: string;
       role: string;
       username: string;
       avatar: string;
     };
+    console.log('Decoded user:', decoded);
     req.user = decoded;
     next();
   } catch (err) {
+    console.error('JWT error:', err);
     return res.status(401).json({ message: 'Invalid token' });
   }
 };
 
 export const authorize =
   (...roles: string[]) =>
-  (req: Request, res: Response, next: NextFunction) => {
-    if (!req.user)
+  (req: Request, res: Response, next: NextFunction): void | Response => {
+    const user = req.user;
+    console.log('User role:', user?.role);
+    if (!user) {
       return res.status(401).json({ message: 'Not authenticated' });
-    if (!roles.includes(req.user.role))
-      return res.status(403).json({ message: 'Forbidden' });
+    }
+
+    if (roles.length > 0 && (!user.role || !roles.includes(user.role))) {
+      return res.status(403).json({ message: 'Нет доступа' });
+    }
+
     next();
   };

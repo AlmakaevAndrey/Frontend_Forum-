@@ -1,6 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import axios from 'axios';
 import { Comment, Post } from '../components/Post/types';
+import { User } from '../components/User1/userTypes';
 
 const axiosBaseQuery =
   ({ baseUrl }: { baseUrl: string }) =>
@@ -143,6 +144,21 @@ export const ApiSlice = createApi({
       invalidatesTags: ['Auth'],
     }),
 
+    getUsers: builder.query<User[], void>({
+      query: () => ({
+        url: '/users',
+        method: 'get',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+        },
+      }),
+      providesTags: ['User'],
+      transformResponse: (response: any) => {
+        console.log('API getUsers response:', response);
+        return response;
+      },
+    }),
+
     uploadAvatar: builder.mutation<
       { avatar: string; message: string },
       FormData
@@ -180,8 +196,9 @@ export const {
   useRegisterMutation,
   useLoginMutation,
   useAddPostMutation,
-  useGetPostsQuery,
   useGetPostQuery,
+  useGetPostsQuery,
+  useGetUsersQuery,
   useLikePostMutation,
   useGetCommentsQuery,
   useAddCommentMutation,

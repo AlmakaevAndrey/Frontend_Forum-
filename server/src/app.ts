@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import authRoutes from './routes/auth';
 import postsRoutes from './routes/posts';
 import uploadRoutes from './routes/upload';
+import usersRoutes from './routes/user';
 import path from 'path';
 
 dotenv.config();
@@ -25,6 +26,7 @@ app.use(express.json());
 
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
+app.use('/users', usersRoutes);
 app.use('/auth', authRoutes);
 app.use('/posts', postsRoutes);
 app.use('/upload', uploadRoutes);
