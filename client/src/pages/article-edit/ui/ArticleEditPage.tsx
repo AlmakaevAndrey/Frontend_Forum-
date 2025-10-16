@@ -1,11 +1,13 @@
-import { RootState } from '../../../api/store';
-import { useGetPostsQuery, useUpdatePostMutation } from '../../../api/apiSlice';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useToast } from '../../../shared/lib/toast';
+import { useGetPostsQuery, useUpdatePostMutation } from '../../../api/apiSlice';
+import { RootState } from '../../../api/store';
+import { Post } from '../../../components/Post/types';
 import * as S from './ArticleEditPage.styled';
 import Editor from '../../../components/Editor/Editor';
+import ForbiddenPage from '../../../pages/ForbiddenPage/ui/ForbiddenPage';
 
 const ArticleEditPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -16,7 +18,7 @@ const ArticleEditPage: React.FC = () => {
   const [updatedPost] = useUpdatePostMutation();
   const { showInfo, showError } = useToast();
 
-  const [article, setArticle] = useState<any>(null);
+  const [article, setArticle] = useState<Post | null>(null);
   const [title, setTitle] = useState('');
   const [excerpt, setExcerpt] = useState('');
   const [excerptHTML, setExcerptHtml] = useState('');
@@ -54,7 +56,7 @@ const ArticleEditPage: React.FC = () => {
   };
 
   const handleCancel = () => {
-    navigate(`/article_edit/${id}`);
+    navigate(`/article_read/${id}`);
   };
 
   if (isLoading) {
@@ -69,8 +71,8 @@ const ArticleEditPage: React.FC = () => {
     return <div>Статья не найдена</div>;
   }
 
-  const canEdit = token && (role === 'admin' || user?.id === article.authorId);
-  if (!canEdit) return <div>У вас нет прав на редактирование</div>;
+  const canEdit = token && (role === 'admin' || user?.id === article.author);
+  if (!canEdit) return <ForbiddenPage />;
 
   return (
     <S.EditWrapper>
@@ -91,8 +93,8 @@ const ArticleEditPage: React.FC = () => {
         />
 
         <S.ButtonWrapper>
-          <S.MyButton onClick={handleSave}>Сохранить</S.MyButton>
           <S.MyButton onClick={handleCancel}>Отмена</S.MyButton>
+          <S.MyButton onClick={handleSave}>Сохранить</S.MyButton>
         </S.ButtonWrapper>
       </S.EditForm>
     </S.EditWrapper>

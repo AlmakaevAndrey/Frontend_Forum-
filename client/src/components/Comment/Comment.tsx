@@ -2,16 +2,26 @@ import { useAddCommentMutation, useGetCommentsQuery } from '../../api/apiSlice';
 import { useState } from 'react';
 import { useToast } from '../../shared/lib/toast';
 import * as S from './Comment.styled';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../api/store';
 
 type Props = { postId: string };
 
 const CommentsDiv: React.FC<Props> = ({ postId }) => {
+  const { token } = useSelector((state: RootState) => state.auth);
   const { data: comments = [], isLoading } = useGetCommentsQuery(postId);
   const [addComment, { isLoading: adding }] = useAddCommentMutation();
   const [text, setText] = useState('');
   const { showInfo, showError } = useToast();
 
   const handleAddComment = async () => {
+    if (!token) {
+      showError(
+        'Гости не могут оставлять комментарии. Пожалуйста, войдите в систему.'
+      );
+      return;
+    }
+
     if (!text.trim()) return;
     try {
       console.log('Adding comment:', { id: postId, text });

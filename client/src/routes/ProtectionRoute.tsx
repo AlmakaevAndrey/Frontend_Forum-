@@ -3,6 +3,7 @@ import { Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../api/store';
 import { Role } from '../shared/types/roles';
+import Loader from '../components/Loader/Loader';
 
 interface Props {
   roles: Role[];
@@ -10,17 +11,29 @@ interface Props {
 }
 
 const ProtectedRoute: React.FC<Props> = ({ children, roles }) => {
-  const { token, user } = useSelector((state: RootState) => state.auth);
-  const role: Role = user?.role || 'guest';
+  const { token, user, role, isLoadingUser } = useSelector(
+    (state: RootState) => state.auth
+  );
 
-  if (!token) {
-    if (roles.includes('guest')) {
-      return <>{children}</>;
-    }
+  if (isLoadingUser) {
+    return <Loader />;
+  }
+
+  const currentRole: Role = role || user?.role || 'guest';
+
+  if (
+    token &&
+    (window.location.pathname === '/signin' ||
+      window.location.pathname === '/signup')
+  ) {
+    return <Navigate to='/' replace />;
+  }
+
+  if (!token && !roles.includes('guest')) {
     return <Navigate to='/signin' replace />;
   }
 
-  if (token && user && !roles.includes(role)) {
+  if (token && !roles.includes(currentRole)) {
     return <Navigate to='/forbidden_page' replace />;
   }
 

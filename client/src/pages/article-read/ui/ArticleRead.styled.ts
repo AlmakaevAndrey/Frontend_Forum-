@@ -30,7 +30,7 @@ export const Author = styled.p`
 `;
 
 export const Content = styled.div`
-  font-size: 16px;
+  font-size: 24px;
   line-height: 1.75;
   color: ${({ theme }) => theme.colors.text};
   margin-bottom: 30px;

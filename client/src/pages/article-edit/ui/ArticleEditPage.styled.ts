@@ -14,6 +14,13 @@ export const EditForm = styled.article`
   background: ${({ theme }) => theme.colors.primary};
   border-radius: 12px;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+
+  .ql-container {
+    padding: 0 0;
+  }
+  .ql-editor {
+    padding: 0 0;
+  }
 `;
 
 export const Title = styled.h1`
@@ -38,6 +45,7 @@ export const Input = styled.input`
   border: 1px solid #ccc;
   margin-bottom: 20px;
   outline: none;
+
   &:focus {
     border-color: ${({ theme }) => theme.colors.text};
     box-shadow: 0px 0px 4px ${({ theme }) => theme.colors.text};
@@ -54,6 +62,7 @@ export const TextArea = styled.textarea`
   margin-bottom: 20px;
   resize: vertical;
   outline: none;
+
   &:focus {
     border-color: ${({ theme }) => theme.colors.text};
     box-shadow: 0px 0px 4px ${({ theme }) => theme.colors.text};

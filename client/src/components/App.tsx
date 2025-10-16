@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import Header from './Header/Header';
 import Footer from './Footer/Footer';
@@ -8,6 +8,7 @@ import { GlobalStyle } from '../styles/GlobalStyle';
 import { useDispatch } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import { loadUser } from '../auth/authSlice';
+import Loader from './/Loader/Loader';
 
 export const AppContainer = styled.div`
   min-height: 100vh;
@@ -55,7 +56,9 @@ const App: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
           }}
         ></Header>
         <Content>
-          <MainContainer>{children ?? <Outlet />}</MainContainer>
+          <MainContainer>
+            <Suspense fallback={<Loader />}>{children ?? <Outlet />}</Suspense>
+          </MainContainer>
         </Content>
         <Footer />
       </AppContainer>

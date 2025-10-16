@@ -41,7 +41,7 @@ export const ArticleForm = styled.form`
   }
 
   @media (max-width: 768px) {
-    padding: 0 8px;
+    padding: 0 0;
 
     .ql-container {
       min-height: 200px;

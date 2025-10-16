@@ -15,6 +15,7 @@ export const Title = styled.h1`
   font-size: 98px;
   margin: 0 auto;
   color: ${({ theme }) => theme.colors.primary};
+  text-shadow: 0 0 20px ${({ theme }) => theme.colors.primary};
 `;
 
 export const Status = styled.p`

@@ -26,7 +26,12 @@ const ArticleReadPage: React.FC = () => {
   };
 
   const handleLike = async () => {
+    if (!token) {
+      showError('Гости не могут ставить лайки!');
+      return;
+    }
     if (!id) return;
+
     try {
       const updated = await likePost(id).unwrap();
       showInfo(updated.likes ? 'Вы лайкнули!' : 'Вы убрали лайк!');

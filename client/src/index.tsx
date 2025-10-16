@@ -1,20 +1,32 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './components/App';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import FeedPage from './pages/feed/ui/FeedPage';
-import ProfilePage from './pages/profile/ui/ProfilePage';
-import SignInPage from './pages/sign-in/ui/SignInPage';
-import ArticleEditPage from './pages/article-edit/ui/ArticleEditPage';
-import ArticleReadPage from './pages/article-read/ui/ArticleReadPage';
-import SettingPage from './pages/settings/ui/SettingPage';
-import SignUpPage from './pages/sign-up/ui/SignUpPage';
 import { store } from './api/store';
 import { Provider } from 'react-redux';
 import ProtectedRoute from './routes/ProtectionRoute';
-import ArticleWriting from './pages/article-writing/ui/ArticleWritingPage';
-import ForbiddenPage from './pages/ForbiddenPage/ui/ForbiddenPage';
-import LayoutErrorPage from './pages/error-page/ui/LayoutErrorPage';
+import { Loader } from './components/Loader/Loader';
+
+const LazyFeedPage = lazy(() => import('./pages/feed/ui/FeedPage'));
+const LazyProfilePage = lazy(() => import('./pages/profile/ui/ProfilePage'));
+const LazySignInPage = lazy(() => import('./pages/sign-in/ui/SignInPage'));
+const LazySignUpPage = lazy(() => import('./pages/sign-up/ui/SignUpPage'));
+const LazyArticleEditPage = lazy(
+  () => import('./pages/article-edit/ui/ArticleEditPage')
+);
+const LazyArticleReadPage = lazy(
+  () => import('./pages/article-read/ui/ArticleReadPage')
+);
+const LazyArticleWriting = lazy(
+  () => import('./pages/article-writing/ui/ArticleWritingPage')
+);
+const LazySettingPage = lazy(() => import('./pages/settings/ui/SettingPage'));
+const LazyForbiddenPage = lazy(
+  () => import('./pages/ForbiddenPage/ui/ForbiddenPage')
+);
+const LazyLayoutErrorPage = lazy(
+  () => import('./pages/error-page/ui/LayoutErrorPage')
+);
 
 const router = createBrowserRouter([
   {
@@ -22,7 +34,9 @@ const router = createBrowserRouter([
     element: <App />,
     errorElement: (
       <App>
-        <LayoutErrorPage />
+        <Suspense fallback={<Loader />}>
+          <LazyLayoutErrorPage />
+        </Suspense>
       </App>
     ),
     children: [
@@ -30,7 +44,9 @@ const router = createBrowserRouter([
         index: true,
         element: (
           <ProtectedRoute roles={['guest', 'user', 'admin']}>
-            <FeedPage />
+            <Suspense fallback={<Loader />}>
+              <LazyFeedPage />
+            </Suspense>
           </ProtectedRoute>
         ),
       },
@@ -38,7 +54,9 @@ const router = createBrowserRouter([
         path: '/signin',
         element: (
           <ProtectedRoute roles={['guest']}>
-            <SignInPage />
+            <Suspense fallback={<Loader />}>
+              <LazySignInPage />
+            </Suspense>
           </ProtectedRoute>
         ),
       },
@@ -46,7 +64,9 @@ const router = createBrowserRouter([
         path: '/signup',
         element: (
           <ProtectedRoute roles={['guest']}>
-            <SignUpPage />
+            <Suspense fallback={<Loader />}>
+              <LazySignUpPage />
+            </Suspense>
           </ProtectedRoute>
         ),
       },
@@ -54,7 +74,9 @@ const router = createBrowserRouter([
         path: '/profile/:id',
         element: (
           <ProtectedRoute roles={['user', 'admin']}>
-            <ProfilePage />
+            <Suspense fallback={<Loader />}>
+              <LazyProfilePage />
+            </Suspense>
           </ProtectedRoute>
         ),
       },
@@ -62,7 +84,9 @@ const router = createBrowserRouter([
         path: '/profile',
         element: (
           <ProtectedRoute roles={['user', 'admin']}>
-            <ProfilePage />
+            <Suspense fallback={<Loader />}>
+              <LazyProfilePage />
+            </Suspense>
           </ProtectedRoute>
         ),
       },
@@ -70,7 +94,9 @@ const router = createBrowserRouter([
         path: '/article_writing',
         element: (
           <ProtectedRoute roles={['user', 'admin']}>
-            <ArticleWriting />
+            <Suspense fallback={<Loader />}>
+              <LazyArticleWriting />
+            </Suspense>
           </ProtectedRoute>
         ),
       },
@@ -78,7 +104,9 @@ const router = createBrowserRouter([
         path: '/article_edit/:id',
         element: (
           <ProtectedRoute roles={['user', 'admin']}>
-            <ArticleEditPage />
+            <Suspense fallback={<Loader />}>
+              <LazyArticleEditPage />
+            </Suspense>
           </ProtectedRoute>
         ),
       },
@@ -86,7 +114,9 @@ const router = createBrowserRouter([
         path: '/article_read/:id',
         element: (
           <ProtectedRoute roles={['guest', 'user', 'admin']}>
-            <ArticleReadPage />
+            <Suspense fallback={<Loader />}>
+              <LazyArticleReadPage />
+            </Suspense>
           </ProtectedRoute>
         ),
       },
@@ -94,7 +124,9 @@ const router = createBrowserRouter([
         path: '/setting',
         element: (
           <ProtectedRoute roles={['admin']}>
-            <SettingPage />
+            <Suspense fallback={<Loader />}>
+              <LazySettingPage />
+            </Suspense>
           </ProtectedRoute>
         ),
       },
@@ -102,7 +134,9 @@ const router = createBrowserRouter([
         path: '/forbidden_page',
         element: (
           <ProtectedRoute roles={['user', 'admin', 'guest']}>
-            <ForbiddenPage />
+            <Suspense fallback={<Loader />}>
+              <LazyForbiddenPage />
+            </Suspense>
           </ProtectedRoute>
         ),
       },
