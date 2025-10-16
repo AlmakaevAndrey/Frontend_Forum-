@@ -3,6 +3,7 @@ import { loginSchema, registerSchema } from '../utils/validators';
 import jwt, { SignOptions } from 'jsonwebtoken';
 import User from '../models/User';
 import dotenv from 'dotenv';
+import { success } from 'zod';
 
 dotenv.config();
 
@@ -84,6 +85,10 @@ export const login = async (req: Request, res: Response) => {
 };
 
 export const logout = (req: Request, res: Response) => {
-  res.clearCookie('token');
-  res.json({ message: 'Logged out' });
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+  });
+  res.status(200).json({ success: true, message: 'Logged out' });
 };

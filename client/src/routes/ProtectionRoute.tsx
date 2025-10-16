@@ -5,24 +5,23 @@ import { RootState } from '../api/store';
 import { Role } from '../shared/types/roles';
 
 interface Props {
-  children: React.ReactNode;
   roles: Role[];
+  children: React.ReactNode;
 }
 
 const ProtectedRoute: React.FC<Props> = ({ children, roles }) => {
   const { token, user } = useSelector((state: RootState) => state.auth);
   const role: Role = user?.role || 'guest';
 
-  if (!token && roles.includes('guest')) {
-    return <>{children}</>;
+  if (!token) {
+    if (roles.includes('guest')) {
+      return <>{children}</>;
+    }
+    return <Navigate to='/signin' replace />;
   }
 
-  if (token) {
-    <Navigate to='signin' replace />;
-  }
-
-  if (token && user && !roles.includes(user.role)) {
-    return <Navigate to='/' replace />;
+  if (token && user && !roles.includes(role)) {
+    return <Navigate to='/forbidden_page' replace />;
   }
 
   return <>{children}</>;

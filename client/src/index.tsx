@@ -13,11 +13,18 @@ import { store } from './api/store';
 import { Provider } from 'react-redux';
 import ProtectedRoute from './routes/ProtectionRoute';
 import ArticleWriting from './pages/article-writing/ui/ArticleWritingPage';
+import ForbiddenPage from './pages/ForbiddenPage/ui/ForbiddenPage';
+import LayoutErrorPage from './pages/error-page/ui/LayoutErrorPage';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
+    errorElement: (
+      <App>
+        <LayoutErrorPage />
+      </App>
+    ),
     children: [
       {
         index: true,
@@ -86,8 +93,16 @@ const router = createBrowserRouter([
       {
         path: '/setting',
         element: (
-          <ProtectedRoute roles={['user', 'admin']}>
+          <ProtectedRoute roles={['admin']}>
             <SettingPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: '/forbidden_page',
+        element: (
+          <ProtectedRoute roles={['user', 'admin', 'guest']}>
+            <ForbiddenPage />
           </ProtectedRoute>
         ),
       },

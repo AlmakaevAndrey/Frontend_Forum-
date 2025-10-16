@@ -9,7 +9,7 @@ import { useDispatch } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import { loadUser } from '../auth/authSlice';
 
-const AppContainer = styled.div`
+export const AppContainer = styled.div`
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -31,7 +31,7 @@ const Content = styled.main`
   width: 100%;
 `;
 
-const App: React.FC = () => {
+const App: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const [isDark, setIsDark] = useState(false);
   const dispatch = useDispatch();
 
@@ -55,9 +55,7 @@ const App: React.FC = () => {
           }}
         ></Header>
         <Content>
-          <MainContainer>
-            <Outlet />
-          </MainContainer>
+          <MainContainer>{children ?? <Outlet />}</MainContainer>
         </Content>
         <Footer />
       </AppContainer>

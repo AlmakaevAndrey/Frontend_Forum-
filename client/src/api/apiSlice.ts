@@ -1,11 +1,12 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
 import axios from 'axios';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { NavigateFunction } from 'react-router-dom';
 import { Comment, Post } from '../components/Post/types';
 import { User } from '../components/User1/userTypes';
-import { NavigateFunction } from 'react-router-dom';
+import { logout } from '../auth/authSlice';
 
 const axiosBaseQuery =
-  ({ baseUrl }: { baseUrl: string }) =>
+  ({ baseUrl, navigate }: { baseUrl: string; navigate?: NavigateFunction }) =>
   async ({
     url,
     method,
@@ -34,13 +35,14 @@ const axiosBaseQuery =
       const status = axiosError.response?.status;
 
       if (status === 401 || status === 403) {
-        console.warn('Token was unvalid');
+        const { store } = await import('./store');
+        store.dispatch(logout());
         localStorage.removeItem('token');
         window.location.href = '/signin';
       }
       return {
         error: {
-          status: axiosError.response?.status,
+          status,
           data: axiosError.response?.data || axiosError.message,
         },
       };
