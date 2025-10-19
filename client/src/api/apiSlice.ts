@@ -34,11 +34,13 @@ const axiosBaseQuery =
     } catch (axiosError: any) {
       const status = axiosError.response?.status;
 
-      if (status === 401 || status === 403) {
+      if (status === 401) {
         const { store } = await import('./store');
         store.dispatch(logout());
         localStorage.removeItem('token');
         window.location.href = '/signin';
+      } else if (status === 403) {
+        console.warn('Access denied', axiosError.response?.data);
       }
       return {
         error: {
@@ -153,6 +155,7 @@ export const ApiSlice = createApi({
       }),
       invalidatesTags: ['Auth'],
     }),
+    // Доделать после а то не работает загрузка аватара в профиль
 
     getUsers: builder.query<User[], void>({
       query: () => ({
@@ -168,37 +171,6 @@ export const ApiSlice = createApi({
         return response;
       },
     }),
-
-    uploadAvatar: builder.mutation<
-      { avatar: string; message: string },
-      FormData
-    >({
-      query: (formData) => ({
-        url: '/upload/avatar',
-        method: 'post',
-        data: formData,
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
-        },
-      }),
-      invalidatesTags: ['User'],
-    }),
-    // Доделать после а то не работает загрузка аватара в профиль
-
-    updateUserPost: builder.mutation<
-      any,
-      { username?: string; avatar?: string }
-    >({
-      query: (data) => ({
-        url: '/auth/update',
-        method: 'put',
-        data,
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
-        },
-      }),
-      invalidatesTags: ['Auth'],
-    }),
   }),
 });
 
@@ -213,6 +185,5 @@ export const {
   useGetCommentsQuery,
   useAddCommentMutation,
   useUpdatePostMutation,
-  useUploadAvatarMutation,
-  useUpdateUserPostMutation,
+  useUpdateUserMutation,
 } = ApiSlice;

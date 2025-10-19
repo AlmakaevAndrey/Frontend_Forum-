@@ -1,33 +1,37 @@
 import { Request, Response } from 'express';
 import User from '../models/User';
 
-export const uploadAvatar = async (req: Request, res: Response) => {
+export const updateUser = async (req: Request, res: Response) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({ message: 'Файл не загружен' });
-    }
     if (!req.user) {
       return res.status(401).json({ message: 'Вы не авторизованы' });
     }
 
-    const filePath = `/uploads/${req.file.filename}`;
+    const { username } = req.body;
+    let avatarPath;
 
-    const user = await User.findByIdAndUpdate(
-      req.user.id,
-      { avatar: filePath },
-      { new: true }
-    );
+    if (req.file) {
+      avatarPath = `/uploads/${req.file.filename}`;
+    }
+
+    const updateData: any = {};
+    if (username) updateData.username = username;
+    if (avatarPath) updateData.avatar = avatarPath;
+
+    const user = await User.findByIdAndUpdate(req.user.id, updateData, {
+      new: true,
+    });
 
     if (!user) {
       return res.status(404).json({ message: 'Пользователь не найден' });
     }
 
     res.json({
-      avatar: filePath,
-      message: 'Аватар успешно загружен',
+      user,
+      message: 'Профиль обновлён успешно',
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Ошибка сервера при загрузке аватара' });
+    res.status(500).json({ message: 'Ошибка сервера при обновлении профиля' });
   }
 };

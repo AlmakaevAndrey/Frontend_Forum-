@@ -5,12 +5,11 @@ import { useToast } from '../../../shared/lib/toast';
 import { useAddPostMutation } from '../../../api/apiSlice';
 import { useNavigate } from 'react-router-dom';
 import Editor from '../../../components/Editor/Editor';
-import DOMPurify from 'dompurify';
 
 const ArticleWriting: React.FC = () => {
   const [title, setTitle] = useState('');
   const [excerpt, setExcerpt] = useState('');
-  const [excerptHTML, setExcerptHtml] = useState('');
+  const [excerptHtml, setExcerptHtml] = useState('');
   const [addPost, { isLoading: isLoadingMutation }] = useAddPostMutation();
 
   const { showInfo, showError } = useToast();
@@ -44,7 +43,7 @@ const ArticleWriting: React.FC = () => {
             onChange={(e) => setTitle(e.target.value)}
           />
           <Editor
-            value={excerptHTML}
+            value={excerptHtml}
             onChange={(plainText, html) => {
               setExcerpt(plainText);
               setExcerptHtml(html);

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ReactQuill, { Quill } from 'react-quill';
 import ImageResizeModule from '../../shared/lib/ImageResizeModule';
-import 'react-quill/dist/react-quill';
+import 'react-quill/dist/quill.snow.css';
 import * as S from './Editor.styled';
 import DOMPurify from 'dompurify';
 
@@ -14,8 +14,6 @@ interface EditProps {
 }
 
 const Editor: React.FC<EditProps> = ({ value, onChange, placeholder }) => {
-  const [html, setHTML] = useState(value);
-
   const modules = {
     toolbar: [
       [{ header: [1, 2, 3, false] }],
@@ -30,13 +28,14 @@ const Editor: React.FC<EditProps> = ({ value, onChange, placeholder }) => {
     },
   };
 
-  const handleChange = (newHTML: string) => {
-    setHTML(newHTML);
+  const handleChange = (newHtml: string) => {
+    const sanitizedHtml = DOMPurify.sanitize(newHtml);
     const temp = document.createElement('div');
-    temp.innerHTML = html;
+    temp.innerHTML = sanitizedHtml;
     const plainText = temp.textContent || temp.innerText || '';
-    onChange(plainText, DOMPurify.sanitize(newHTML));
+    onChange(plainText.trim(), sanitizedHtml);
   };
+  // Сделать добавки и отрисовку картинок
 
   return (
     <>

@@ -16,9 +16,10 @@ export const Title = styled.h1`
 `;
 
 export const Message = styled.p`
-  font-size: 28px;
+  font-size: 26px;
   text-align: justify;
   max-width: 500px;
+  margin: 0 14px 0 14px;
   margin-bottom: 30px;
   color: ${({ theme }) => theme.colors.text};
 `;

@@ -9,7 +9,7 @@ const LayoutErrorPage: React.FC = () => {
     <div>
       <S.ErrorWrapper>
         <S.Title>{error?.status || '404'}</S.Title>
-        <S.Status>{error?.statusText || 'Страница не найдена'}</S.Status>
+        <S.Status>{'Страница не найдена'}</S.Status>
         <S.BackLink to='/'>Вернуться на главную</S.BackLink>
       </S.ErrorWrapper>
     </div>

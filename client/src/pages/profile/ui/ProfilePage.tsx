@@ -5,8 +5,7 @@ import { useToast } from '../../../shared/lib/toast';
 import {
   useGetPostsQuery,
   useUpdatePostMutation,
-  useUploadAvatarMutation,
-  useUpdateUserPostMutation,
+  useUpdateUserMutation,
 } from '../../../api/apiSlice';
 import * as S from './ProfilePage.styles';
 import MyButton from '../../../components/Button/Button';
@@ -20,16 +19,15 @@ export const ProfilePage: React.FC = () => {
 
   const { data: posts, isLoading, error } = useGetPostsQuery(undefined);
   const [updatePost] = useUpdatePostMutation();
+  const [updateUser, { isLoading: updating }] = useUpdateUserMutation();
+
   const [editingPostId, setEditingPostId] = useState<string | null>(null);
   const [editingTitle, setEditingTitle] = useState('');
   const [editingExcerpt, setEditingExcerpt] = useState('');
+  const [editingUsername, setEditUsername] = useState(user?.username || '');
 
   const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
-  const [uploadAvatar, { isLoading: uploading }] = useUploadAvatarMutation();
   const [preview, setPreview] = useState<string | null>(null);
-
-  const [editingUsername, setEditUsername] = useState(user?.username || '');
-  const [updateUser] = useUpdateUserPostMutation();
 
   const selectAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -39,50 +37,43 @@ export const ProfilePage: React.FC = () => {
     }
   };
 
-  const handleUploadAvatar = async () => {
-    if (!selectedAvatar) return;
-    const formData = new FormData();
-    formData.append('avatar', selectedAvatar);
-
+  const handleUpdateUser = async () => {
     try {
-      console.log('JWT:', localStorage.getItem('token'));
-
-      const response = await uploadAvatar(formData).unwrap();
-      await updateUser({ avatar: response.avatar }).unwrap();
-
-      dispatch(updateUserProfile({ avatar: response.avatar }));
-      showInfo('Аватар обновлен!');
-      setPreview(null);
-      setSelectedAvatar(null);
+      let payload: { username?: string; avatar?: string } = {};
+      if (editingUsername) payload.username = editingUsername;
+      if (selectedAvatar) {
+        const reader = new FileReader();
+        reader.onloadend = async () => {
+          payload.avatar = reader.result as string;
+          const response = await updateUser(payload).unwrap();
+          dispatch(updateUserProfile({ response }));
+          showInfo('Профиль обновлен!');
+          setSelectedAvatar(null);
+          setPreview(null);
+        };
+      } else {
+        const response = await updateUser(payload).unwrap();
+        dispatch(updateUserProfile(response));
+        showInfo('Профиль обновлен!');
+      }
     } catch (error) {
       showError('Ошибка при загрузке аватара');
-    }
-  };
-
-  const handleUsernameSave = async () => {
-    try {
-      await updateUser({ username: editingUsername }).unwrap();
-      dispatch(updateUserProfile({ username: editingUsername }));
-
-      showInfo('Никнейм изменен!');
-    } catch (error) {
-      showError('Ошибка обновления ника');
     }
   };
 
   const userPosts =
     posts?.filter((p) => p.author.toString() === user?.id) ?? [];
 
-  const handleEditClick = (postsId: string, title: string, excerpt: string) => {
-    setEditingPostId(postsId);
-    setEditingTitle(title);
-    setEditingExcerpt(excerpt);
+  const handleEditClick = (post: any) => {
+    setEditingPostId(post._id);
+    setEditingTitle(post.title);
+    setEditingExcerpt(post.excerpt);
   };
 
-  const handleSave = async (editingPostId: string) => {
+  const handleSave = async (id: string) => {
     try {
       await updatePost({
-        id: editingPostId,
+        id,
         data: { title: editingTitle, excerpt: editingExcerpt },
       }).unwrap();
       showInfo('Пост оновлен');
@@ -110,9 +101,10 @@ export const ProfilePage: React.FC = () => {
           ) : (
             <span style={{ fontSize: 50 }}>👨‍💻</span>
           )}
+
           <S.Input type='file' accept='image/*' onChange={selectAvatarChange} />
-          <MyCustomButton onClick={handleUploadAvatar} disabled={uploading}>
-            {uploading ? 'Загрузка...' : 'Загрузить'}
+          <MyCustomButton onClick={handleUpdateUser} disabled={updating}>
+            {updating ? 'Загрузка...' : 'Загрузить'}
           </MyCustomButton>
         </S.AvatarWrapper>
         <p>Username: {user?.username}</p>
@@ -121,7 +113,7 @@ export const ProfilePage: React.FC = () => {
             value={editingUsername}
             onChange={(e) => setEditUsername(e.target.value)}
           />
-          <MyButton onClick={handleUsernameSave}>Сменить</MyButton>
+          <MyButton onClick={handleUpdateUser}>Сменить</MyButton>
         </S.AvatarWrapper>
         <p>Email: {user?.email}</p>
         {/* Нужно сделать аватар с функционалом */}
@@ -155,11 +147,7 @@ export const ProfilePage: React.FC = () => {
               <>
                 <h3>{post.title}</h3>
                 <p>{post.excerpt}</p>
-                <MyButton
-                  onClick={() =>
-                    handleEditClick(post._id, post.title, post.excerpt)
-                  }
-                >
+                <MyButton onClick={() => handleEditClick(post)}>
                   Редактировать
                 </MyButton>
               </>
