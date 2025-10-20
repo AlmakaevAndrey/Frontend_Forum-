@@ -1,5 +1,5 @@
 import ProfilePage from '../../../pages/profile/ui/ProfilePage';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { Suspense, useEffect, useMemo, useState } from 'react';
 import * as S from './SettingPage.styles';
 import { PostList } from '../../../components/PostList/ui/PostList';
 import { UserList } from '../../../components/User/ui/UserList';
@@ -10,7 +10,11 @@ const SettingPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'profile' | 'users' | 'posts'>(
     'profile'
   );
-  const { data: posts = [], isLoading, isError } = useGetPostsQuery();
+  const {
+    data: posts = [],
+    isLoading: isPostLoading,
+    isError: isPostError,
+  } = useGetPostsQuery();
   const {
     data: users = [],
     isLoading: isUsersLoading,
@@ -23,12 +27,36 @@ const SettingPage: React.FC = () => {
   }, [users]);
 
   useEffect(() => {
-    if (isLoading) {
-      showInfo('Загрузка');
-    } else if (isError) {
-      showError('Ошибка при загрузке');
-    }
-  }, [isLoading, isError, showInfo, showError]);
+    if (isPostLoading || isUsersLoading) showInfo('Загрузка');
+    if (isPostError || isUsersError) showError('Ошибка при загрузке');
+  }, [
+    isPostLoading,
+    isUsersLoading,
+    isPostError,
+    isUsersError,
+    showInfo,
+    showError,
+  ]);
+
+  //   const content = useMemo(() => {
+  //   switch (activeTab) {
+  //     case 'profile':
+  //       return <ProfilePage />;
+
+  //     case 'users':
+  //       if (isUsersLoading) return <p>Загрузка пользователей...</p>;
+  //       if (isUsersError) return <p>Ошибка загрузки пользователей</p>;
+  //       return users.length ? <UserList users={users} /> : <p>Нет пользователей</p>;
+
+  //     case 'posts':
+  //       if (isPostsLoading) return <p>Загрузка постов...</p>;
+  //       if (isPostsError) return <p>Ошибка загрузки постов</p>;
+  //       return <PostList posts={posts} />;
+
+  //     default:
+  //       return null;
+  //   }
+  // }, [activeTab, users, posts, isUsersLoading, isUsersError, isPostsLoading, isPostsError]);
 
   return (
     <S.SettingsWrapper>

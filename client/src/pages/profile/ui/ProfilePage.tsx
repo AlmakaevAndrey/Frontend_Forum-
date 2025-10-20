@@ -1,5 +1,5 @@
 import { RootState } from '../../../api/store';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useToast } from '../../../shared/lib/toast';
 import {
@@ -11,6 +11,7 @@ import * as S from './ProfilePage.styles';
 import MyButton from '../../../components/Button/Button';
 import { MyCustomButton } from '../../../components/Button/Button.styles';
 import { updateUserProfile } from '../../../auth/authSlice';
+import { Post } from '../../../components/Post/types';
 
 export const ProfilePage: React.FC = () => {
   const { token, role, user } = useSelector((state: RootState) => state.auth);
@@ -61,10 +62,30 @@ export const ProfilePage: React.FC = () => {
     }
   };
 
-  const userPosts =
-    posts?.filter((p) => p.author.toString() === user?.id) ?? [];
+  const userPosts = useMemo<Post[]>(() => {
+    if (!posts || !user?.id) return [];
 
-  const handleEditClick = (post: any) => {
+    return posts.filter((p) => {
+      if (!p.author) return false;
+
+      let authorId: string | undefined;
+
+      if (typeof p.author === 'object') {
+        const authorObj = p.author as unknown;
+        if ('id' in (authorObj as object)) {
+          authorId = (authorObj as any).id;
+        } else if ('_id' in (authorObj as object)) {
+          authorId = (authorObj as any)._id;
+        }
+      } else {
+        authorId = p.author;
+      }
+
+      return authorId === user.id;
+    });
+  }, [posts, user?.id]);
+
+  const handleEditClick = (post: Post) => {
     setEditingPostId(post._id);
     setEditingTitle(post.title);
     setEditingExcerpt(post.excerpt);
@@ -123,37 +144,46 @@ export const ProfilePage: React.FC = () => {
       <S.PostsSection>
         <h2>Мои посты</h2>
         {isLoading && <p>Загрузка постов</p>}
-        {error && <p>Ошбика загрузки постов</p>}
-        {userPosts.map((post) => (
-          <S.PostCard key={post._id}>
-            {editingPostId === post._id ? (
-              <>
-                <S.Input
-                  value={editingTitle}
-                  onChange={(e) => setEditingTitle(e.target.value)}
-                />
-                <textarea
-                  value={editingExcerpt}
-                  onChange={(e) => setEditingExcerpt(e.target.value)}
-                ></textarea>
-                <MyButton onClick={() => handleSave(post._id)}>
-                  Сохранить
-                </MyButton>
-                <MyButton onClick={() => setEditingPostId(null)}>
-                  Отмена
-                </MyButton>
-              </>
+        {error && <p>Ошибка загрузки постов</p>}
+
+        {!isLoading && !error && (
+          <>
+            {Array.isArray(userPosts) && userPosts.length > 0 ? (
+              userPosts.map((post) => (
+                <S.PostCard key={post._id}>
+                  {editingPostId === post._id ? (
+                    <>
+                      <S.Input
+                        value={editingTitle}
+                        onChange={(e) => setEditingTitle(e.target.value)}
+                      />
+                      <textarea
+                        value={editingExcerpt}
+                        onChange={(e) => setEditingExcerpt(e.target.value)}
+                      ></textarea>
+                      <MyButton onClick={() => handleSave(post._id)}>
+                        Сохранить
+                      </MyButton>
+                      <MyButton onClick={() => setEditingPostId(null)}>
+                        Отмена
+                      </MyButton>
+                    </>
+                  ) : (
+                    <>
+                      <h3>{post.title}</h3>
+                      <p>{post.excerpt}</p>
+                      <MyButton onClick={() => handleEditClick(post)}>
+                        Редактировать
+                      </MyButton>
+                    </>
+                  )}
+                </S.PostCard>
+              ))
             ) : (
-              <>
-                <h3>{post.title}</h3>
-                <p>{post.excerpt}</p>
-                <MyButton onClick={() => handleEditClick(post)}>
-                  Редактировать
-                </MyButton>
-              </>
+              <p>У вас пока нет постов</p>
             )}
-          </S.PostCard>
-        ))}
+          </>
+        )}
       </S.PostsSection>
     </S.ProfileWrapper>
   );

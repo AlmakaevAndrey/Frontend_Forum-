@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import * as S from './PostCard.styles';
 import { Post } from '../types';
 import { useLikePostMutation } from '../../../api/apiSlice';
@@ -8,7 +8,7 @@ interface PostProps {
   onClick?: () => void;
 }
 
-export const PostCard = ({ post, onClick }: PostProps) => {
+export const PostCard = memo(({ post, onClick }: PostProps) => {
   const [likePost] = useLikePostMutation();
 
   const handleLikes = () => {
@@ -43,4 +43,4 @@ export const PostCard = ({ post, onClick }: PostProps) => {
       </S.Footer>
     </S.Card>
   );
-};
+});

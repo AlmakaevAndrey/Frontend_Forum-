@@ -1,9 +1,18 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import * as S from './FeedPage.styles';
 import { PostList } from '../../../components/PostList/ui/PostList';
 import { usefulLinks } from '../../../components/Links/usefulLinks';
 import { useGetPostsQuery } from '../../../api/apiSlice';
 import { useToast } from '../../../shared/lib/toast';
+import { filteredAndSortPosts } from '../../../utils/postUtils';
+import { Loader } from 'lucide-react';
 
 const categories = {
   docs: '📚 Документация',
@@ -18,34 +27,29 @@ const FeedPage: React.FC = () => {
 
   const { data: posts = [], isLoading, isError } = useGetPostsQuery();
   const { showInfo, showError } = useToast();
+  const prevState = useRef({ isLoading: false, isError: false });
 
   useEffect(() => {
-    if (isLoading) {
-      showInfo('Загрузка');
-    } else if (isError) {
-      showError('Ошибка при загрузке');
-    }
+    if (isLoading && !prevState.current.isLoading) showInfo('Загрузка');
+    if (isError && !prevState.current.isError) showError('Ошибка при загрузке');
+    prevState.current = { isLoading, isError };
   }, [isLoading, isError, showInfo, showError]);
 
-  const filteredPosts = useMemo(() => {
-    const lowerQuery = query.toLowerCase();
+  const filteredPosts = useMemo(
+    () => filteredAndSortPosts(posts, query, sort),
+    [posts, query, sort]
+  );
 
-    let filtered = posts.filter((post) =>
-      post.title.toLowerCase().includes(lowerQuery)
-    );
+  const handleQueryChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value),
+    []
+  );
 
-    if (sort === 'date') {
-      return [...filtered].sort(
-        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-      );
-    }
-
-    if (sort === 'likes') {
-      return [...filtered].sort((a, b) => b.likes.length - a.likes.length);
-    }
-
-    return filtered;
-  }, [posts, query, sort]);
+  const handleSortChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) =>
+      setSort(e.target.value as 'date' | 'likes'),
+    []
+  );
 
   return (
     <S.ContentWrapper>
@@ -54,14 +58,13 @@ const FeedPage: React.FC = () => {
           <h2>Настройки поиска статей</h2>
           <S.WrapperForArticleDiv>
             <S.InputInArticle
+              aria-label='Поиск по статьям'
               type='text'
               placeholder='Поиск...'
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={handleQueryChange}
             />
-            <S.SelectInArticle
-              onChange={(e) => setSort(e.target.value as 'date' | 'likes')}
-            >
+            <S.SelectInArticle onChange={handleSortChange}>
               <S.OptionInArticle value='date'>По дате</S.OptionInArticle>
               <S.OptionInArticle value='likes'>По лайкам</S.OptionInArticle>
             </S.SelectInArticle>
@@ -72,7 +75,9 @@ const FeedPage: React.FC = () => {
         <S.ContainerForArticle>
           <h3>✍ Посты</h3>
           {/* Сделать на MongoDB список постов */}
-          <PostList posts={filteredPosts}></PostList>
+          {isLoading && <Loader />}
+          {isError && <p>Ошибка при загрузке постов</p>}
+          {!isLoading && !isError && <PostList posts={filteredPosts} />}
         </S.ContainerForArticle>
       </S.Section>
       <S.Section>

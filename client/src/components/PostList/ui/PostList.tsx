@@ -2,14 +2,14 @@ import { useNavigate } from 'react-router-dom';
 import { Post } from '../../../components/Post/types';
 import { PostCard } from '../../Post/ui/PostCard';
 import * as S from './PostList.styles';
-import { ReactNode } from 'react';
+import { memo, ReactNode } from 'react';
 
 interface PostProps {
   posts: Post[];
   children?: ReactNode;
 }
 
-export const PostList = ({ posts }: PostProps) => {
+export const PostList = memo(({ posts }: PostProps) => {
   const navigate = useNavigate();
   return (
     <S.List>
@@ -22,4 +22,6 @@ export const PostList = ({ posts }: PostProps) => {
       ))}
     </S.List>
   );
-};
+});
+
+export default PostList;
