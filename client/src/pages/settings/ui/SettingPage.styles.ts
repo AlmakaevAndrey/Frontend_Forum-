@@ -76,7 +76,7 @@ export const Content = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
-  background: ${({ theme }) => theme.colors.background};
+  background: ${({ theme }) => theme.colors.primary};
   border-radius: 0 12px 12px 0;
   animation: fadeIn 0.4s ease;
 

@@ -17,7 +17,6 @@ export const HeaderWrapper = styled.header`
 
   @media (max-width: 480px) {
     padding: 6px;
-    gap: 6px;
   }
 `;
 
@@ -42,10 +41,21 @@ export const ButtonDivWrapper = styled.div`
   align-items: center;
   gap: 10px;
 
+  button {
+    margin: 4px;
+
+    @media (max-width: 400px) {
+      margin: 0;
+    }
+  }
+
   @media (min-width: 769px) {
-    gap: 0;
     position: static;
     align-items: center;
+  }
+
+  @media (min-width: 420px) {
+    gap: 0;
   }
 `;
 
