@@ -8,8 +8,10 @@ import { Post } from '../../../components/Post/types';
 import * as S from './ArticleEditPage.styled';
 import Editor from '../../../components/Editor/Editor';
 import ForbiddenPage from '../../../pages/ForbiddenPage/ui/ForbiddenPage';
+import { useTranslation } from 'react-i18next';
 
 const ArticleEditPage: React.FC = () => {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const { token, role, user } = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
@@ -43,14 +45,15 @@ const ArticleEditPage: React.FC = () => {
         data: { title, excerpt },
       }).unwrap();
 
-      showInfo('Статья успешно обновлена!');
+      showInfo(t('articleEdit.updated'));
       navigate(`/article_read/${id}`);
     } catch (err) {
       if (err?.status === 401) {
-        showError('Вы не авторизированы!');
+        showError(t('articleEdit.notAuthorized'));
+
         navigate('/signin');
       } else {
-        showError('Ошибка при обновслении статьи!');
+        showError(t('articleEdit.updateError'));
       }
     }
   };
@@ -59,17 +62,9 @@ const ArticleEditPage: React.FC = () => {
     navigate(`/article_read/${id}`);
   };
 
-  if (isLoading) {
-    return <div>Загрузка...</div>;
-  }
-
-  if (error) {
-    return <div>Ошибка загрузки статьи</div>;
-  }
-
-  if (!article) {
-    return <div>Статья не найдена</div>;
-  }
+  if (isLoading) return <div>{t('common.loading')}...</div>;
+  if (error) return <div>{t('common.fetchError')}</div>;
+  if (!article) return <div>{t('articleEdit.notFound')}</div>;
 
   const canEdit = token && (role === 'admin' || user?.id === article.author);
   if (!canEdit) return <ForbiddenPage />;
@@ -77,12 +72,12 @@ const ArticleEditPage: React.FC = () => {
   return (
     <S.EditWrapper>
       <S.EditForm>
-        <S.Title>Редактирование статьи</S.Title>
+        <S.Title>{t('articleEdit.pageTitle')}</S.Title>
 
-        <S.Label>Заголовок</S.Label>
+        <S.Label>{t('articleEdit.title')}</S.Label>
         <S.Input value={title} onChange={(e) => setTitle(e.target.value)} />
 
-        <S.Label>Текст</S.Label>
+        <S.Label>{t('articleEdit.text')}</S.Label>
 
         <Editor
           value={excerptHTML}
@@ -93,8 +88,8 @@ const ArticleEditPage: React.FC = () => {
         />
 
         <S.ButtonWrapper>
-          <S.MyButton onClick={handleCancel}>Отмена</S.MyButton>
-          <S.MyButton onClick={handleSave}>Сохранить</S.MyButton>
+          <S.MyButton onClick={handleCancel}>{t('buttons.cancel')}</S.MyButton>
+          <S.MyButton onClick={handleSave}>{t('buttons.save')}</S.MyButton>
         </S.ButtonWrapper>
       </S.EditForm>
     </S.EditWrapper>

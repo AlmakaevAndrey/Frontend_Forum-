@@ -28,6 +28,10 @@ export const CommentWrapper = styled.li`
   border-radius: 8px;
   background-color: ${({ theme }) => theme.colors.background};
   word-break: break-word;
+
+  @media (max-width: 400px) {
+    padding: 10px 10px;
+  }
 `;
 
 export const CommentHeader = styled.div`
@@ -38,16 +42,19 @@ export const CommentHeader = styled.div`
 
 export const Username = styled.span`
   font-weight: 600;
+  font-size: 14px;
+
+  margin: 0 2px 0 0;
   color: ${({ theme }) => theme.colors.primary};
 `;
 
 export const DateText = styled.span`
-  font-size: 12px;
+  font-size: 14px;
   color: gray;
 `;
 
 export const CommentText = styled.p`
-  font-size: 14px;
+  font-size: 16px;
   color: ${({ theme }) => theme.colors.text};
 `;
 

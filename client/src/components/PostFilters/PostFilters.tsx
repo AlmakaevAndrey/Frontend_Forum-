@@ -3,8 +3,7 @@ import z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as S from './PostFilters.styled';
-
-type SortOption = 'date' | 'likes';
+import { useTranslation } from 'react-i18next';
 
 const searchSchemas = z.object({
   query: z.string().min(2, 'Минимум 2 символа'),
@@ -16,6 +15,7 @@ type SearchForm = z.infer<typeof searchSchemas>;
 export const PostFilters: React.FC<{
   onChange: (values: SearchForm) => void;
 }> = ({ onChange }) => {
+  const { t } = useTranslation();
   const {
     register,
     handleSubmit,
@@ -32,15 +32,18 @@ export const PostFilters: React.FC<{
   return (
     <S.SearchForm onSubmit={handleSubmit(onSubmit)}>
       <S.FormGroup>
-        <S.Input {...register('query')} placeholder='Поиск постов' />
+        <S.Input
+          {...register('query')}
+          placeholder={t('postFilters.inputPlaceholder')}
+        />
         {errors.query && <span>{errors.query.message}</span>}
       </S.FormGroup>
       <S.Select {...register('sort')}>
-        <option value='date'>По дате</option>
-        <option value='likes'>По лайкам</option>
+        <option value='date'>{t('postFilters.optionDate')}</option>
+        <option value='likes'>{t('postFilters.optionLikes')}</option>
       </S.Select>
 
-      <button type='submit'>Найти</button>
+      <button type='submit'>{t('postFilters.buttonSubmit')}</button>
     </S.SearchForm>
   );
 };

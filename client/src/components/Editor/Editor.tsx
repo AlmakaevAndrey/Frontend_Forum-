@@ -4,6 +4,7 @@ import ImageResizeModule from '../../shared/lib/ImageResizeModule';
 import 'react-quill/dist/quill.snow.css';
 import * as S from './Editor.styled';
 import DOMPurify from 'dompurify';
+import { useTranslation } from 'react-i18next';
 
 Quill.register('modules/imageResize', ImageResizeModule);
 
@@ -14,6 +15,8 @@ interface EditProps {
 }
 
 const Editor: React.FC<EditProps> = ({ value, onChange, placeholder }) => {
+  const { t, i18n } = useTranslation();
+
   const modules = {
     toolbar: [
       [{ header: [1, 2, 3, false] }],
@@ -39,15 +42,16 @@ const Editor: React.FC<EditProps> = ({ value, onChange, placeholder }) => {
 
   return (
     <>
-      <S.ArticleForm>
+      <S.ArticleSection>
         <ReactQuill
+          key={i18n.language}
           theme='snow'
-          placeholder={placeholder || 'Введите текст статьи'}
+          placeholder={t('editor.addPostText')}
           value={value}
           onChange={handleChange}
           modules={modules}
         />
-      </S.ArticleForm>
+      </S.ArticleSection>
     </>
   );
 };

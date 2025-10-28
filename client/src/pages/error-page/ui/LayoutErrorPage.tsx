@@ -1,16 +1,18 @@
 import React from 'react';
-import { Link, useRouteError } from 'react-router-dom';
+import { useRouteError } from 'react-router-dom';
 import * as S from './LayoutErrorPage.styles';
+import { useTranslation } from 'react-i18next';
 
 const LayoutErrorPage: React.FC = () => {
+  const { t } = useTranslation();
   const error = useRouteError() as any;
 
   return (
     <div>
       <S.ErrorWrapper>
         <S.Title>{error?.status || '404'}</S.Title>
-        <S.Status>{'Страница не найдена'}</S.Status>
-        <S.BackLink to='/'>Вернуться на главную</S.BackLink>
+        <S.Status>{t('error.pageNotFound')}</S.Status>
+        <S.BackLink to='/'>{t('error.backToHome')}</S.BackLink>
       </S.ErrorWrapper>
     </div>
   );

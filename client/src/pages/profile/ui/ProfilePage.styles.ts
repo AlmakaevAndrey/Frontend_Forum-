@@ -16,6 +16,11 @@ export const ProfileCard = styled.div`
   flex-direction: column;
   gap: 15px;
 
+  @media (max-width: 480px) {
+    width: 330px;
+    padding: 10px 20px;
+  }
+
   img {
     width: 100px;
     height: 100px;
@@ -75,13 +80,19 @@ export const TextArea = styled.textarea`
 `;
 
 export const PostCard = styled.div`
-  background: ${({ theme }) => theme.colors.secondary};
+  background: ${({ theme }) => theme.colors.primary};
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
   gap: 10px;
+  overflow-wrap: break-word;
+
+  @media (max-width: 480px) {
+    width: 330px;
+    padding: 12px;
+  }
 
   h3 {
     font-size: 1.25rem;

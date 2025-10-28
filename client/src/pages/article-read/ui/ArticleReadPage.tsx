@@ -7,55 +7,66 @@ import { useToast } from '../../../shared/lib/toast';
 import * as S from './ArticleRead.styled';
 import MyButton from '../../../components/Button/Button';
 import CommentsDiv from '../../../components/Comment/Comment';
+import { useTranslation } from 'react-i18next';
+import DOMPurify from 'dompurify';
 
 const ArticleReadPage: React.FC = () => {
+  const { t, i18n } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const { token, role, user } = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
+  const { showInfo, showError } = useToast();
 
-  const { data: article, isLoading, error } = useGetPostQuery(id!);
+  const {
+    data: article,
+    isLoading,
+    error,
+  } = useGetPostQuery(id!, {
+    skip: !id,
+  });
+
   const [likePost] = useLikePostMutation();
 
   const hasLiked =
     article?.likes?.some((like) => like.toString() === user?.id) ?? false;
 
-  const { showInfo, showError } = useToast();
-
   const handleEdit = () => {
     navigate(`/article_edit/${id}`);
   };
 
+  const dateFormatted = article
+    ? new Intl.DateTimeFormat(i18n.language, {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      }).format(new Date(article.date))
+    : '';
+
   const handleLike = async () => {
     if (!token) {
-      showError('Гости не могут ставить лайки!');
+      showError(t('messages.likeGuestError'));
       return;
     }
     if (!id) return;
 
     try {
       const updated = await likePost(id).unwrap();
-      showInfo(updated.likes ? 'Вы лайкнули!' : 'Вы убрали лайк!');
+      showInfo(
+        updated.likes ? t('messages.likeAdded') : t('messages.likeRemoved')
+      );
     } catch (err) {
       if (err?.status === 401) {
-        showError('Вы не авторизированы!');
+        showError(t('messages.notAuthorized'));
         navigate('/signin');
       } else {
-        showError('Ошибка при лайке поста!');
+        showError(t('messages.likeFailed'));
       }
     }
   };
 
-  if (isLoading) {
-    return <div>Загрузка...</div>;
-  }
-
-  if (error) {
-    return <div>Ошибка загрузки статьи</div>;
-  }
-
-  if (!article) {
-    return <div>Статья не найдена</div>;
-  }
+  if (isLoading) return <div>{t('common.loading')}...</div>;
+  if (error) return <div>{t('common.fetchError')}</div>;
+  if (!article) return <div>{t('articleEdit.notFound')}</div>;
 
   const canEdit = token && (role === 'admin' || user?.id === article.author);
 
@@ -64,14 +75,26 @@ const ArticleReadPage: React.FC = () => {
       <S.ArticleDiv>
         <S.Title>{article.title}</S.Title>
         <S.Author>
-          By {article.author} | {new Date(article.date).toLocaleDateString()}
+          {t('articleRead.by')} {article.author ?? 'Unknown'} | {dateFormatted}
         </S.Author>
-        <S.Content>{article.excerpt}</S.Content>
+        <S.Content
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(article.excerpt),
+          }}
+        ></S.Content>
         <S.ButtonWrapper>
-          <MyButton onClick={handleLike} disabled={!article}>
-            {hasLiked ? '❤️' : '💔'}({article.likes?.length ?? 0})
+          <MyButton
+            onClick={handleLike}
+            aria-label={
+              hasLiked ? t('articleRead.unlike') : t('articleRead.like')
+            }
+            disabled={!article}
+          >
+            {hasLiked ? '❤️' : '🤍'}({article.likes?.length ?? 0})
           </MyButton>
-          {canEdit && <MyButton onClick={handleEdit}>Edit</MyButton>}
+          {canEdit && (
+            <MyButton onClick={handleEdit}>{t('buttons.edit')}</MyButton>
+          )}
           {/* сделать админку */}
         </S.ButtonWrapper>
 

@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react';
+import React from 'react';
 import {
   ButtonDivWrapper,
   HeaderWrapper,
@@ -10,7 +10,6 @@ import { Logo } from '../../assets/svg/Frontend_Forum';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../auth/authSlice';
 import { RootState } from 'api/store';
-import ArticleLogo from '../../assets/svg/ArticleLogo';
 import Nav from '../../components/Nav/Nav';
 import BurgerIcon from '../../assets/svg/burger-menu-right-svgrepo-com.svg';
 
@@ -39,7 +38,6 @@ const Header: React.FC<HeaderProps> = ({
   const handleLogin = () => {
     navigate('/signup');
   };
-  // Сделать NAV до конца, с страницей новой и перекрасить ссылки
   return (
     <HeaderWrapper>
       <HeaderDivider>
@@ -54,6 +52,7 @@ const Header: React.FC<HeaderProps> = ({
           ) : (
             <MyButton onClick={handleLogout}>Logout</MyButton>
           )}
+
           <MyButton onClick={toggleTheme}>
             {isDarkProps ? 'Light' : 'Dark'}
           </MyButton>

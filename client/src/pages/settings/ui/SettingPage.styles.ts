@@ -8,8 +8,8 @@ export const SettingsWrapper = styled.div`
   display: flex;
   width: 100%;
   margin: 100px;
-  background: ${({ theme }) => theme.colors.background || 'f9f9f9'};
-  color: ${({ theme }) => theme.colors.text || '#333'};
+  background: ${({ theme }) => theme.colors.background};
+  color: ${({ theme }) => theme.colors.text};
   transition:
     background 0.3s ease,
     color 0.3s ease;
@@ -23,8 +23,8 @@ export const Sidebar = styled.aside`
   flex-direction: column;
   width: 250px;
   min-height: 100vh;
-  background: ${({ theme }) => theme.colors.background || '#fff'};
-  border-right: 1px solid ${({ theme }) => theme.colors.border || '#ddd'};
+  background: ${({ theme }) => theme.colors.background};
+  border-right: 1px solid ${({ theme }) => theme.colors.border};
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
   padding: 20px;
   gap: 10px;
@@ -32,12 +32,9 @@ export const Sidebar = styled.aside`
 
   @media (max-width: 768px) {
     width: 100%;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
     min-height: auto;
     border-right: none;
-    border-bottom: 1px solid ${({ theme }) => theme.colors.border || '#ddd'};
+    border-bottom: 1px solid ${({ theme }) => theme.colors.border};
     box-shadow: none;
   }
 `;
@@ -58,7 +55,7 @@ export const SidebarItem = styled.button<SidebarItemProps>`
 
   &:hover {
     background: ${({ $active, theme }) =>
-      $active ? theme.colors.primary : theme.colors.background || '#f1f1f1'};
+      $active ? theme.colors.primary : theme.colors.background};
     color: ${({ theme }) => theme.colors.textBlack};
   }
 
@@ -68,13 +65,18 @@ export const SidebarItem = styled.button<SidebarItemProps>`
   }
 `;
 
+export const MyTitle = styled.h1`
+  display: flex;
+  justify-content: center;
+`;
+
 export const Content = styled.div`
   flex: 1;
   padding: 40px;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  background: ${({ theme }) => theme.colors.backgroundInput || '#fff'};
+  background: ${({ theme }) => theme.colors.background};
   border-radius: 0 12px 12px 0;
   animation: fadeIn 0.4s ease;
 

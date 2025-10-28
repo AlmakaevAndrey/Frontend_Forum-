@@ -6,8 +6,10 @@ import { useDispatch } from 'react-redux';
 import { useToast } from '../../../shared/lib/toast';
 import * as S from './SignUpPage.styled';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const SignUnPage: React.FC = () => {
+  const { t } = useTranslation();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -23,7 +25,7 @@ const SignUnPage: React.FC = () => {
 
     try {
       await register({ username, email, password }).unwrap();
-      showInfo('Регистрация прошла успешно!');
+      showInfo(t('signUp.register'));
 
       const res = await login({ email, password }).unwrap();
       localStorage.setItem('token', res.token);
@@ -35,40 +37,40 @@ const SignUnPage: React.FC = () => {
         })
       );
 
-      showInfo('Вы успешно вошли!');
+      showInfo(t('signUp.registerClear'));
       navigate('/', { replace: true });
     } catch (err: any) {
-      showError(err?.data?.message || 'Ошибка при регистрации');
+      showError(err?.data?.message || t('signUp.failRegister'));
     }
   };
 
   return (
     <S.ContentWrapper>
       <S.SignUpForm onSubmit={handleRegister}>
-        <S.TitleText>Регистрация на Форуме</S.TitleText>
+        <S.TitleText>{t('signUp.title')}</S.TitleText>
         <S.SignUpInput
           type='text'
-          placeholder='Username'
+          placeholder={t('signUp.username')}
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
         />
         <S.SignUpInput
           type='email'
-          placeholder='Email'
+          placeholder={t('common.email')}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
         <S.SignUpInput
           type='password'
-          placeholder='Password'
+          placeholder={t('signUp.password')}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
         <S.MySignUpButton disabled={isRegister || isLoggingIn}>
-          {isRegister || isLoggingIn ? 'Loading...' : 'Sign Up'}
+          {isRegister || isLoggingIn ? t('common.loading') : t('signUp.signUp')}
         </S.MySignUpButton>
       </S.SignUpForm>
     </S.ContentWrapper>

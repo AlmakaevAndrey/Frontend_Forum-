@@ -1,0 +1,167 @@
+{
+  "post": {
+    "profile": "User Profile",
+    "username": "Username",
+    "email": "Email",
+    "role": "Role",
+    "save": "Save",
+    "edit": "Edit",
+    "upload": "Upload",
+    "loading": "Loading...",
+    "notAuthorized": "You are not authorized",
+    "addNewTask": "Add new task!",
+    "searchSettings": "Article search settings",
+    "searchPlaceholder": "Search...",
+    "sortByDate": "By date",
+    "sortByLikes": "By likes",
+    "posts": "Posts",
+    "loadingPosts": "Loading posts",
+    "errorLoadingPosts": "Error loading posts",
+    "usefulLinks": "Useful links"
+  },
+
+  "feed": {
+    "settingsTitle": "Article search settings",
+    "searchAria": "Search articles",
+    "searchPlaceholder": "Search...",
+    "sortByDate": "By date",
+    "sortByLikes": "By likes",
+    "postsTitle": "✍ Posts",
+    "loadingError": "Error loading posts",
+    "usefulLinksTitle": "🔗 Useful links"
+  },
+
+  "categories": {
+    "docs": "📚 Documentation",
+    "practice": "🛠 Practice",
+    "courses": "🎓 Courses",
+    "community": "📰 Community"
+  },
+
+  "common": {
+    "loading": "Loading...",
+    "fetchError": "Error loading",
+    "notFound": "Not found",
+    "user": "User",
+    "email": "Email",
+    "profile": "User Profile",
+    "profileSettings": "Profile settings",
+    "searchPlaceholder": "Search...",
+    "fetchErrorOrUser": "Fetch error or dont have users",
+    "settingsPage": "Settings Page"
+  },
+
+  "editor": {
+    "addPostText": "Add post text"
+  },
+
+  "error": {
+    "pageNotFound": "Page not found",
+    "backToHome": "Back to home"
+  },
+
+  "comments": {
+    "guestsCannotComment": "Guests are not allowed to leave comments. Please log in.",
+    "commentAdded": "Comment was added",
+    "commentAddError": "Error when adding a comment",
+    "commentsCount": "Comments",
+    "writeComment": "Write the comment",
+    "sending": "Sending...",
+    "add": "Add"
+  },
+
+  "buttons": {
+    "edit": "Edit",
+    "cancel": "Cancel",
+    "save": "Save"
+  },
+
+  "messages": {
+    "fillAllFields": "Fill in all fields!",
+    "postAdded": "Post successfully added",
+    "notAuthorized": "You are not authorized!",
+    "likeGuestError": "Guests cannot like posts!",
+    "likeFailed": "Error while trying to like the post!",
+    "likeAdded": "You liked the post!",
+    "likeRemoved": "You removed your like!"
+  },
+
+  "forbidden": {
+    "title": "403",
+    "message": "You do not have permission to view this page. You may be logged in as a different user or not authorized.",
+    "goHome": "Back to home"
+  },
+
+  "postFilters": {
+    "inputPlaceholder": "Post search",
+    "optionDate": "By date",
+    "optionLikes": "By Likes",
+    "buttonSubmit": "Find"
+  },
+
+  "articleEdit": {
+    "updated": "The article has been updated successfully!",
+    "notAuthorized": "You are not authorized!",
+    "updatedError": "Error updating the article!",
+    "pageTitle": "Editing the article",
+    "title": "Title",
+    "text": "Text",
+    "cancel": "Cancel",
+    "save": "Save"
+  },
+
+  "articleRead": {
+    "updated": "The article has been updated successfully!",
+    "notAuthorized": "You are not authorized!",
+    "updatedError": "Error updating the article!",
+    "pageTitle": "Editing the article",
+    "by": "By: ",
+    "unlike": "Unlike",
+    "like": "Like"
+  },
+
+  "articleWriting": {
+    "createArticle": "Create article",
+    "enterTitle": "Enter a title",
+    "enterContent": "Enter article text",
+    "publish": "Publish",
+    "saving": "Saving..."
+  },
+
+  "profile": {
+    "title": "User Profile",
+    "username": "Username",
+    "email": "Email",
+    "role": "Role",
+    "change": "Change",
+    "upload": "Upload",
+    "loading": "Loading...",
+    "postsTitle": "My Posts",
+    "noPosts": "You have no posts yet",
+    "edit": "Edit",
+    "save": "Save",
+    "cancel": "Cancel",
+    "postUpdated": "Post updated",
+    "userUpdated": "Profile updated",
+    "notAuthorized": "You are not authorized",
+    "postUpdateError": "Error updating post",
+    "avatarUpdateError": "Error uploading avatar"
+  },
+
+  "signIn": {
+    "loadingProfile": "Loading your request",
+    "fetchError": "Error loading",
+    "title": "Authorization on the Forum",
+    "signIn": "Sign in"
+  },
+
+  "signUp": {
+    "register": "Registration was successful!",
+    "registerClear": "You have successfully logged in!",
+    "failRegister": "Error during registration",
+    "title": "Registration on the Forum",
+    "username": "User",
+    "password": "Password",
+    "signUp": "Sign Up"
+  }
+}

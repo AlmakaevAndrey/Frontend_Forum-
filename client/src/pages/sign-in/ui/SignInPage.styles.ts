@@ -31,7 +31,7 @@ export const SignInForm = styled.form`
   padding: 20px;
   background: ${({ theme }) => theme.colors.primary};
   border: 2px solid ${({ theme }) => theme.colors.border};
-  border-radius: 8px;
+  border-radius: 16px;
   outline: none;
   transition: all 0.3s ease;
 

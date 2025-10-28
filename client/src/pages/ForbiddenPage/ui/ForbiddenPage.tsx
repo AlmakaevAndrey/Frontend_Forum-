@@ -1,17 +1,16 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Title, Wrapper, Message } from './ForbiddenPage.styles';
+import { useTranslation } from 'react-i18next';
 
 const ForbiddenPage: React.FC = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   return (
     <Wrapper>
-      <Title>403</Title>
-      <Message>
-        У вас нет прав для просмотра этой страницы. Возможно, вы вошли под
-        другим пользователем или не авторизованы.
-      </Message>
-      <Button onClick={() => navigate('/signin')}>Вернуться на главную</Button>
+      <Title>{t('forbidden.title')}</Title>
+      <Message>{t('forbidden.message')}</Message>
+      <Button onClick={() => navigate('/')}>{t('forbidden.goHome')}</Button>
     </Wrapper>
   );
 };

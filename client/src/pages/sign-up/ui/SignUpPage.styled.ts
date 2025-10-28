@@ -47,7 +47,7 @@ export const SignUpInput = styled.input`
   font-weight: 500;
   font-size: 16px;
   background-color: ${({ theme }) => theme.colors.backgroundInput};
-  border-color: ${({ theme }) => theme.colors.backgroundInput};
+  border-color: ${({ theme }) => theme.colors.text};
 
   @media (max-width: 476px) {
     width: 300px;

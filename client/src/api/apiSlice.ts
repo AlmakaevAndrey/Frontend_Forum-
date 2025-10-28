@@ -144,18 +144,18 @@ export const ApiSlice = createApi({
       invalidatesTags: ['Posts'],
     }),
 
-    updateUser: builder.mutation<any, { username?: string; avatar?: string }>({
-      query: (data) => ({
-        url: '/auth/update',
+    updateUser: builder.mutation<any, FormData>({
+      query: (formData) => ({
+        url: '/upload/update',
         method: 'put',
-        data,
+        data: formData,
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+          'Content-Type': 'multipart/form-data',
         },
       }),
       invalidatesTags: ['Auth'],
     }),
-    // Доделать после а то не работает загрузка аватара в профиль
 
     getUsers: builder.query<User[], void>({
       query: () => ({
@@ -167,7 +167,6 @@ export const ApiSlice = createApi({
       }),
       providesTags: ['User'],
       transformResponse: (response: any) => {
-        console.log('API getUsers response:', response);
         return response;
       },
     }),

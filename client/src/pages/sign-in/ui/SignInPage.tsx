@@ -4,8 +4,10 @@ import { useDispatch } from 'react-redux';
 import { loginSuccess } from '../../../auth/authSlice';
 import { useToast } from '../../../shared/lib/toast';
 import * as S from './SignInPage.styles';
+import { useTranslation } from 'react-i18next';
 
 const SignInPage: React.FC = () => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [login, { isLoading }] = useLoginMutation();
@@ -16,35 +18,34 @@ const SignInPage: React.FC = () => {
     e.preventDefault();
     try {
       const res = await login({ email, password }).unwrap();
-      console.log(res);
       dispatch(
         loginSuccess({ user: res.user, token: res.token, role: res.user.role })
       );
-      showInfo('Загрузка вашего запроса');
+      showInfo(t('common.profile'));
     } catch (err: any) {
-      showError(err?.data?.message || 'Ошибка при загрузке');
+      showError(err?.data?.message || t('common.fetchError'));
     }
   };
   return (
     <S.ContentWrapper>
       <S.SignInForm action='action' onSubmit={handleLogin}>
-        <S.TitleText>Авторизация на Форуме</S.TitleText>
+        <S.TitleText>{t('common.fetchError')}</S.TitleText>
         <S.SignInInput
           type='email'
-          placeholder='Email'
+          placeholder={t('common.email')}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
         <S.SignInInput
           type='password'
-          placeholder='Password'
+          placeholder={t('signUp.password')}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
         <S.MySignInButton disabled={isLoading}>
-          {isLoading ? 'Loading...' : 'Sign in'}
+          {isLoading ? t('common.loading') : t('signIn.signIn')}
         </S.MySignInButton>
       </S.SignInForm>
     </S.ContentWrapper>

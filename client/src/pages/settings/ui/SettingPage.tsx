@@ -1,84 +1,47 @@
 import ProfilePage from '../../../pages/profile/ui/ProfilePage';
-import React, { Suspense, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as S from './SettingPage.styles';
 import { PostList } from '../../../components/PostList/ui/PostList';
 import { UserList } from '../../../components/User/ui/UserList';
 import { useGetPostsQuery, useGetUsersQuery } from '../../../api/apiSlice';
 import { useToast } from '../../../shared/lib/toast';
+import { useTranslation } from 'react-i18next';
 
 const SettingPage: React.FC = () => {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<'profile' | 'users' | 'posts'>(
     'profile'
   );
-  const {
-    data: posts = [],
-    isLoading: isPostLoading,
-    isError: isPostError,
-  } = useGetPostsQuery();
-  const {
-    data: users = [],
-    isLoading: isUsersLoading,
-    isError: isUsersError,
-  } = useGetUsersQuery();
-  const { showInfo, showError } = useToast();
+  const { showError } = useToast();
+
+  const { data: posts = [], isError: isPostError } = useGetPostsQuery();
+  const { data: users = [], isError: isUsersError } = useGetUsersQuery();
 
   useEffect(() => {
-    console.log('Users from API:', users);
-  }, [users]);
-
-  useEffect(() => {
-    if (isPostLoading || isUsersLoading) showInfo('Загрузка');
-    if (isPostError || isUsersError) showError('Ошибка при загрузке');
-  }, [
-    isPostLoading,
-    isUsersLoading,
-    isPostError,
-    isUsersError,
-    showInfo,
-    showError,
-  ]);
-
-  //   const content = useMemo(() => {
-  //   switch (activeTab) {
-  //     case 'profile':
-  //       return <ProfilePage />;
-
-  //     case 'users':
-  //       if (isUsersLoading) return <p>Загрузка пользователей...</p>;
-  //       if (isUsersError) return <p>Ошибка загрузки пользователей</p>;
-  //       return users.length ? <UserList users={users} /> : <p>Нет пользователей</p>;
-
-  //     case 'posts':
-  //       if (isPostsLoading) return <p>Загрузка постов...</p>;
-  //       if (isPostsError) return <p>Ошибка загрузки постов</p>;
-  //       return <PostList posts={posts} />;
-
-  //     default:
-  //       return null;
-  //   }
-  // }, [activeTab, users, posts, isUsersLoading, isUsersError, isPostsLoading, isPostsError]);
+    if (isPostError || isUsersError) showError(t('common.fetchError'));
+  }, [isPostError, isUsersError, showError]);
 
   return (
     <S.SettingsWrapper>
       <S.Sidebar>
-        <h1>Setting Page</h1>
+        <S.MyTitle>{t('common.profileSettings')}</S.MyTitle>
         <S.SidebarItem
           $active={activeTab === 'profile'}
           onClick={() => setActiveTab('profile')}
         >
-          Профиль
+          {t('common.profile')}
         </S.SidebarItem>
         <S.SidebarItem
           $active={activeTab === 'users'}
           onClick={() => setActiveTab('users')}
         >
-          Пользователи
+          {t('common.user')}
         </S.SidebarItem>
         <S.SidebarItem
           $active={activeTab === 'posts'}
           onClick={() => setActiveTab('posts')}
         >
-          Посты
+          {t('post.posts')}
         </S.SidebarItem>
       </S.Sidebar>
       <S.Content>
@@ -88,7 +51,7 @@ const SettingPage: React.FC = () => {
             {users && users.length > 0 ? (
               <UserList users={users} />
             ) : (
-              <p> Нет пользователей или ошибка загрузки</p>
+              <p>{t('common.fetchErrorOrUser')}</p>
             )}
           </>
         )}

@@ -4,10 +4,12 @@ import { useToast } from '../../shared/lib/toast';
 import * as S from './Comment.styled';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../api/store';
+import { useTranslation } from 'react-i18next';
 
 type Props = { postId: string };
 
 const CommentsDiv: React.FC<Props> = ({ postId }) => {
+  const { t } = useTranslation();
   const { token } = useSelector((state: RootState) => state.auth);
   const { data: comments = [], isLoading } = useGetCommentsQuery(postId);
   const [addComment, { isLoading: adding }] = useAddCommentMutation();
@@ -16,25 +18,20 @@ const CommentsDiv: React.FC<Props> = ({ postId }) => {
 
   const handleAddComment = async () => {
     if (!token) {
-      showError(
-        'Гости не могут оставлять комментарии. Пожалуйста, войдите в систему.'
-      );
+      showError(t('comments.guestsCannotComment'));
       return;
     }
 
     if (!text.trim()) return;
     try {
-      console.log('Adding comment:', { id: postId, text });
       const result = await addComment({ id: postId, text }).unwrap();
-      console.log('Comment added:', result);
       setText('');
-      showInfo('Комментарий добавлен!!');
+      showInfo(t('comments.commentAdded'));
     } catch (error) {
-      console.error('Add comment error:', error);
       showError(
         error?.data?.message ||
           error?.error?.data?.message ||
-          'Ошибка при добавлении комментария'
+          t('comments.commentAddError')
       );
     }
   };
@@ -43,18 +40,20 @@ const CommentsDiv: React.FC<Props> = ({ postId }) => {
 
   return (
     <S.CommentsWrapper>
-      <S.CommentsTitle>Комментарии ({comments.length})</S.CommentsTitle>
+      <S.CommentsTitle>
+        {t('comments.commentsCount')} ({comments.length})
+      </S.CommentsTitle>
 
       <S.CommentsList>
         {comments.map((c, idx) => (
           <S.CommentWrapper key={`${c.userId}-${c.createdAt ?? idx}`}>
             <S.CommentHeader>
-              <S.Username>{c.username}</S.Username>
+              <S.Username>{c.username} </S.Username>
               <S.DateText>
                 {c.createdAt ? new Date(c.createdAt).toLocaleString() : ''}
               </S.DateText>
             </S.CommentHeader>
-            <S.CommentText>{c.text}</S.CommentText>
+            <S.CommentText>{c.text} </S.CommentText>
           </S.CommentWrapper>
         ))}
       </S.CommentsList>
@@ -63,10 +62,10 @@ const CommentsDiv: React.FC<Props> = ({ postId }) => {
         <S.AddCommentInput
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder='Написать комментарий...'
+          placeholder={t('comments.writeComment')}
         />
         <S.AddCommentButton onClick={handleAddComment} disabled={adding}>
-          {adding ? 'Отправка...' : 'Добавить'}
+          {adding ? t('comments.sending') : t('comments.add')}
         </S.AddCommentButton>
       </S.AddCommentWrapper>
     </S.CommentsWrapper>

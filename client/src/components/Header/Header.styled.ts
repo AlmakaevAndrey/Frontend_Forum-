@@ -16,7 +16,7 @@ export const HeaderWrapper = styled.header`
   background: ${({ theme }) => theme.colors.primary};
 
   @media (max-width: 480px) {
-    padding: 10px;
+    padding: 6px;
     gap: 6px;
   }
 `;
@@ -43,6 +43,7 @@ export const ButtonDivWrapper = styled.div`
   gap: 10px;
 
   @media (min-width: 769px) {
+    gap: 0;
     position: static;
     align-items: center;
   }

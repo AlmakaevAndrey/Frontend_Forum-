@@ -5,6 +5,8 @@ export const filteredAndSortPosts = (
   query: string,
   sort: 'date' | 'likes'
 ): Post[] => {
+  if (!Array.isArray(posts)) return [];
+
   const lowerQuery = query.toLowerCase();
 
   let filtered = posts.filter((post) =>

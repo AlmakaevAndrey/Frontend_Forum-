@@ -2,6 +2,7 @@ import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './components/App';
 import '../public/fonts/Roboto.css';
+import './i18n';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { store } from './api/store';
 import { Provider } from 'react-redux';

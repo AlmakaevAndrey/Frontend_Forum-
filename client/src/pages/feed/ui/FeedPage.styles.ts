@@ -160,12 +160,16 @@ export const WrapperGridLinksList = styled.div`
     gap: 10px;
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 660px) {
     grid-template-columns: repeat(2, 2fr);
   }
 `;
 
 export const DividerLinksList = styled.div``;
+
+export const LinksTitle = styled.h4`
+  font-size: 15px;
+`;
 
 export const LinksList = styled.ul`
   // display: flex;

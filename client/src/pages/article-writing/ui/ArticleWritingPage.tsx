@@ -5,8 +5,10 @@ import { useToast } from '../../../shared/lib/toast';
 import { useAddPostMutation } from '../../../api/apiSlice';
 import { useNavigate } from 'react-router-dom';
 import Editor from '../../../components/Editor/Editor';
+import { useTranslation } from 'react-i18next';
 
 const ArticleWriting: React.FC = () => {
+  const { t } = useTranslation();
   const [title, setTitle] = useState('');
   const [excerpt, setExcerpt] = useState('');
   const [excerptHtml, setExcerptHtml] = useState('');
@@ -18,16 +20,17 @@ const ArticleWriting: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || !excerpt.trim()) {
-      showError('Заполните все поля!');
+      showError(t('messages.fillAllFields'));
+
       return;
     }
 
     try {
       const newPost = await addPost({ title, excerpt }).unwrap();
-      showInfo('Статья успешно добавлена');
+      showInfo(t('messages.postAdded'));
       navigate(`/article_read/${newPost._id}`);
     } catch (err) {
-      showError('Вы не авторизированы!');
+      showError(t('messages.notAuthorized'));
     }
   };
 
@@ -35,11 +38,11 @@ const ArticleWriting: React.FC = () => {
     <S.ArticleWrapper>
       <S.ArticleForm onSubmit={handleSubmit}>
         <S.ArticleEditor>
-          <S.Text>Создание статьи</S.Text>
+          <S.Text>{t('articleWriting.createArticle')}</S.Text>
           <S.Input
-            type='text'
-            placeholder='Введите заголовок'
             value={title}
+            type='text'
+            placeholder={t('articleWriting.enterTitle')}
             onChange={(e) => setTitle(e.target.value)}
           />
           <Editor
@@ -48,10 +51,12 @@ const ArticleWriting: React.FC = () => {
               setExcerpt(plainText);
               setExcerptHtml(html);
             }}
-            placeholder='Введите текст статьи'
+            placeholder={t('articleWriting.enterContent')}
           />
-          <S.ToPublishButton disabled={isLoadingMutation}>
-            {isLoadingMutation ? 'Сохраняю...' : 'Опубликовать'}
+          <S.ToPublishButton type='submit' disabled={isLoadingMutation}>
+            {isLoadingMutation
+              ? t('articleWriting.saving')
+              : t('articleWriting.publish')}
           </S.ToPublishButton>
         </S.ArticleEditor>
       </S.ArticleForm>

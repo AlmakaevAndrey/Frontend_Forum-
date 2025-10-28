@@ -12,13 +12,15 @@ import MyButton from '../../../components/Button/Button';
 import { MyCustomButton } from '../../../components/Button/Button.styles';
 import { updateUserProfile } from '../../../auth/authSlice';
 import { Post } from '../../../components/Post/types';
+import { useTranslation } from 'react-i18next';
 
 export const ProfilePage: React.FC = () => {
+  const { t } = useTranslation();
   const { token, role, user } = useSelector((state: RootState) => state.auth);
   const { showInfo, showError } = useToast();
   const dispatch = useDispatch();
 
-  const { data: posts, isLoading, error } = useGetPostsQuery(undefined);
+  const { data: posts = [], isLoading, error } = useGetPostsQuery();
   const [updatePost] = useUpdatePostMutation();
   const [updateUser, { isLoading: updating }] = useUpdateUserMutation();
 
@@ -40,25 +42,21 @@ export const ProfilePage: React.FC = () => {
 
   const handleUpdateUser = async () => {
     try {
-      let payload: { username?: string; avatar?: string } = {};
-      if (editingUsername) payload.username = editingUsername;
+      const formData = new FormData();
+      formData.append('username', editingUsername);
+
       if (selectedAvatar) {
-        const reader = new FileReader();
-        reader.onloadend = async () => {
-          payload.avatar = reader.result as string;
-          const response = await updateUser(payload).unwrap();
-          dispatch(updateUserProfile({ response }));
-          showInfo('Профиль обновлен!');
-          setSelectedAvatar(null);
-          setPreview(null);
-        };
-      } else {
-        const response = await updateUser(payload).unwrap();
-        dispatch(updateUserProfile(response));
-        showInfo('Профиль обновлен!');
+        formData.append('avatar', selectedAvatar);
       }
+
+      const response = await updateUser(formData).unwrap();
+      dispatch(updateUserProfile(response.user));
+
+      showInfo(t('profile.userUpdated'));
+      setSelectedAvatar(null);
+      setPreview(null);
     } catch (error) {
-      showError('Ошибка при загрузке аватара');
+      showError(t('profile.avatarUpdateError'));
     }
   };
 
@@ -68,22 +66,14 @@ export const ProfilePage: React.FC = () => {
     return posts.filter((p) => {
       if (!p.author) return false;
 
-      let authorId: string | undefined;
-
       if (typeof p.author === 'object') {
-        const authorObj = p.author as unknown;
-        if ('id' in (authorObj as object)) {
-          authorId = (authorObj as any).id;
-        } else if ('_id' in (authorObj as object)) {
-          authorId = (authorObj as any)._id;
-        }
-      } else {
-        authorId = p.author;
+        const authorObj = p.author as any;
+        return authorObj._id === user.id || authorObj.id === user.id;
       }
 
-      return authorId === user.id;
+      return p.author === user.username;
     });
-  }, [posts, user?.id]);
+  }, [posts, user?.id, user?.username]);
 
   const handleEditClick = (post: Post) => {
     setEditingPostId(post._id);
@@ -97,19 +87,19 @@ export const ProfilePage: React.FC = () => {
         id,
         data: { title: editingTitle, excerpt: editingExcerpt },
       }).unwrap();
-      showInfo('Пост оновлен');
+      showInfo(t('profile.postUpdated'));
       setEditingPostId(null);
     } catch (error) {
-      showError('Ошбика обновлении поста');
+      showError(t('profile.postUpdateError'));
     }
   };
 
-  if (!token) return <div>Вы не авторизованы</div>;
+  if (!token) return <div>{t('profile.notAuthorized')}</div>;
 
   return (
     <S.ProfileWrapper>
       <S.ProfileCard>
-        <h1>Профиль пользователя</h1>
+        <h1>{t('profile.title')}</h1>
         <S.AvatarWrapper>
           {preview ? (
             <img src={preview} alt='preview' width={100} />
@@ -125,26 +115,32 @@ export const ProfilePage: React.FC = () => {
 
           <S.Input type='file' accept='image/*' onChange={selectAvatarChange} />
           <MyCustomButton onClick={handleUpdateUser} disabled={updating}>
-            {updating ? 'Загрузка...' : 'Загрузить'}
+            {updating ? t('profile.loading') : t('profile.upload')}
           </MyCustomButton>
         </S.AvatarWrapper>
-        <p>Username: {user?.username}</p>
+        <p>
+          {t('profile.username')} {user?.username}
+        </p>
         <S.AvatarWrapper>
           <S.Input
             value={editingUsername}
             onChange={(e) => setEditUsername(e.target.value)}
           />
-          <MyButton onClick={handleUpdateUser}>Сменить</MyButton>
+          <MyButton onClick={handleUpdateUser}>{t('profile.change')}</MyButton>
         </S.AvatarWrapper>
-        <p>Email: {user?.email}</p>
+        <p>
+          {t('profile.email')} {user?.email}
+        </p>
         {/* Нужно сделать аватар с функционалом */}
-        <p>Role: {user?.role}</p>
+        <p>
+          {t('profile.role')} {user?.role}
+        </p>
       </S.ProfileCard>
 
       <S.PostsSection>
-        <h2>Мои посты</h2>
-        {isLoading && <p>Загрузка постов</p>}
-        {error && <p>Ошибка загрузки постов</p>}
+        <h2>{t('profile.postsTitle')}</h2>
+        {isLoading && <p>{t('profile.Loading')}</p>}
+        {error && <p>{t('common.fetchError')}</p>}
 
         {!isLoading && !error && (
           <>
@@ -162,10 +158,10 @@ export const ProfilePage: React.FC = () => {
                         onChange={(e) => setEditingExcerpt(e.target.value)}
                       ></textarea>
                       <MyButton onClick={() => handleSave(post._id)}>
-                        Сохранить
+                        {t('buttons.save')}
                       </MyButton>
                       <MyButton onClick={() => setEditingPostId(null)}>
-                        Отмена
+                        {t('buttons.cancel')}
                       </MyButton>
                     </>
                   ) : (
@@ -173,14 +169,14 @@ export const ProfilePage: React.FC = () => {
                       <h3>{post.title}</h3>
                       <p>{post.excerpt}</p>
                       <MyButton onClick={() => handleEditClick(post)}>
-                        Редактировать
+                        {t('profile.change')}
                       </MyButton>
                     </>
                   )}
                 </S.PostCard>
               ))
             ) : (
-              <p>У вас пока нет постов</p>
+              <p>{t('profile.noPosts')}</p>
             )}
           </>
         )}

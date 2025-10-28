@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const MyCustomButton = styled.button`
   width: 80px;
+  padding: 0 4px;
   height: 36px;
   border-radius: 20px;
   font-weight: 500;

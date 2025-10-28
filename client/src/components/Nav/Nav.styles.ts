@@ -1,3 +1,4 @@
+import MyButton from '../Button/Button';
 import styled, { keyframes } from 'styled-components';
 
 interface NavigationProps {
@@ -81,7 +82,7 @@ export const Navigation = styled.nav<NavigationProps>`
     z-index: 999;
     a {
       font-size: 18px;
-      color: ${({ theme }) => theme.colors.textBlack};
+      color: ${({ theme }) => theme.colors.text};
       opacity: 0;
       animation: ${({ $isOpen }) => ($isOpen ? fadeInLinks : 'none')} 0.4s ease
         forwards;
@@ -136,7 +137,7 @@ export const Underscore = styled.ul`
 export const List = styled.li`
   a {
     text-decoration: none;
-    color: #333;
+    color: ${({ theme }) => theme.colors.text};
     font-weight: 500;
     transition: color 0.2s;
 
@@ -144,4 +145,11 @@ export const List = styled.li`
       color: #007bff;
     }
   }
+`;
+
+export const LanguageButton = styled(MyButton).attrs({ as: 'a' })`
+  text-decoration: none;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
 `;

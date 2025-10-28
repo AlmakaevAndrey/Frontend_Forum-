@@ -7,6 +7,7 @@
     "jsx": "react-jsx",
     "allowJs": true,
     "moduleResolution": "node",
+    "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true, // позволяет работать с пакетами, которые использую common js как с обычными с помощью import
     "esModuleInterop": true, // нужен для библиотек котрое не имеют дефолтный импорт
     "baseUrl": "src",

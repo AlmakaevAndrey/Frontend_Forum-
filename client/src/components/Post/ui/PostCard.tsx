@@ -2,6 +2,7 @@ import { memo, useState } from 'react';
 import * as S from './PostCard.styles';
 import { Post } from '../types';
 import { useLikePostMutation } from '../../../api/apiSlice';
+import { useTranslation } from 'react-i18next';
 
 interface PostProps {
   post: Post;
@@ -10,10 +11,17 @@ interface PostProps {
 
 export const PostCard = memo(({ post, onClick }: PostProps) => {
   const [likePost] = useLikePostMutation();
+  const { t, i18n } = useTranslation();
 
   const handleLikes = () => {
     likePost(post._id);
   };
+
+  const dateFormatted = new Intl.DateTimeFormat(i18n.language, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  }).format(new Date());
 
   return (
     <S.Card onClick={onClick}>
@@ -31,11 +39,7 @@ export const PostCard = memo(({ post, onClick }: PostProps) => {
         </S.SpanItem>
         <S.SpanItem>
           📅
-          {new Date(post.date).toLocaleDateString('ru-RU', {
-            day: '2-digit',
-            month: 'long',
-            year: 'numeric',
-          })}
+          {dateFormatted}
         </S.SpanItem>
         <S.SpanItem onClick={handleLikes}>
           🩷 {post.likes?.length ?? 0}

@@ -1,15 +1,20 @@
 import { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useTheme } from 'styled-components';
 
 export const useToast = () => {
   const theme = useTheme();
+  const { t } = useTranslation();
+
   const themeMode: 'light' | 'dark' =
     (theme as any).mode === 'dark' ? 'dark' : 'light';
 
   const shownToasts = useRef<Set<string>>(new Set());
+  const lastShown: Record<string, number> = {};
 
-  const showSuccess = (message: string) => {
+  const showSuccess = (key: string) => {
+    const message = t(key);
     if (shownToasts.current.has(message)) return;
     shownToasts.current.add(message);
 
@@ -23,10 +28,11 @@ export const useToast = () => {
       theme: themeMode,
     });
   };
-  const lastShown: Record<string, number> = {};
-  const showError = (message: string) => {
+
+  const showError = (key: string) => {
+    const message = t(key);
     const now = Date.now();
-    if (lastShown[message] && now - lastShown[message] < 2000) return; // блокируем часто
+    if (lastShown[message] && now - lastShown[message] < 2000) return; // блочим часто
     lastShown[message] = now;
 
     toast.error(message, {
@@ -40,7 +46,8 @@ export const useToast = () => {
     });
   };
 
-  const showInfo = (message: string) => {
+  const showInfo = (key: string) => {
+    const message = t(key);
     if (shownToasts.current.has(message)) return;
     shownToasts.current.add(message);
 
