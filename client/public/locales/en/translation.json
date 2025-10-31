@@ -64,7 +64,7 @@
     "guestsCannotComment": "Guests are not allowed to leave comments. Please log in.",
     "commentAdded": "Comment was added",
     "commentAddError": "Error when adding a comment",
-    "commentsCount": "Comments",
+    "commentsCount": "Comments ({{count}})",
     "writeComment": "Write the comment",
     "sending": "Sending...",
     "add": "Add"

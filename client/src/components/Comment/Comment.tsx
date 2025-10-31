@@ -5,6 +5,7 @@ import * as S from './Comment.styled';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../api/store';
 import { useTranslation } from 'react-i18next';
+import { count } from 'console';
 
 type Props = { postId: string };
 
@@ -41,7 +42,7 @@ const CommentsDiv: React.FC<Props> = ({ postId }) => {
   return (
     <S.CommentsWrapper>
       <S.CommentsTitle>
-        {t('comments.commentsCount')} ({comments.length})
+        {t('comments.commentsCount', { count: comments.length })}
       </S.CommentsTitle>
 
       <S.CommentsList>
