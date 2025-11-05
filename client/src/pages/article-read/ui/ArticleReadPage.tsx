@@ -88,6 +88,7 @@ const ArticleReadPage: React.FC = () => {
             aria-label={
               hasLiked ? t('articleRead.unlike') : t('articleRead.like')
             }
+            data-testid='like-button'
             disabled={!article}
           >
             {hasLiked ? '❤️' : '🤍'}({article.likes?.length ?? 0})

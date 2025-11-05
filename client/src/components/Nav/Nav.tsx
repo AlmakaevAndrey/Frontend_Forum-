@@ -24,7 +24,7 @@ const Nav: React.FC<NavProps> = ({ token, children }) => {
         {children}
       </S.BurgerButton>
 
-      <S.Overlay $isOpen={isOpen} onClick={closeMenu} />
+      <S.Overlay data-testid='overlay' $isOpen={isOpen} onClick={closeMenu} />
 
       <S.Navigation $isOpen={isOpen}>
         <S.LanguageButton onClick={() => i18n.changeLanguage('en')}>

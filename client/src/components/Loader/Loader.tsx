@@ -11,7 +11,11 @@ const LoaderWrapper = styled.div`
 export const Loader: React.FC = () => {
   return (
     <LoaderWrapper>
-      <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'>
+      <svg
+        xmlns='http://www.w3.org/2000/svg'
+        data-testid='loader-svg'
+        viewBox='0 0 200 200'
+      >
         <rect
           fill='#000000'
           stroke='#000000'

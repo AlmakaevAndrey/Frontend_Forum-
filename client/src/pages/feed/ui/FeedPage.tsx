@@ -83,7 +83,7 @@ const FeedPage: React.FC = () => {
       <S.Section>
         <S.ContainerForArticle>
           <h3>✍ {t('post.posts')}</h3>
-          {isLoading && <Loader />}
+          {isLoading && <Loader data-testid='loader-svg' />}
           {isError && <p>{t('post.errorLoadingPosts')}</p>}
           {!isLoading && !isError && <PostList posts={filteredPosts} />}
         </S.ContainerForArticle>

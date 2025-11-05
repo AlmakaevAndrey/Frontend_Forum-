@@ -1,12 +1,12 @@
 export type Post = {
-  authorAvatar: string;
   _id: string;
   title: string;
   excerpt: string;
   author: string;
+  authorAvatar?: string;
+  likes: { likes: string; ref: 'User' }[];
   date: string;
-  likes: [{ likes: String; ref: 'User' }];
-  comments: Comment;
+  comments: Comment[];
 };
 
 export type Comment = {

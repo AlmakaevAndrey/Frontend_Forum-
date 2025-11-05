@@ -28,7 +28,7 @@ export const PostCard = memo(({ post, onClick }: PostProps) => {
       <S.Title>{post.title}</S.Title>
       <S.Excerpt>{post.excerpt}</S.Excerpt>
       <S.Footer>
-        <S.SpanItem>
+        <S.SpanItem data-testid='span-item'>
           {post.authorAvatar ? (
             <img src={post.authorAvatar} alt={post.author} />
           ) : (
@@ -37,11 +37,14 @@ export const PostCard = memo(({ post, onClick }: PostProps) => {
           {/* Доделать логику аватара, после того ка сделаю добавление аватара и создание статьи */}
           {post.author}
         </S.SpanItem>
-        <S.SpanItem>
+        <S.SpanItem data-testid='span-item'>
           📅
           {dateFormatted}
         </S.SpanItem>
-        <S.SpanItem onClick={handleLikes}>
+        <S.SpanItem
+          onClick={handleLikes}
+          data-testid={`like-button-${post._id}`}
+        >
           🩷 {post.likes?.length ?? 0}
         </S.SpanItem>
       </S.Footer>

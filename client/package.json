@@ -13,7 +13,7 @@
     "build:desktop": "webpack --env mode=production --env platform=desktop",
     "predeploy": "npm run build:prod",
     "deploy": "gh-pages -d build:prod",
-    "test": "jest --config-jest.config.ts --passWithNoTests --coverage"
+    "test": "jest --config jest.config.js --passWithNoTests --coverage"
   },
   "repository": {
     "type": "git",
@@ -74,7 +74,7 @@
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.11",
-    "@reduxjs/toolkit": "^2.9.0",
+    "@reduxjs/toolkit": "^2.10.1",
     "@svgr/webpack": "^8.1.0",
     "axios": "^1.11.0",
     "dompurify": "^3.2.7",

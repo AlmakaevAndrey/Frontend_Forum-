@@ -1,17 +1,17 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Title, Wrapper, Message } from './ForbiddenPage.styles';
 import { useTranslation } from 'react-i18next';
+import * as S from './ForbiddenPage.styles';
 
 const ForbiddenPage: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   return (
-    <Wrapper>
-      <Title>{t('forbidden.title')}</Title>
-      <Message>{t('forbidden.message')}</Message>
-      <Button onClick={() => navigate('/')}>{t('forbidden.goHome')}</Button>
-    </Wrapper>
+    <S.Wrapper>
+      <S.Title>{t('forbidden.title')}</S.Title>
+      <S.Message>{t('forbidden.message')}</S.Message>
+      <S.Button onClick={() => navigate('/')}>{t('forbidden.goHome')}</S.Button>
+    </S.Wrapper>
   );
 };
 

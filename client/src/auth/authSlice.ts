@@ -3,7 +3,7 @@ import { User } from './userTypes';
 import { Role } from 'shared/types/roles';
 import { boolean } from 'zod';
 
-interface AuthState {
+export interface AuthState {
   user: User | null;
   token: string | null;
   role: 'admin' | 'user' | 'guest' | null;
