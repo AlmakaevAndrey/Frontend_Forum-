@@ -53,7 +53,7 @@ const axiosBaseQuery =
 
 export const ApiSlice = createApi({
   reducerPath: 'api',
-  baseQuery: axiosBaseQuery({ baseUrl: 'http://localhost:5000' }),
+  baseQuery: axiosBaseQuery({ baseUrl: process.env.REACT_APP_API_URL }), // http://localhost:5000
   tagTypes: ['Posts', 'Auth', 'Comments', 'User'],
   endpoints: (builder) => ({
     register: builder.mutation<
