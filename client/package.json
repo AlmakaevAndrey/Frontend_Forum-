@@ -12,8 +12,7 @@
     "build:mobile": "webpack --env mode=production --env platform=mobile",
     "build:desktop": "webpack --env mode=production --env platform=desktop",
     "predeploy": "npm run build:prod",
-    "test": "jest --config jest.config.js --passWithNoTests --coverage",
-    "prepare": "husky install"
+    "test": "jest --config jest.config.js --passWithNoTests --coverage"
   },
   "repository": {
     "type": "git",
