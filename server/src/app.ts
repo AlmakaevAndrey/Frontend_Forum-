@@ -15,7 +15,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+    origin: process.env.CORS_ORIGIN || 'http://localhost:3000', //изменил CORS
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
   })
