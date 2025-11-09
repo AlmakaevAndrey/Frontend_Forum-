@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-
+import { existsSync } from 'fs';
 import authRoutes from './routes/auth';
 import postsRoutes from './routes/posts';
 import uploadRoutes from './routes/upload';
@@ -32,22 +32,27 @@ app.use('/posts', postsRoutes);
 app.use('/upload', uploadRoutes);
 
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../../client/build')));
+  const clientBuildPath = path.join(__dirname, '../../client/build');
 
-  app.use((req, res, next) => {
-    if (
-      !req.path.startsWith('/api') &&
-      !req.path.startsWith('/uploads') &&
-      !req.path.startsWith('/auth') &&
-      !req.path.startsWith('/users') &&
-      !req.path.startsWith('/posts') &&
-      !req.path.startsWith('/upload')
-    ) {
-      res.sendFile(path.join(__dirname, '../../client/build', 'index.html'));
-    } else {
-      next();
-    }
-  });
+  if (existsSync(clientBuildPath)) {
+    app.use(express.static(clientBuildPath));
+
+    app.use((req, res, next) => {
+      if (
+        !req.path.startsWith('/uploads') &&
+        !req.path.startsWith('/auth') &&
+        !req.path.startsWith('/users') &&
+        !req.path.startsWith('/posts') &&
+        !req.path.startsWith('/upload')
+      ) {
+        res.sendFile(path.join(clientBuildPath, 'index.html'));
+      } else {
+        next();
+      }
+    });
+  } else {
+    console.warn('Client build folder not found, skipping static serving');
+  }
 }
 
 export default app;
