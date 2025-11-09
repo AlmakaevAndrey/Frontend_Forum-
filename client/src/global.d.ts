@@ -18,10 +18,4 @@ declare module '*.svg' {
 
 declare const __PLATFORM__: 'mobile' | 'desktop';
 declare const __IS_DEV__: 'development' | 'production';
-
-declare namespace NodeJS {
-  interface ProcessEnv {
-    REACT_APP_API_URL: string;
-    NODE_ENV: 'development' | 'production';
-  }
-}
+declare const __API_URL__: string;

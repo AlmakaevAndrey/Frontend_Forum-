@@ -51,13 +51,12 @@ const axiosBaseQuery =
     }
   };
 
-const API_URL = process.env.REACT_APP_API_URL as string;
+const API_URL = __API_URL__ || 'http://localhost:5000';
+console.log('API URL:', API_URL);
 
 export const ApiSlice = createApi({
   reducerPath: 'api',
-  baseQuery: axiosBaseQuery({
-    baseUrl: API_URL || 'http://localhost:5000',
-  }), // http://localhost:5000
+  baseQuery: axiosBaseQuery({ baseUrl: API_URL }),
   tagTypes: ['Posts', 'Auth', 'Comments', 'User'],
   endpoints: (builder) => ({
     register: builder.mutation<
