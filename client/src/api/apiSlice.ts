@@ -55,7 +55,9 @@ const API_URL = process.env.REACT_APP_API_URL as string;
 
 export const ApiSlice = createApi({
   reducerPath: 'api',
-  baseQuery: axiosBaseQuery({ baseUrl: API_URL }), // http://localhost:5000
+  baseQuery: axiosBaseQuery({
+    baseUrl: API_URL || 'http://localhost:5000',
+  }), // http://localhost:5000
   tagTypes: ['Posts', 'Auth', 'Comments', 'User'],
   endpoints: (builder) => ({
     register: builder.mutation<
