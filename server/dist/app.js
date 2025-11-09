@@ -28,8 +28,7 @@ app.use('/posts', posts_1.default);
 app.use('/upload', upload_1.default);
 if (process.env.NODE_ENV === 'production') {
     app.use(express_1.default.static(path_1.default.join(__dirname, '../../client/build')));
-    app.get('/*', (req, res) => {
-        //исправил
+    app.get('/:path(.*)', (req, res) => {
         res.sendFile(path_1.default.join(__dirname, '../../client/build', 'index.html'));
     });
 }
