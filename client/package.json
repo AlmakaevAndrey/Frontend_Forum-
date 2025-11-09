@@ -13,7 +13,8 @@
     "build:desktop": "webpack --env mode=production --env platform=desktop",
     "predeploy": "npm run build:prod",
     "deploy": "gh-pages -d build:prod",
-    "test": "jest --config jest.config.js --passWithNoTests --coverage"
+    "test": "jest --config jest.config.js --passWithNoTests --coverage",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",

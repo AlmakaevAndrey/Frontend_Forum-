@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+
+echo "🧩 Running client tests..."
+cd client
+npm test || exit 1
+cd ..
