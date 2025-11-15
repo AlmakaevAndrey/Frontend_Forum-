@@ -14,7 +14,13 @@ import { updateUserProfile } from '../../../auth/authSlice';
 import { Post } from '../../../components/Post/types';
 import { useTranslation } from 'react-i18next';
 
-export const ProfilePage: React.FC = () => {
+interface ProfilePageProps {
+  variant?: 'profile' | 'settings';
+}
+
+export const ProfilePage: React.FC<ProfilePageProps> = ({
+  variant = 'profile',
+}) => {
   const { t } = useTranslation();
   const { token, role, user } = useSelector((state: RootState) => state.auth);
   const { showInfo, showError } = useToast();
@@ -98,7 +104,7 @@ export const ProfilePage: React.FC = () => {
 
   return (
     <S.ProfileWrapper>
-      <S.ProfileCard>
+      <S.ProfileCard variant={variant}>
         <h1>{t('profile.title')}</h1>
         <S.AvatarWrapper>
           {preview ? (
@@ -146,7 +152,7 @@ export const ProfilePage: React.FC = () => {
           <>
             {Array.isArray(userPosts) && userPosts.length > 0 ? (
               userPosts.map((post) => (
-                <S.PostCard key={post._id}>
+                <S.PostCard variant={variant} key={post._id}>
                   {editingPostId === post._id ? (
                     <>
                       <S.Input

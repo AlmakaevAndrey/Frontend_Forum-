@@ -29,7 +29,7 @@ const SignInPage: React.FC = () => {
   return (
     <S.ContentWrapper>
       <S.SignInForm action='action' onSubmit={handleLogin}>
-        <S.TitleText>{t('common.fetchError')}</S.TitleText>
+        <S.TitleText>{t('signIn.title')}</S.TitleText>
         <S.SignInInput
           type='email'
           placeholder={t('common.email')}

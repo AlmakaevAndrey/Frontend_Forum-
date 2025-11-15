@@ -1,13 +1,18 @@
 import styled from 'styled-components';
 
+interface ProfileProps {
+  variant?: 'profile' | 'settings';
+}
+
 export const ProfileWrapper = styled.div`
   padding: 20px;
   max-width: 900px;
   margin: 160px auto;
 `;
 
-export const ProfileCard = styled.div`
-  background: ${({ theme }) => theme.colors.primary};
+export const ProfileCard = styled.div<ProfileProps>`
+  background: ${({ variant, theme }) =>
+    variant === 'profile' ? theme.colors.primary : theme.colors.background};
   padding: 25px 30px;
   border-radius: 12px;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
@@ -79,8 +84,9 @@ export const TextArea = styled.textarea`
   }
 `;
 
-export const PostCard = styled.div`
-  background: ${({ theme }) => theme.colors.primary};
+export const PostCard = styled.div<ProfileProps>`
+  background: ${({ variant, theme }) =>
+    variant === 'profile' ? theme.colors.primary : theme.colors.background};
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.05);

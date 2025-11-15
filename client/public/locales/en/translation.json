@@ -31,6 +31,19 @@
     "usefulLinksTitle": "🔗 Useful links"
   },
 
+  "header": {
+    "home": "Home",
+    "signIn": "Sign in",
+    "settings": "Settings",
+    "profile": "Profile",
+    "login": "Login",
+    "logout": "Logout",
+    "light": "Light",
+    "dark": "Dark",
+    "en": "EN",
+    "ru": "RU"
+  },
+
   "categories": {
     "docs": "📚 Documentation",
     "practice": "🛠 Practice",

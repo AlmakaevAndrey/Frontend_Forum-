@@ -7,16 +7,23 @@ import { configureStore } from '@reduxjs/toolkit';
 import { ThemeProvider } from 'styled-components';
 import theme from '../../styles/theme';
 
-const mockAuthReducer = (state: AuthState = { token: null }, action: any) =>
-  state;
-
 interface AuthState {
   token: string | null;
 }
 
+const mockAuthReducer = (state: AuthState = { token: null }, action: any) =>
+  state;
+
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({
-    t: (key: string) => key,
+    t: (key: string) => {
+      const translations: Record<string, string> = {
+        'header.login': 'Login',
+        'header.logout': 'Logout',
+        'header.dark': 'Dark',
+      };
+      return translations[key] || key;
+    },
     i18n: { changeLanguage: jest.fn() },
   }),
 }));

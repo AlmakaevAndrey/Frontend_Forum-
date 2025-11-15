@@ -12,6 +12,7 @@ import { logout } from '../../auth/authSlice';
 import { RootState } from 'api/store';
 import Nav from '../../components/Nav/Nav';
 import BurgerIcon from '../../assets/svg/burger-menu-right-svgrepo-com.svg';
+import { useTranslation } from 'react-i18next';
 
 interface HeaderProps {
   isDarkProps: boolean;
@@ -30,6 +31,8 @@ const Header: React.FC<HeaderProps> = ({
   const navigate = useNavigate();
   const { token } = useSelector((state: RootState) => state.auth);
 
+  const { t, i18n } = useTranslation();
+
   const handleLogout = () => {
     dispatch(logout());
     navigate('/signin');
@@ -47,14 +50,14 @@ const Header: React.FC<HeaderProps> = ({
         <ButtonDivWrapper>
           {!token ? (
             <>
-              <MyButton onClick={handleLogin}>Login</MyButton>
+              <MyButton onClick={handleLogin}>{t('header.login')}</MyButton>
             </>
           ) : (
-            <MyButton onClick={handleLogout}>Logout</MyButton>
+            <MyButton onClick={handleLogout}>{t('header.logout')}</MyButton>
           )}
 
-          <MyButton onClick={toggleTheme}>
-            {isDarkProps ? 'Light' : 'Dark'}
+          <MyButton key={i18n.language} onClick={toggleTheme}>
+            {isDarkProps ? t('header.light') : t('header.dark')}
           </MyButton>
           <Nav
             token={token}
