@@ -1,10 +1,6 @@
 <h1 align="center">🔥 Frontend Forum — Fullstack IT Forum</h1>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/gist/andreialmakaev/logo-forum-1/raw/banner.png" alt="Forum Banner" width="100%" />
-</p>
-
-<p align="center">
   <img src="https://img.shields.io/badge/React-19-blue" />
   <img src="https://img.shields.io/badge/TypeScript-5-blue" />
   <img src="https://img.shields.io/badge/Webpack-Custom-orange" />
