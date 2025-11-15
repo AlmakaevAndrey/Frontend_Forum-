@@ -59,11 +59,11 @@ export const Navigation = styled.nav<NavigationProps>`
     }
   }
 
-  @media (min-width: 900px) {
+  @media (min-width: 910px) {
     position: static;
   }
 
-  @media (max-width: 900px) {
+  @media (max-width: 910px) {
     position: fixed;
     top: ${({ $isOpen }) => ($isOpen ? '0' : '-100%')};
     left: 0;
@@ -123,7 +123,7 @@ export const BurgerButton = styled.button`
   cursor: pointer;
   display: none;
 
-  @media (max-width: 900px) {
+  @media (max-width: 910px) {
     display: block;
   }
 `;

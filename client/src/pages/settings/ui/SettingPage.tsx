@@ -7,7 +7,11 @@ import { useGetPostsQuery, useGetUsersQuery } from '../../../api/apiSlice';
 import { useToast } from '../../../shared/lib/toast';
 import { useTranslation } from 'react-i18next';
 
-const SettingPage: React.FC = () => {
+interface ProfilePageProps {
+  variant?: 'profile' | 'settings';
+}
+
+const SettingPage: React.FC<ProfilePageProps> = ({ variant = 'profile' }) => {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<'profile' | 'users' | 'posts'>(
     'profile'
@@ -45,7 +49,7 @@ const SettingPage: React.FC = () => {
         </S.SidebarItem>
       </S.Sidebar>
       <S.Content>
-        {activeTab === 'profile' && <ProfilePage />}
+        {activeTab === 'profile' && <ProfilePage variant='settings' />}
         {activeTab === 'users' && (
           <>
             {users && users.length > 0 ? (

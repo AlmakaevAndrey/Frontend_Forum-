@@ -3,6 +3,7 @@ import * as S from './Nav.styles';
 import { Link } from 'react-router-dom';
 import ArticleLogo from '../../assets/svg/ArticleLogo';
 import { useTranslation } from 'react-i18next';
+import { t } from 'i18next';
 
 interface NavProps {
   token: string | null;
@@ -33,25 +34,29 @@ const Nav: React.FC<NavProps> = ({ token, children }) => {
         <S.LanguageButton onClick={() => i18n.changeLanguage('ru')}>
           RU
         </S.LanguageButton>
-        <Link to='/' onClick={closeMenu}>
-          Home
+        <Link to='/' data-testid='link-home' onClick={closeMenu}>
+          {t('header.home')}
         </Link>
-        <Link to='/signin' onClick={closeMenu}>
-          Sign in
+        <Link to='/signin' data-testid='link-signin' onClick={closeMenu}>
+          {t('header.signIn')}
         </Link>
 
         {token && (
-          <Link to='/setting' onClick={closeMenu}>
-            Settings
+          <Link to='/setting' data-testid='link-settings' onClick={closeMenu}>
+            {t('header.settings')}
           </Link>
         )}
         {token && (
-          <Link to='/profile' onClick={closeMenu}>
-            Profile
+          <Link to='/profile' data-testid='link-profile' onClick={closeMenu}>
+            {t('header.profile')}
           </Link>
         )}
         {token && (
-          <Link to='/article_writing' onClick={closeMenu}>
+          <Link
+            to='/article_writing'
+            data-testid='link-article-writing'
+            onClick={closeMenu}
+          >
             <ArticleLogo />
           </Link>
         )}
