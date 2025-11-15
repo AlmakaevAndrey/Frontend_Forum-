@@ -13,9 +13,31 @@ dotenv.config();
 
 const app = express();
 
+const allowedOrigins = [
+  'https://frontend-forum.vercel.app', // прод-домен
+  'http://localhost:3000', // dev
+];
+
+function isVercelPreview(origin: string | string[]) {
+  return (
+    origin && origin.includes('vercel.app') && origin.includes('frontend-forum')
+  );
+}
+
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN || 'http://localhost:3000', //изменил CORS
+    origin: function (origin, callback) {
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      if (allowedOrigins.includes(origin) || isVercelPreview(origin)) {
+        return callback(null, true);
+      }
+
+      console.log('❌ CORS BLOCKED:', origin);
+      return callback(new Error('CORS blocked: ' + origin));
+    },
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
   })

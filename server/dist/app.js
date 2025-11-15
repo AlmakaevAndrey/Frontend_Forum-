@@ -15,8 +15,24 @@ const user_1 = __importDefault(require("./routes/user"));
 const path_1 = __importDefault(require("path"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
+const allowedOrigins = [
+    'https://frontend-forum.vercel.app', // прод-домен
+    'http://localhost:3000', // dev
+];
+function isVercelPreview(origin) {
+    return (origin && origin.includes('vercel.app') && origin.includes('frontend-forum'));
+}
 app.use((0, cors_1.default)({
-    origin: process.env.CORS_ORIGIN || 'http://localhost:3000', //изменил CORS
+    origin: function (origin, callback) {
+        if (!origin) {
+            return callback(null, true);
+        }
+        if (allowedOrigins.includes(origin) || isVercelPreview(origin)) {
+            return callback(null, true);
+        }
+        console.log('❌ CORS BLOCKED:', origin);
+        return callback(new Error('CORS blocked: ' + origin));
+    },
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
 }));
