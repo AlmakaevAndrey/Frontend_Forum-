@@ -26,6 +26,10 @@ export const useToast = () => {
     toast.success(message, {
       position: 'top-right',
       autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
       theme: themeMode,
     });
   };
@@ -43,6 +47,10 @@ export const useToast = () => {
     toast.error(message, {
       position: 'top-right',
       autoClose: 4000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
       theme: themeMode,
     });
   };
@@ -58,6 +66,10 @@ export const useToast = () => {
     toast.info(message, {
       position: 'top-center',
       autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
       theme: themeMode,
     });
   };
