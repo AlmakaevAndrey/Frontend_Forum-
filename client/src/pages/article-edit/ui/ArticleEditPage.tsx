@@ -45,7 +45,6 @@ const ArticleEditPage: React.FC = () => {
         data: { title, excerpt },
       }).unwrap();
 
-      showInfo(t('articleEdit.updated'));
       navigate(`/article_read/${id}`);
     } catch (err) {
       if (err?.status === 401) {

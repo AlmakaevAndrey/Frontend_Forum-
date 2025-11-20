@@ -27,13 +27,8 @@ const CommentsDiv: React.FC<Props> = ({ postId }) => {
     try {
       const result = await addComment({ id: postId, text }).unwrap();
       setText('');
-      showInfo(t('comments.commentAdded'));
     } catch (error) {
-      showError(
-        error?.data?.message ||
-          error?.error?.data?.message ||
-          t('comments.commentAddError')
-      );
+      showError(t('comments.addError'));
     }
   };
 

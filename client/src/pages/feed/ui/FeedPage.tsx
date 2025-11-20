@@ -33,9 +33,8 @@ const FeedPage: React.FC = () => {
 
   useEffect(() => {
     if (isLoading && !prevState.current.isLoading)
-      showInfo(t('common.loading'));
-    if (isError && !prevState.current.isError)
-      showError(t('common.fetchError'));
+      if (isError && !prevState.current.isError)
+        showError(t('common.fetchError'));
     prevState.current = { isLoading, isError };
   }, [isLoading, isError, showInfo, showError, t]);
 

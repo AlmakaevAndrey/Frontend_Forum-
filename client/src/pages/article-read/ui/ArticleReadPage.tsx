@@ -15,7 +15,7 @@ const ArticleReadPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { token, role, user } = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
-  const { showInfo, showError } = useToast();
+  const { showError } = useToast();
 
   const {
     data: article,
@@ -51,9 +51,6 @@ const ArticleReadPage: React.FC = () => {
 
     try {
       const updated = await likePost(id).unwrap();
-      showInfo(
-        updated.likes ? t('messages.likeAdded') : t('messages.likeRemoved')
-      );
     } catch (err) {
       if (err?.status === 401) {
         showError(t('messages.notAuthorized'));

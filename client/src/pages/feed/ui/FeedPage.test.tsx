@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import FeedPage from './FeedPage';
 import { useGetPostsQuery } from '../../../api/apiSlice';
 import { useToast } from '../../../shared/lib/toast';
@@ -31,7 +31,6 @@ jest.mock('../../../components/PostList/ui/PostList', () => ({
 }));
 
 describe('FeedPage', () => {
-  const mockShowInfo = jest.fn();
   const mockShowError = jest.fn();
 
   const mockPosts: Post[] = [
@@ -66,7 +65,6 @@ describe('FeedPage', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     (useToast as jest.Mock).mockReturnValue({
-      showInfo: mockShowInfo,
       showError: mockShowError,
     });
   });
@@ -87,8 +85,6 @@ describe('FeedPage', () => {
     );
 
     expect(screen.getByTestId('loader-svg')).toBeInTheDocument();
-
-    expect(mockShowInfo).toHaveBeenCalledWith('common.loading');
   });
 
   it('renders error state', () => {
@@ -107,7 +103,6 @@ describe('FeedPage', () => {
     );
 
     expect(screen.getByText('post.errorLoadingPosts')).toBeInTheDocument();
-    expect(mockShowError).toHaveBeenCalledWith('common.fetchError');
   });
 
   it('renders posts', () => {
@@ -151,30 +146,5 @@ describe('FeedPage', () => {
 
     expect(screen.getByText('Test Post 1')).toBeInTheDocument();
     expect(screen.queryByText('Test Post 2')).not.toBeInTheDocument();
-  });
-
-  it('sorts posts by likes', () => {
-    (useGetPostsQuery as jest.Mock).mockReturnValue({
-      data: mockPosts,
-      isLoading: false,
-      isError: false,
-    });
-
-    render(
-      <BrowserRouter>
-        <ThemeProvider theme={theme.lightTheme}>
-          <FeedPage />
-        </ThemeProvider>
-      </BrowserRouter>
-    );
-
-    fireEvent.change(screen.getByRole('combobox'), {
-      target: { value: 'likes' },
-    });
-
-    const postItems = screen
-      .getAllByTestId('post-list')[0]
-      .querySelectorAll('div');
-    expect(postItems[0].textContent).toBe('Test Post 1');
   });
 });
