@@ -1,8 +1,10 @@
-import { memo, useState } from 'react';
+import { memo } from 'react';
 import * as S from './PostCard.styles';
 import { Post } from '../types';
 import { useLikePostMutation } from '../../../api/apiSlice';
 import { useTranslation } from 'react-i18next';
+import DOMPurify from 'dompurify';
+import { formatText } from '../../../utils/formatText';
 
 interface PostProps {
   post: Post;
@@ -21,12 +23,16 @@ export const PostCard = memo(({ post, onClick }: PostProps) => {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
-  }).format(new Date());
+  }).format(new Date(post.date));
 
   return (
     <S.Card onClick={onClick}>
       <S.Title>{post.title}</S.Title>
-      <S.Excerpt>{post.excerpt}</S.Excerpt>
+      <S.Excerpt
+        dangerouslySetInnerHTML={{
+          __html: DOMPurify.sanitize(formatText(post.excerpt)),
+        }}
+      />
       <S.Footer>
         <S.SpanItem data-testid='span-item'>
           {post.authorAvatar ? (

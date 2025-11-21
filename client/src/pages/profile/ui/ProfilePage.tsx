@@ -11,8 +11,11 @@ import * as S from './ProfilePage.styles';
 import MyButton from '../../../components/Button/Button';
 import { MyCustomButton } from '../../../components/Button/Button.styles';
 import { updateUserProfile } from '../../../auth/authSlice';
+import DOMPurify from 'dompurify';
+
 import { Post } from '../../../components/Post/types';
 import { useTranslation } from 'react-i18next';
+import { formatText } from '../../../utils/formatText';
 
 interface ProfilePageProps {
   variant?: 'profile' | 'settings';
@@ -100,6 +103,14 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
     }
   };
 
+  const postExcerpt = (post: Post) => (
+    <p
+      dangerouslySetInnerHTML={{
+        __html: DOMPurify.sanitize(formatText(post.excerpt)),
+      }}
+    />
+  );
+
   if (!token) return <div>{t('profile.notAuthorized')}</div>;
 
   return (
@@ -173,7 +184,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
                   ) : (
                     <>
                       <h3>{post.title}</h3>
-                      <p>{post.excerpt}</p>
+                      {postExcerpt(post)}
                       <MyButton onClick={() => handleEditClick(post)}>
                         {t('profile.change')}
                       </MyButton>

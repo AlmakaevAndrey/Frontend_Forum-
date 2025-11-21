@@ -33,6 +33,7 @@ const ArticleEditPage: React.FC = () => {
         setArticle(found);
         setTitle(found.title);
         setExcerpt(found.excerpt);
+        setExcerptHtml(found.excerpt);
       }
     }
   }, [posts, id]);

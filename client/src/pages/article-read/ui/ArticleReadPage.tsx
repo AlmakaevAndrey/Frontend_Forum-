@@ -9,6 +9,7 @@ import MyButton from '../../../components/Button/Button';
 import CommentsDiv from '../../../components/Comment/Comment';
 import { useTranslation } from 'react-i18next';
 import DOMPurify from 'dompurify';
+import { formatText } from '../../../utils/formatText';
 
 const ArticleReadPage: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -66,6 +67,7 @@ const ArticleReadPage: React.FC = () => {
   if (!article) return <div>{t('articleEdit.notFound')}</div>;
 
   const canEdit = token && (role === 'admin' || user?.id === article.author);
+  console.log(article.excerpt);
 
   return (
     <S.ArticleWrapper>
@@ -76,7 +78,7 @@ const ArticleReadPage: React.FC = () => {
         </S.Author>
         <S.Content
           dangerouslySetInnerHTML={{
-            __html: DOMPurify.sanitize(article.excerpt),
+            __html: DOMPurify.sanitize(formatText(article.excerpt)),
           }}
         ></S.Content>
         <S.ButtonWrapper>
