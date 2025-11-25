@@ -15,3 +15,7 @@ export const postCreateSchema = z.object({
   title: z.string().min(1),
   excerpt: z.string().min(1),
 });
+
+export const memeCreateSchema = z.object({
+  imgURL: z.string().min(1),
+});

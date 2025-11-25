@@ -7,6 +7,7 @@ import authRoutes from './routes/auth';
 import postsRoutes from './routes/posts';
 import uploadRoutes from './routes/upload';
 import usersRoutes from './routes/user';
+import memesRoutes from './routes/memes';
 import path from 'path';
 
 dotenv.config();
@@ -52,6 +53,7 @@ app.use('/users', usersRoutes);
 app.use('/auth', authRoutes);
 app.use('/posts', postsRoutes);
 app.use('/upload', uploadRoutes);
+app.use('/memes', memesRoutes);
 
 if (process.env.NODE_ENV === 'production') {
   const clientBuildPath = path.join(__dirname, '../../client/build');
@@ -65,6 +67,7 @@ if (process.env.NODE_ENV === 'production') {
         !req.path.startsWith('/auth') &&
         !req.path.startsWith('/users') &&
         !req.path.startsWith('/posts') &&
+        !req.path.startsWith('/memes') &&
         !req.path.startsWith('/upload')
       ) {
         res.sendFile(path.join(clientBuildPath, 'index.html'));

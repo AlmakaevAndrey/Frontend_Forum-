@@ -61,7 +61,8 @@
     "profileSettings": "Profile settings",
     "searchPlaceholder": "Search...",
     "fetchErrorOrUser": "Fetch error or dont have users",
-    "settingsPage": "Settings Page"
+    "settingsPage": "Settings Page",
+    "memes": "Meme"
   },
 
   "editor": {

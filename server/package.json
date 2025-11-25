@@ -7,7 +7,8 @@
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
-    "startserv": "node server.js"
+    "startserv": "node server.js",
+    "seed": "ts-node src/seedMemes.ts"
   },
   "keywords": [],
   "author": "",

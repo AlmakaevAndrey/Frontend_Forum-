@@ -22,7 +22,7 @@ const Nav: React.FC<NavProps> = ({ token, children }) => {
   const { user, role } = useSelector((state: RootState) => state.auth);
 
   const closeMenu = () => setIsOpen(false);
-  const currentLang = i18n.language?.toUpperCase() ?? 'en';
+  const currentLang = i18n.language === 'en' ? 'RU' : 'EN';
 
   return (
     <S.NavWrapper>
@@ -42,13 +42,6 @@ const Nav: React.FC<NavProps> = ({ token, children }) => {
         >
           {currentLang}
         </MyCustomButton>
-
-        {/* <S.LanguageButton onClick={() => i18n.changeLanguage('en')}>
-          EN
-        </S.LanguageButton>
-        <S.LanguageButton onClick={() => i18n.changeLanguage('ru')}>
-          RU
-        </S.LanguageButton> */}
 
         <Link to='/' data-testid='link-home' onClick={closeMenu}>
           {t('header.home')}

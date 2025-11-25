@@ -4,6 +4,7 @@ import { NavigateFunction } from 'react-router-dom';
 import { Comment, Post } from '../components/Post/types';
 import { User } from '../components/User1/userTypes';
 import { logout } from '../auth/authSlice';
+import { Meme } from 'components/Meme/memeTypes';
 
 const axiosBaseQuery =
   ({ baseUrl, navigate }: { baseUrl: string; navigate?: NavigateFunction }) =>
@@ -57,7 +58,7 @@ console.log('API URL:', API_URL);
 export const ApiSlice = createApi({
   reducerPath: 'api',
   baseQuery: axiosBaseQuery({ baseUrl: API_URL }),
-  tagTypes: ['Posts', 'Auth', 'Comments', 'User'],
+  tagTypes: ['Posts', 'Auth', 'Comments', 'User', 'Meme'],
   endpoints: (builder) => ({
     register: builder.mutation<
       any,
@@ -173,6 +174,53 @@ export const ApiSlice = createApi({
         return response;
       },
     }),
+
+    getMeme: builder.query<Meme, void>({
+      query: (id) => ({
+        url: `/memes/${id}`,
+        method: 'get',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+        },
+      }),
+      providesTags: ['Meme'],
+    }),
+
+    getMemes: builder.query<Meme[], void>({
+      query: () => ({
+        url: '/memes',
+        method: 'get',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+        },
+      }),
+      providesTags: ['Meme'],
+    }),
+
+    postMeme: builder.mutation<Meme[], void>({
+      query: (newPostMeme) => ({
+        url: '/memes',
+        method: 'post',
+        data: newPostMeme,
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+        },
+      }),
+      invalidatesTags: ['Meme'],
+    }),
+
+    postLikeOnMeme: builder.mutation<Meme[], string>({
+      query: (postMemeId) => ({
+        url: `/memes/${postMemeId}/like`,
+        method: 'post',
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+        },
+      }),
+      invalidatesTags: ['Meme'],
+    }),
   }),
 });
 
@@ -188,4 +236,8 @@ export const {
   useAddCommentMutation,
   useUpdatePostMutation,
   useUpdateUserMutation,
+  useGetMemeQuery,
+  useGetMemesQuery,
+  usePostLikeOnMemeMutation,
+  usePostMemeMutation,
 } = ApiSlice;

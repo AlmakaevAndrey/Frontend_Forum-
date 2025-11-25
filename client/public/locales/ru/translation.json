@@ -59,7 +59,8 @@
     "profileSettings": "Настройки профиля",
     "searchPlaceholder": "Поиск...",
     "fetchErrorOrUser": "Ошибка при загрузке  или нету пользователей",
-    "settingsPage": "Настройки"
+    "settingsPage": "Настройки",
+    "memes": "Мемы"
   },
 
   "editor": {
