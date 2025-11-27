@@ -5,7 +5,6 @@ import * as S from './Comment.styled';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../api/store';
 import { useTranslation } from 'react-i18next';
-import { count } from 'console';
 
 type Props = { postId: string };
 
@@ -28,7 +27,7 @@ const CommentsDiv: React.FC<Props> = ({ postId }) => {
       const result = await addComment({ id: postId, text }).unwrap();
       setText('');
     } catch (error) {
-      showError(t('comments.addError'));
+      showError(t('comments.commentAddError'));
     }
   };
 
@@ -39,7 +38,6 @@ const CommentsDiv: React.FC<Props> = ({ postId }) => {
       <S.CommentsTitle>
         {t('comments.commentsCount', { count: comments.length })}
       </S.CommentsTitle>
-
       <S.CommentsList>
         {comments.map((c, idx) => (
           <S.CommentWrapper key={`${c.userId}-${c.createdAt ?? idx}`}>
@@ -53,7 +51,6 @@ const CommentsDiv: React.FC<Props> = ({ postId }) => {
           </S.CommentWrapper>
         ))}
       </S.CommentsList>
-
       <S.AddCommentWrapper>
         <S.AddCommentInput
           value={text}

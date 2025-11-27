@@ -12,7 +12,7 @@ export interface IMeme extends Document {
 const MemeSchema = new Schema<IMeme>({
   imgURL: { type: String, required: true },
   author: { type: String, required: true },
-  authorAvatar: { type: String, required: false },
+  authorAvatar: { type: String, default: false },
   likes: [{ type: Schema.Types.ObjectId, ref: 'User', default: [] }],
   date: { type: Date, default: Date.now },
 });

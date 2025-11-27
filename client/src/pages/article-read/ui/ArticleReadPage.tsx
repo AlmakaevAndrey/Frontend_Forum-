@@ -67,7 +67,6 @@ const ArticleReadPage: React.FC = () => {
   if (!article) return <div>{t('articleEdit.notFound')}</div>;
 
   const canEdit = token && (role === 'admin' || user?.id === article.author);
-  console.log(article.excerpt);
 
   return (
     <S.ArticleWrapper>

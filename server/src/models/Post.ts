@@ -32,7 +32,7 @@ const PostSchema = new Schema<IPost>({
   excerpt: { type: String, required: true },
   author: { type: String, required: true },
   date: { type: Date, default: Date.now },
-  authorAvatar: { type: String, required: true },
+  authorAvatar: { type: String, required: false, default: '' },
   likes: [{ type: Schema.Types.ObjectId, ref: 'User', default: [] }],
   comments: [CommentSchema],
 });

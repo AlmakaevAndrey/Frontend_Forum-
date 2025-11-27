@@ -120,6 +120,9 @@ export const ApiSlice = createApi({
         url: `/posts/${id}/comments`,
         method: 'post',
         data: { text },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+        },
       }),
       invalidatesTags: (result, error, { id }) => [{ type: 'Comments', id }],
     }),

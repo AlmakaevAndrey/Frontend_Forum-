@@ -46,9 +46,12 @@ const Nav: React.FC<NavProps> = ({ token, children }) => {
         <Link to='/' data-testid='link-home' onClick={closeMenu}>
           {t('header.home')}
         </Link>
-        <Link to='/signin' data-testid='link-signin' onClick={closeMenu}>
-          {t('header.signIn')}
-        </Link>
+
+        {!token && (
+          <Link to='/signin' data-testid='link-signin' onClick={closeMenu}>
+            {t('header.signIn')}
+          </Link>
+        )}
 
         {token && role === 'admin' && (
           <Link to='/setting' data-testid='link-settings' onClick={closeMenu}>
