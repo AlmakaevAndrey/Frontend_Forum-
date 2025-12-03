@@ -3,7 +3,6 @@ import { loginSchema, registerSchema } from '../utils/validators';
 import jwt, { SignOptions } from 'jsonwebtoken';
 import User from '../models/User';
 import dotenv from 'dotenv';
-import { success } from 'zod';
 
 dotenv.config();
 

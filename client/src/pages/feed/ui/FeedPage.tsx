@@ -61,7 +61,7 @@ const FeedPage: React.FC = () => {
     <S.ContentWrapper>
       <S.Section>
         <S.SettingsForArticle>
-          <h2>{t('feed.settingsTitle')}</h2>
+          <S.Title>{t('feed.settingsTitle')}</S.Title>
           <S.WrapperForArticleDiv>
             <S.InputInArticle
               aria-label={t('post.searchSetting')}
@@ -83,7 +83,7 @@ const FeedPage: React.FC = () => {
       </S.Section>
       <S.Section>
         <S.ContainerForArticle>
-          <h3>✍ {t('post.posts')}</h3>
+          <S.Title>✍ {t('post.posts')}</S.Title>
           {isLoading && <Loader data-testid='loader-svg' />}
           {isError && <p>{t('post.errorLoadingPosts')}</p>}
           {!isLoading && !isError && <PostList posts={filteredPosts} />}
@@ -91,13 +91,13 @@ const FeedPage: React.FC = () => {
       </S.Section>
       <S.Section>
         <S.SettingsForArticle>
-          <h3>😂 {t('common.memes')}</h3>
+          <S.Title>😂 {t('common.memes')}</S.Title>
           <MemeSlider memes={memes} />
         </S.SettingsForArticle>
       </S.Section>
       <S.Section>
         <S.ContainerForLinks>
-          <h4>🔗 {t('post.usefulLinks')}</h4>
+          <S.Title>🔗 {t('post.usefulLinks')}</S.Title>
           {/* Сделать топ - 3 и дальше сделать новую страницу! */}
           <S.WrapperGridLinksList>
             {categories.map((key) => {
@@ -127,7 +127,6 @@ const FeedPage: React.FC = () => {
                 </S.DividerLinksList>
               );
             })}
-            {/* Еще подумать где сделать блок с мемами(может сбоку) */}
           </S.WrapperGridLinksList>
         </S.ContainerForLinks>
       </S.Section>

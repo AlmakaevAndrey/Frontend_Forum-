@@ -18,6 +18,11 @@ const ArticleReadPage: React.FC = () => {
   const navigate = useNavigate();
   const { showError } = useToast();
 
+  const API_URL =
+    process.env.NODE_ENV === 'production'
+      ? 'https://frontend-forum.onrender.com'
+      : 'http://localhost:5000';
+
   const {
     data: article,
     isLoading,
@@ -71,33 +76,43 @@ const ArticleReadPage: React.FC = () => {
   return (
     <S.ArticleWrapper>
       <S.ArticleDiv>
-        <S.Title>{article.title}</S.Title>
-        <S.Author>
-          {t('articleRead.by')} {article.author ?? 'Unknown'} | {dateFormatted}
-        </S.Author>
-        <S.Content
-          dangerouslySetInnerHTML={{
-            __html: DOMPurify.sanitize(formatText(article.excerpt)),
-          }}
-        ></S.Content>
-        <S.ButtonWrapper>
-          <MyButton
-            onClick={handleLike}
-            aria-label={
-              hasLiked ? t('articleRead.unlike') : t('articleRead.like')
-            }
-            data-testid='like-button'
-            disabled={!article}
-          >
-            {hasLiked ? '❤️' : '🤍'}({article.likes?.length ?? 0})
-          </MyButton>
-          {canEdit && (
-            <MyButton onClick={handleEdit}>{t('buttons.edit')}</MyButton>
-          )}
-          {/* сделать админку */}
-        </S.ButtonWrapper>
+        <S.Wrapper>
+          <S.Title>{article.title}</S.Title>
+          <S.Author>
+            {t('articleRead.by')}{' '}
+            {
+              <img
+                src={`${API_URL}${encodeURI(article.authorAvatar)}`}
+                alt={article.author}
+                style={{ width: 40, height: 40, borderRadius: '50%' }}
+              />
+            }{' '}
+            {article.author ?? 'Unknown'} | {dateFormatted}
+          </S.Author>
+          <S.Content
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(formatText(article.excerpt)),
+            }}
+          ></S.Content>
+          <S.ButtonWrapper>
+            <MyButton
+              onClick={handleLike}
+              aria-label={
+                hasLiked ? t('articleRead.unlike') : t('articleRead.like')
+              }
+              data-testid='like-button'
+              disabled={!article}
+            >
+              {hasLiked ? '❤️' : '🤍'}({article.likes?.length ?? 0})
+            </MyButton>
+            {canEdit && (
+              <MyButton onClick={handleEdit}>{t('buttons.edit')}</MyButton>
+            )}
+            {/* сделать админку */}
+          </S.ButtonWrapper>
 
-        <CommentsDiv postId={article._id} />
+          <CommentsDiv postId={article._id} />
+        </S.Wrapper>
       </S.ArticleDiv>
     </S.ArticleWrapper>
   );

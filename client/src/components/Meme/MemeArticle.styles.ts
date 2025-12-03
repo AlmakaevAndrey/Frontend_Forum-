@@ -26,12 +26,6 @@ export const MemeCard = styled.article`
   }
 `;
 
-export const Title = styled.h3`
-  font-size: 20px;
-  font-weight: 600;
-  color: ${({ theme }) => theme.colors.text};
-`;
-
 export const MemeImg = styled.img`
   width: 100%;
   height: auto;
@@ -61,12 +55,17 @@ export const SpanItem = styled.span`
 export const Footer = styled.div`
   display: flex;
   justify-content: space-between;
-  font-size: 14px;
+  font-size: 16px;
   color: ${({ theme }) => theme.colors.text};
 
-  @media (max-width: 660px) {
+  @media (max-width: 760px) {
     display: flex;
     flex-direction: column;
+    gap: 4px;
+  }
+
+  @media (max-width: 560px) {
+    font-size: 14px;
   }
 
   span {

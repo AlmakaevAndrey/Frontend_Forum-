@@ -5,6 +5,7 @@ import { useLikePostMutation } from '../../../api/apiSlice';
 import { useTranslation } from 'react-i18next';
 import DOMPurify from 'dompurify';
 import { formatText } from '../../../utils/formatText';
+import dotenv from 'dotenv';
 
 interface PostProps {
   post: Post;
@@ -14,6 +15,10 @@ interface PostProps {
 export const PostCard = memo(({ post, onClick }: PostProps) => {
   const [likePost] = useLikePostMutation();
   const { t, i18n } = useTranslation();
+  const API_URL =
+    process.env.NODE_ENV === 'production'
+      ? 'https://frontend-forum.onrender.com'
+      : 'http://localhost:5000';
 
   const handleLikes = () => {
     likePost(post._id);
@@ -35,12 +40,15 @@ export const PostCard = memo(({ post, onClick }: PostProps) => {
       />
       <S.Footer>
         <S.SpanItem data-testid='span-item'>
-          {post.authorAvatar ? (
-            <img src={post.authorAvatar} alt={post.author} />
+          {post.authorAvatar && post.authorAvatar.trim() !== '' ? (
+            <img
+              src={`${API_URL}${encodeURI(post.authorAvatar)}`}
+              alt={post.author}
+              style={{ width: 30, height: 30, borderRadius: '50%' }}
+            />
           ) : (
             '👨‍💻'
           )}
-          {/* Доделать логику аватара, после того ка сделаю добавление аватара и создание статьи */}
           {post.author}
         </S.SpanItem>
         <S.SpanItem data-testid='span-item'>

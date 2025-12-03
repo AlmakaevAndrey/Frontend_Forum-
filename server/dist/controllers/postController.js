@@ -48,13 +48,14 @@ const createPost = async (req, res) => {
         if (!req.user) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
-        const user = await User_1.default.findById(req.user?.id).select('username');
+        const user = await User_1.default.findById(req.user.id).select('username avatar');
         if (!user)
             return res.status(404).json({ message: 'User not found' });
         const parsed = validators_1.postCreateSchema.parse(req.body);
         const newPost = new Post_1.default({
             ...parsed,
             author: user.username,
+            authorAvatar: user.avatar ? `/uploads/${user.avatar}` : '',
             userId: req.user.id,
         });
         const saved = await newPost.save();

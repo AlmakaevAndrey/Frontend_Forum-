@@ -89,6 +89,14 @@ export const ArticleEditor = styled.div`
 
 export const Text = styled.h1`
   font-size: 32px;
+
+  @media (max-width: 900px) {
+    font-size: 24px;
+  }
+
+  @media (max-width: 560px) {
+    font-size: 22px;
+  }
 `;
 
 export const Input = styled.input`
@@ -101,6 +109,7 @@ export const Input = styled.input`
 
   @media (max-width: 620px) {
     width: 400px;
+    font-size: 16px;
   }
 
   @media (max-width: 500px) {
@@ -130,14 +139,22 @@ export const MyTextArea = styled.textarea`
     border-color: ${({ theme }) => theme.colors.text};
     box-shadow: 0px 0px 4px ${({ theme }) => theme.colors.text};
   }
+
+  @media (max-width: 620px) {
+    font-size: 16px;
+  }
 `;
 
 export const Content = styled.div`
-  font-size: 16px;
+  font-size: 20px;
   line-height: 1.75;
   color: ${({ theme }) => theme.colors.text};
   margin-bottom: 30px;
   word-break: break-word;
+
+  @media (max-width: 620px) {
+    font-size: 14px;
+  }
 `;
 
 export const ToPublishButton = styled.button`

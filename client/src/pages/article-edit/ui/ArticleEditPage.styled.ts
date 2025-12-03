@@ -27,20 +27,34 @@ export const Title = styled.h1`
   font-size: 28px;
   font-weight: 700;
   margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  @media (max-width: 720px) {
+    font-size: 22px;
+  }
+
+  @media (max-width: 560px) {
+    font-size: 20px;
+  }
 `;
 
 export const Label = styled.label`
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   color: ${({ theme }) => theme.colors.text};
   margin-bottom: 8px;
   display: block;
+
+  @media (max-width: 720px) {
+    font-size: 14px;
+  }
 `;
 
 export const Input = styled.input`
   width: 100%;
   height: 40px;
-  font-size: 16px;
+  font-size: 18px;
+  padding: 10px;
   border-radius: 8px;
   border: 1px solid #ccc;
   margin-bottom: 20px;
@@ -50,13 +64,18 @@ export const Input = styled.input`
     border-color: ${({ theme }) => theme.colors.text};
     box-shadow: 0px 0px 4px ${({ theme }) => theme.colors.text};
   }
+
+  @media (max-width: 720px) {
+    font-size: 16px;
+  }
 `;
 
 export const TextArea = styled.textarea`
   width: 100%;
   min-height: 200px;
   padding: 12px;
-  font-size: 16px;
+
+  font-size: 18px;
   border-radius: 8px;
   border: 1px solid #ccc;
   margin-bottom: 20px;
@@ -66,6 +85,14 @@ export const TextArea = styled.textarea`
   &:focus {
     border-color: ${({ theme }) => theme.colors.text};
     box-shadow: 0px 0px 4px ${({ theme }) => theme.colors.text};
+  }
+
+  @media (max-width: 760px) {
+    font-size: 16px;
+  }
+
+  @media (max-width: 620px) {
+    font-size: 14px;
   }
 `;
 

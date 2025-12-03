@@ -168,6 +168,14 @@ export const WrapperGridLinksList = styled.div`
 
 export const DividerLinksList = styled.div``;
 
+export const Title = styled.h3`
+  font-size: 24px;
+
+  @media (max-width: 660px) {
+    font-size: 22px;
+  }
+`;
+
 export const LinksTitle = styled.h4`
   font-size: 15px;
 `;

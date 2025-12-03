@@ -52,8 +52,12 @@ const axiosBaseQuery =
     }
   };
 
-const API_URL = __API_URL__ || 'http://localhost:5000';
-console.log('API URL:', API_URL);
+const API_URL =
+  process.env.NODE_ENV === 'production'
+    ? 'https://frontend-forum.onrender.com'
+    : 'http://localhost:5000';
+
+// console.log('API URL:', API_URL);
 
 export const ApiSlice = createApi({
   reducerPath: 'api',
