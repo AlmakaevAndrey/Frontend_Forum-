@@ -28,6 +28,9 @@ const axiosBaseQuery =
         headers: {
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
           ...headers,
+          ...(data instanceof FormData
+            ? {}
+            : { 'Content-Type': 'application/json' }),
         },
         withCredentials: true,
       });
@@ -228,6 +231,25 @@ export const ApiSlice = createApi({
       }),
       invalidatesTags: ['Meme'],
     }),
+
+    addMeme: builder.mutation<Meme, { file: File }>({
+      query: ({ file }) => {
+        const formData = new FormData();
+        formData.append('image', file);
+        const token = localStorage.getItem('token');
+
+        return {
+          url: '/memes',
+          method: 'post',
+          data: formData,
+          headers: {
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+          withCredentials: true,
+        };
+      },
+      invalidatesTags: ['Meme'],
+    }),
   }),
 });
 
@@ -247,4 +269,5 @@ export const {
   useGetMemesQuery,
   usePostLikeOnMemeMutation,
   usePostMemeMutation,
+  useAddMemeMutation,
 } = ApiSlice;

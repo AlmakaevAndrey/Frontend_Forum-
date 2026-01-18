@@ -2,8 +2,9 @@ import styled from 'styled-components';
 
 export const MemeCard = styled.article`
   padding: 20px;
+  margin: 20px;
   border-radius: 16px;
-  background: ${({ theme }) => theme.colors.background};
+  background: ${({ theme }) => theme.colors.backgroundInput};
   box-shadow: 0 2px 6px ${({ theme }) => theme.colors.border};
   display: flex;
   flex-direction: column;
@@ -17,11 +18,14 @@ export const MemeCard = styled.article`
 
   @media (max-width: 760px) {
     padding: 10px;
+    margin: 10px;
     gap: 6px;
   }
 
   @media (max-width: 560px) {
     padding: 6px;
+    margin: 0;
+
     gap: 4px;
   }
 `;
@@ -39,6 +43,7 @@ export const SpanItem = styled.span`
   align-items: center;
   gap: 6px;
   white-space: normal;
+  color: black;
 
   img {
     width: 28px;

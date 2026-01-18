@@ -23,6 +23,11 @@ const allowedOrigins = [
 function isVercelPreview(origin) {
     return (origin && origin.includes('vercel.app') && origin.includes('frontend-forum'));
 }
+//
+// app.use((req, res, next) => {
+//   console.log(`➡️ ${req.method} ${req.url}`);
+//   next();
+// });
 app.use((0, cors_1.default)({
     origin: function (origin, callback) {
         if (!origin) {
@@ -67,4 +72,11 @@ if (process.env.NODE_ENV === 'production') {
         console.warn('Client build folder not found, skipping static serving');
     }
 }
+// Глобальный обработчик ошибок
+app.use((err, req, res, next) => {
+    console.error('🔴 Global error handler caught:', err);
+    res.status(err.status || 500).json({
+        message: err.message || 'Internal Server Error',
+    });
+});
 exports.default = app;

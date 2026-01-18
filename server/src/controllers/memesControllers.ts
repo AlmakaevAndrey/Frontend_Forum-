@@ -3,6 +3,8 @@ import { Request, Response } from 'express';
 import { memeCreateSchema } from '../utils/validators';
 import mongoose, { SortOrder } from 'mongoose';
 import User from '../models/User';
+import cloudinary from '../config/cloudinary';
+import { resourceLimits } from 'worker_threads';
 
 export const getMeme = async (req: Request, res: Response) => {
   try {
@@ -30,19 +32,31 @@ export const createMeme = async (req: Request, res: Response) => {
       return res.status(401).json({ message: 'Unauthorized' });
     }
 
-    const user = await User.findById(req.user?.id).select('username');
-    if (!user) return res.status(404).json({ message: 'User not found' });
+    if (!req.file) {
+      return res.status(400).json({ message: 'Image is required' });
+    }
 
-    const parsed = memeCreateSchema.parse(req.body);
+    const user = await User.findById(req.user.id).select('username');
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: 'memes',
+      resource_type: 'image',
+    });
+
     const newMeme = new Meme({
-      ...parsed,
-      author: user.username,
-      userId: req.user.id,
+      imgURL: result.secure_url,
+      author: user.username || 'User',
+      authorAvatar: user.avatar || '',
+      likes: [],
     });
 
     const saved = await newMeme.save();
     res.status(201).json(saved);
   } catch (err) {
+    console.error(err);
     if (err instanceof Error) {
       res.status(500).json({ message: err.message });
     } else {

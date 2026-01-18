@@ -1,15 +1,54 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useTransition } from 'react';
 import * as S from './MemeSlider.styled';
 import { Meme } from '../Meme/memeTypes';
-import { t } from 'i18next';
 import MemeArticle from '../../components/Meme/MemeArticle';
+import { useAddMemeMutation } from '../../api/apiSlice';
+import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   memes: Meme[];
 }
 
 const MemeSlider: React.FC<Props> = ({ memes }) => {
+  const { t } = useTranslation();
   const [index, setIndex] = useState(0);
+  const [file, setFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
+  const [addMeme] = useAddMemeMutation();
+
+  useEffect(() => {
+    if (!file) return;
+
+    const url = URL.createObjectURL(file);
+    setPreview(url);
+
+    return () => URL.revokeObjectURL(url);
+  }, [file]);
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selected = e.target.files?.[0];
+    if (!selected) return;
+
+    setFile(selected);
+  };
+
+  const uploadHandler = async () => {
+    if (!file) return;
+
+    await addMeme({
+      file,
+    });
+  };
+
+  const truncateFileName = (name: string, max = 18) => {
+    if (name.length <= max) return name;
+
+    const ext = name.split('.').pop();
+    const base = name.slice(0, max - (ext?.length || 0) - 3);
+
+    return `${base}...${ext}`;
+  };
 
   const prev = () => {
     setIndex((prev) => (prev === 0 ? memes.length - 1 : prev - 1));
@@ -36,6 +75,24 @@ const MemeSlider: React.FC<Props> = ({ memes }) => {
       </S.Slider>
 
       <S.NextButton onClick={next}>▶</S.NextButton>
+      <S.AddMemeWrapper>
+        {preview && <S.Preview src={preview} />}
+
+        <S.HiddenInput
+          id='upload'
+          type='file'
+          accept='image/*'
+          onChange={onChange}
+        />
+
+        <S.UploadLabel htmlFor='upload'>
+          <S.Icon>🖼️</S.Icon>
+          {file ? truncateFileName(file.name) : t('common.fileNotSelected')}
+        </S.UploadLabel>
+        <S.AddMemeButton onClick={uploadHandler}>
+          {t('common.addMeme')}
+        </S.AddMemeButton>
+      </S.AddMemeWrapper>
     </S.Wrapper>
   );
 };

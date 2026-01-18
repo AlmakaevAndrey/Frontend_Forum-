@@ -62,7 +62,10 @@
     "searchPlaceholder": "Search...",
     "fetchErrorOrUser": "Fetch error or dont have users",
     "settingsPage": "Settings Page",
-    "memes": "Meme"
+    "memes": "Meme",
+    "addMeme": "Download",
+    "selectFile": "Select a file",
+    "fileNotSelected": "File not selected"
   },
 
   "editor": {

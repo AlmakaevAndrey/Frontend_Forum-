@@ -60,7 +60,10 @@
     "searchPlaceholder": "Поиск...",
     "fetchErrorOrUser": "Ошибка при загрузке  или нету пользователей",
     "settingsPage": "Настройки",
-    "memes": "Мемы"
+    "memes": "Мемы",
+    "addMeme": "Загрузить",
+    "selectFile": "Выберите файл",
+    "fileNotSelected": "Файл не выбран"
   },
 
   "editor": {
