@@ -9,8 +9,7 @@ import { authenticate, authorize } from '../middleware/auth';
 import { createUploader } from '../middleware/uploads';
 
 const router = Router();
-
-const memeUpload = createUploader('');
+const memeUpload = createUploader();
 
 router.get('/', getMemes);
 router.get('/:id', getMeme);

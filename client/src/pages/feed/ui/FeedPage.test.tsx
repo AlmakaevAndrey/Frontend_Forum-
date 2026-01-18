@@ -1,7 +1,11 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import FeedPage from './FeedPage';
-import { useGetMemesQuery, useGetPostsQuery } from '../../../api/apiSlice';
+import {
+  useAddMemeMutation,
+  useGetMemesQuery,
+  useGetPostsQuery,
+} from '../../../api/apiSlice';
 import { useToast } from '../../../shared/lib/toast';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
@@ -11,6 +15,7 @@ import { Post } from '../../../components/Post/types';
 jest.mock('../../../api/apiSlice', () => ({
   useGetPostsQuery: jest.fn(),
   useGetMemesQuery: jest.fn(),
+  useAddMemeMutation: jest.fn(),
 }));
 
 jest.mock('../../../shared/lib/toast', () => ({
@@ -74,6 +79,8 @@ describe('FeedPage', () => {
       isLoading: false,
       isError: false,
     });
+
+    (useAddMemeMutation as jest.Mock).mockReturnValue([jest.fn()]);
   });
 
   it('renders loading state', () => {

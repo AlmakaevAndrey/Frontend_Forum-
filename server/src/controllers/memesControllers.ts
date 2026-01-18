@@ -1,10 +1,9 @@
-import Meme, { IMeme } from '../models/Meme';
+import Meme from '../models/Meme';
 import { Request, Response } from 'express';
-import { memeCreateSchema } from '../utils/validators';
 import mongoose, { SortOrder } from 'mongoose';
 import User from '../models/User';
 import cloudinary from '../config/cloudinary';
-import { resourceLimits } from 'worker_threads';
+import streamifier from 'streamifier';
 
 export const getMeme = async (req: Request, res: Response) => {
   try {
@@ -28,26 +27,31 @@ export const getMemes = async (req: Request, res: Response) => {
 
 export const createMeme = async (req: Request, res: Response) => {
   try {
-    if (!req.user) {
-      return res.status(401).json({ message: 'Unauthorized' });
-    }
-
-    if (!req.file) {
+    if (!req.user) return res.status(401).json({ message: 'Unauthorized' });
+    if (!req.file)
       return res.status(400).json({ message: 'Image is required' });
-    }
 
-    const user = await User.findById(req.user.id).select('username');
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
+    const user = await User.findById(req.user.id).select('username avatar');
+    if (!user) return res.status(404).json({ message: 'User not found' });
 
-    const result = await cloudinary.uploader.upload(req.file.path, {
-      folder: 'memes',
-      resource_type: 'image',
-    });
+    const file = req.file;
+
+    const streamUpload = () =>
+      new Promise<string>((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: 'memes', resource_type: 'image' },
+          (error, result) => {
+            if (result) resolve(result.secure_url);
+            else reject(error);
+          }
+        );
+        streamifier.createReadStream(file.buffer).pipe(stream);
+      });
+
+    const imageUrl = await streamUpload();
 
     const newMeme = new Meme({
-      imgURL: result.secure_url,
+      imgURL: imageUrl,
       author: user.username || 'User',
       authorAvatar: user.avatar || '',
       likes: [],
@@ -55,13 +59,9 @@ export const createMeme = async (req: Request, res: Response) => {
 
     const saved = await newMeme.save();
     res.status(201).json(saved);
-  } catch (err) {
+  } catch (err: any) {
     console.error(err);
-    if (err instanceof Error) {
-      res.status(500).json({ message: err.message });
-    } else {
-      res.status(500).json({ message: 'Unknown error' });
-    }
+    res.status(500).json({ message: err.message || 'Internal server error' });
   }
 };
 

@@ -12,9 +12,14 @@ const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '1h';
 export const register = async (req: Request, res: Response) => {
   try {
     const parsed = registerSchema.parse(req.body);
-    const exists = await User.findOne({ email: parsed.email });
-    if (exists)
+
+    const existsEmail = await User.findOne({ email: parsed.email });
+    if (existsEmail)
       return res.status(400).json({ message: 'Email already in use' });
+
+    const existsUsername = await User.findOne({ username: parsed.username });
+    if (existsUsername)
+      return res.status(400).json({ message: 'Username already in use' });
 
     const user = new User(parsed);
     await user.save();
@@ -27,9 +32,7 @@ export const register = async (req: Request, res: Response) => {
         avatar: user.avatar,
       },
       JWT_SECRET,
-      {
-        expiresIn: JWT_EXPIRES_IN,
-      } as SignOptions
+      { expiresIn: JWT_EXPIRES_IN } as SignOptions
     );
 
     res.cookie('token', token, {
@@ -44,6 +47,10 @@ export const register = async (req: Request, res: Response) => {
       token,
     });
   } catch (err: any) {
+    if (err.code === 11000) {
+      const field = Object.keys(err.keyValue)[0];
+      return res.status(400).json({ message: `${field} already in use` });
+    }
     res.status(400).json({ message: err?.message || 'Validation failed' });
   }
 };
