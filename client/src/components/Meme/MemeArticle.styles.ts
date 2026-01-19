@@ -63,7 +63,7 @@ export const Footer = styled.div`
   font-size: 16px;
   color: ${({ theme }) => theme.colors.text};
 
-  @media (max-width: 760px) {
+  @media (max-width: 860px) {
     display: flex;
     flex-direction: column;
     gap: 4px;

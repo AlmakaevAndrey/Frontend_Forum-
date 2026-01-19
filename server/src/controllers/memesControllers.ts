@@ -4,6 +4,7 @@ import mongoose, { SortOrder } from 'mongoose';
 import User from '../models/User';
 import cloudinary from '../config/cloudinary';
 import streamifier from 'streamifier';
+import { error } from 'console';
 
 export const getMeme = async (req: Request, res: Response) => {
   try {
@@ -31,34 +32,37 @@ export const createMeme = async (req: Request, res: Response) => {
     if (!req.file)
       return res.status(400).json({ message: 'Image is required' });
 
-    const user = await User.findById(req.user.id).select('username avatar');
+    const user = await User.findById(req.user.id);
     if (!user) return res.status(404).json({ message: 'User not found' });
 
     const file = req.file;
 
-    const streamUpload = () =>
-      new Promise<string>((resolve, reject) => {
-        const stream = cloudinary.uploader.upload_stream(
-          { folder: 'memes', resource_type: 'image' },
-          (error, result) => {
-            if (result) resolve(result.secure_url);
-            else reject(error);
-          }
-        );
-        streamifier.createReadStream(file.buffer).pipe(stream);
-      });
+    const uploadResult = await new Promise<any>((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(
+        {
+          folder: 'memes',
+          transformation: [
+            { width: 900, crop: 'limit' },
+            { quality: 'auto' },
+            { fetch_format: 'auto' },
+          ],
+        },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      );
+      streamifier.createReadStream(file.buffer).pipe(stream);
+    });
 
-    const imageUrl = await streamUpload();
-
-    const newMeme = new Meme({
-      imgURL: imageUrl,
+    const newMeme = await Meme.create({
+      imgURL: uploadResult.secure_url,
       author: user.username || 'User',
       authorAvatar: user.avatar || '',
       likes: [],
     });
 
-    const saved = await newMeme.save();
-    res.status(201).json(saved);
+    res.status(201).json(newMeme);
   } catch (err: any) {
     console.error(err);
     res.status(500).json({ message: err.message || 'Internal server error' });
