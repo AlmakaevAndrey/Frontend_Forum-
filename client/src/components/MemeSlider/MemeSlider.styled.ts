@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const Wrapper = styled.div`
   width: 100%;
   max-width: 900px;
-  height: 540px;
+  height: 620px;
   margin: 0 auto;
   position: relative;
   display: flex;
@@ -16,23 +16,16 @@ export const Wrapper = styled.div`
   border-radius: 16px;
   overflow: hidden;
 
-  @media (max-width: 730px) {
-    height: 540px;
-  }
-
-  @media (max-width: 680px) {
-    height: 510px;
-  }
-
-  @media (max-width: 620px) {
-    height: 500px;
+  @media (max-width: 590px) {
+    height: 600px;
   }
 
   @media (max-width: 530px) {
-    height: 490px;
+    height: 560px;
   }
+
   @media (max-width: 440px) {
-    height: 480px;
+    height: 520px;
   }
 `;
 
@@ -47,6 +40,7 @@ export const Slider = styled.div`
 
   @media (max-width: 470px) {
     gap: 10px;
+    height: 80%;
   }
 `;
 
@@ -60,6 +54,22 @@ export const Center = styled.div`
 
   overflow: hidden;
   border-radius: 16px;
+
+  @media (max-width: 860px) {
+    height: 480px;
+  }
+
+  @media (max-width: 680px) {
+    height: 500px;
+  }
+
+  @media (max-width: 620px) {
+    height: 426px;
+  }
+
+  @media (max-width: 530px) {
+    height: 410px;
+  }
 `;
 
 export const Side = styled.img`
@@ -115,7 +125,7 @@ export const UploadLabel = styled.label`
   background: ${({ theme }) => theme.colors.svg};
   color: ${({ theme }) => theme.colors.textBlack};
 
-  @media (max-width: 450px) {
+  @media (max-width: 460px) {
     padding: 0 6px;
     font-size: 14px;
     height: 30px;
@@ -155,10 +165,11 @@ export const AddMemeButton = styled.button`
     cursor: not-allowed;
   }
 
-  @media (max-width: 450px) {
+  @media (max-width: 460px) {
     padding: 0 6px;
     font-size: 14px;
     height: 30px;
+    width: 58px;
   }
 `;
 
@@ -170,7 +181,10 @@ export const AddMemeWrapper = styled.div`
 
   @media (max-width: 730px) {
     padding: 0;
-    margin: 0 0 8px 0;
+    margin: 0 0 30px 0;
+  }
+  @media (max-width: 480px) {
+    flex-wrap: wrap;
   }
 `;
 
@@ -180,10 +194,20 @@ export const Icon = styled.span`
 `;
 
 export const Preview = styled.img`
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
   margin: 10px 10px;
   border-radius: 4px;
   object-fit: cover;
   border: 1px solid ${({ theme }) => theme.colors.svg};
+
+  @media (max-width: 480px) {
+    padding: 0;
+    margin: 0;
+  }
+
+  @media (max-width: 480px) {
+    width: 60px;
+    height: 60px;
+  }
 `;
