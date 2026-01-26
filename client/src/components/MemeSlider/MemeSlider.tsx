@@ -5,6 +5,7 @@ import MemeArticle from '../../components/Meme/MemeArticle';
 import { useAddMemeMutation } from '../../api/apiSlice';
 import { t } from 'i18next';
 import { useTranslation } from 'react-i18next';
+import Loader from '../../components/Loader/Loader';
 
 interface Props {
   memes: Meme[];
@@ -34,7 +35,7 @@ const MemeSlider: React.FC<Props> = ({ memes }) => {
   };
 
   const uploadHandler = async () => {
-    if (!file) return;
+    if (!file) return <Loader />;
 
     await addMeme({
       file,

@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Link, useNavigate } from 'react-router-dom';
 
 export const HeaderWrapper = styled.header`
   width: 100%;
@@ -44,7 +45,7 @@ export const ButtonDivWrapper = styled.div`
   button {
     margin: 4px;
 
-    @media (max-width: 400px) {
+    @media (max-width: 419px) {
       margin: 0;
     }
   }
@@ -90,4 +91,10 @@ export const Navigation = styled.nav`
   }
 `;
 
-export const Linked = styled.link``;
+export const Linked = styled(Link)`
+  @media (max-width: 400px) {
+    svg {
+      width: 120px;
+    }
+  }
+`;

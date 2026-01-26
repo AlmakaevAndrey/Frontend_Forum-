@@ -3,6 +3,7 @@ import {
   ButtonDivWrapper,
   HeaderWrapper,
   HeaderDivider,
+  Linked,
 } from './Header.styled';
 import MyButton from '../Button/Button';
 import { Link, useNavigate } from 'react-router-dom';
@@ -44,9 +45,9 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <HeaderWrapper>
       <HeaderDivider>
-        <Link to='/'>
+        <Linked to='/'>
           <Logo />
-        </Link>
+        </Linked>
         <ButtonDivWrapper>
           {!token ? (
             <>
