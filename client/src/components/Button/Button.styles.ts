@@ -12,7 +12,7 @@ export const MyCustomButton = styled.button`
   align-items: center;
   justify-content: center;
   z-index: 1;
-
+  //
   background: ${({ theme }) => theme.colors.svg};
   color: ${({ theme }) => theme.colors.textBlack};
 
