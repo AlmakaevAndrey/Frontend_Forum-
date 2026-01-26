@@ -16,6 +16,7 @@ export function buildPlugins({
 }: BuildOptions): Configuration['plugins'] {
   const isDev = mode === 'development';
   const isProd = mode === 'production';
+  const API_URL = process.env.REACT_APP_API_URL || '/';
 
   const plugins: Configuration['plugins'] = [
     new HtmlWebpackPlugin({
@@ -42,6 +43,7 @@ export function buildPlugins({
     new DefinePlugin({
       __PLATFORM__: JSON.stringify(platform),
       __IS_DEV__: JSON.stringify(mode),
+      'process.env.REACT_APP_API_URL': JSON.stringify(API_URL),
     }),
   ];
 
