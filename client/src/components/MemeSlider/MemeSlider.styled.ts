@@ -184,6 +184,7 @@ export const AddMemeWrapper = styled.div`
     margin: 0 0 30px 0;
   }
   @media (max-width: 480px) {
+    justify-content: center;
     flex-wrap: wrap;
   }
 `;
@@ -191,6 +192,10 @@ export const AddMemeWrapper = styled.div`
 export const Icon = styled.span`
   font-size: 18px;
   flex-shrink: 0;
+
+  @media (max-width: 480px) {
+    font-size: 14px;
+  }
 `;
 
 export const Preview = styled.img`

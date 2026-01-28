@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const MemeCard = styled.article`
+export const MemeCard = styled.article<{ $disabled?: boolean }>`
   padding: 20px;
   margin: 20px;
   border-radius: 16px;
@@ -10,6 +10,8 @@ export const MemeCard = styled.article`
   flex-direction: column;
   gap: 12px;
   cursor: pointer;
+  // 
+  filter: ${({ $disabled }) => ($disabled ? 'blur(2px)' : 'none')}
 
   &:hover {
     transform: translateY(-4px);
@@ -44,6 +46,7 @@ export const SpanItem = styled.span`
   gap: 6px;
   white-space: normal;
   color: black;
+  font-size: 14px;
 
   img {
     width: 28px;
@@ -54,6 +57,9 @@ export const SpanItem = styled.span`
 
   &:hover {
     color: ${({ theme }) => theme.colors.primary || '#007bff'};
+  }
+  @media (max-width: 460px) {
+    font-size: 14px;
   }
 `;
 
@@ -82,4 +88,18 @@ export const Footer = styled.div`
       display: flex;
     }
   }
+`;
+
+export const Overlay = styled.div`
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;

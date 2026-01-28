@@ -16,30 +16,32 @@ const MemeSlider: React.FC<Props> = ({ memes }) => {
   const [index, setIndex] = useState(0);
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
-  const [addMeme] = useAddMemeMutation();
+  const [addMeme, { isLoading: isAddingMeme }] = useAddMemeMutation();
 
   useEffect(() => {
-    if (!file) return;
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setPreview(url);
 
-    const url = URL.createObjectURL(file);
-    setPreview(url);
-
-    return () => URL.revokeObjectURL(url);
+      return () => URL.revokeObjectURL(url);
+    } else {
+      setPreview(null);
+    }
   }, [file]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selected = e.target.files?.[0];
-    if (!selected) return;
-
+    const selected = e.target.files?.[0] ?? null;
     setFile(selected);
   };
 
   const uploadHandler = async () => {
-    if (!file) return <Loader />;
+    if (!file) return;
 
-    await addMeme({
-      file,
-    });
+    try {
+      await addMeme({ file }).unwrap();
+      setFile(null);
+    } finally {
+    }
   };
 
   const truncateFileName = (name: string, max = 18) => {
@@ -70,7 +72,7 @@ const MemeSlider: React.FC<Props> = ({ memes }) => {
       <S.Slider>
         <S.Side src={memes[leftIndex].imgURL} />
         <S.Center>
-          <MemeArticle memes={memes[index]} />
+          <MemeArticle memes={memes[index]} disabled={isAddingMeme} />
         </S.Center>
         <S.Side src={memes[rightIndex].imgURL} />
       </S.Slider>
@@ -90,8 +92,8 @@ const MemeSlider: React.FC<Props> = ({ memes }) => {
           <S.Icon>🖼️</S.Icon>
           {file ? truncateFileName(file.name) : t('common.fileNotSelected')}
         </S.UploadLabel>
-        <S.AddMemeButton onClick={uploadHandler}>
-          {t('common.addMeme')}
+        <S.AddMemeButton onClick={uploadHandler} disabled={isAddingMeme}>
+          {isAddingMeme ? <Loader /> : t('common.addMeme')}
         </S.AddMemeButton>
       </S.AddMemeWrapper>
     </S.Wrapper>

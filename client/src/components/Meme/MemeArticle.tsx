@@ -7,9 +7,10 @@ import { Loader } from 'lucide-react';
 
 interface memeProps {
   memes: Meme;
+  disabled: boolean;
 }
 
-export const MemeArticle: React.FC<memeProps> = ({ memes }) => {
+export const MemeArticle: React.FC<memeProps> = ({ memes, disabled }) => {
   const [likeMeme] = usePostLikeOnMemeMutation();
   const { t, i18n } = useTranslation();
 
@@ -32,6 +33,11 @@ export const MemeArticle: React.FC<memeProps> = ({ memes }) => {
   return (
     <S.MemeCard>
       <S.MemeImg src={memes.imgURL} alt='meme' />
+      {disabled && (
+        <S.Overlay>
+          <Loader />
+        </S.Overlay>
+      )}
       <S.Footer>
         <S.SpanItem>
           {memes?.authorAvatar ? (
