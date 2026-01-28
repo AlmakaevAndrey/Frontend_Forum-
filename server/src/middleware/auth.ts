@@ -24,7 +24,7 @@ export const authenticate = (
   next: NextFunction
 ) => {
   const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
-
+  console.log('Token', token);
   if (!token) {
     return res.status(401).json({ message: 'No token provided' });
   }
@@ -38,6 +38,7 @@ export const authenticate = (
     };
 
     req.user = decoded;
+    console.log('Decoded user', decoded);
     next();
   } catch (err: any) {
     console.error('JWT verification error:', err.message);

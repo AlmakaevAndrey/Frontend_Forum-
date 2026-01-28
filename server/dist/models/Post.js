@@ -45,6 +45,7 @@ const PostSchema = new mongoose_1.Schema({
     excerpt: { type: String, required: true },
     author: { type: String, required: true },
     date: { type: Date, default: Date.now },
+    authorAvatar: { type: String, default: '' },
     likes: [{ type: mongoose_1.Schema.Types.ObjectId, ref: 'User', default: [] }],
     comments: [CommentSchema],
 });

@@ -9,11 +9,12 @@ import React, {
 import * as S from './FeedPage.styles';
 import { PostList } from '../../../components/PostList/ui/PostList';
 import { usefulLinks } from '../../../components/Links/usefulLinks';
-import { useGetPostsQuery } from '../../../api/apiSlice';
+import { useGetMemesQuery, useGetPostsQuery } from '../../../api/apiSlice';
 import { useToast } from '../../../shared/lib/toast';
 import { filteredAndSortPosts } from '../../../utils/postUtils';
 import { Loader } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import MemeSlider from '../../../components/MemeSlider/MemeSlider';
 
 const categories: readonly string[] = [
   'docs',
@@ -28,14 +29,14 @@ const FeedPage: React.FC = () => {
   const [sort, setSort] = useState<'date' | 'likes'>('date');
 
   const { data: posts = [], isLoading, isError } = useGetPostsQuery();
+  const { data: memes = [] } = useGetMemesQuery();
   const { showInfo, showError } = useToast();
   const prevState = useRef({ isLoading: false, isError: false });
 
   useEffect(() => {
     if (isLoading && !prevState.current.isLoading)
-      showInfo(t('common.loading'));
-    if (isError && !prevState.current.isError)
-      showError(t('common.fetchError'));
+      if (isError && !prevState.current.isError)
+        showError(t('common.fetchError'));
     prevState.current = { isLoading, isError };
   }, [isLoading, isError, showInfo, showError, t]);
 
@@ -60,7 +61,7 @@ const FeedPage: React.FC = () => {
     <S.ContentWrapper>
       <S.Section>
         <S.SettingsForArticle>
-          <h2>{t('feed.settingsTitle')}</h2>
+          <S.Title>{t('feed.settingsTitle')}</S.Title>
           <S.WrapperForArticleDiv>
             <S.InputInArticle
               aria-label={t('post.searchSetting')}
@@ -82,15 +83,21 @@ const FeedPage: React.FC = () => {
       </S.Section>
       <S.Section>
         <S.ContainerForArticle>
-          <h3>✍ {t('post.posts')}</h3>
+          <S.Title>✍ {t('post.posts')}</S.Title>
           {isLoading && <Loader data-testid='loader-svg' />}
           {isError && <p>{t('post.errorLoadingPosts')}</p>}
           {!isLoading && !isError && <PostList posts={filteredPosts} />}
         </S.ContainerForArticle>
       </S.Section>
       <S.Section>
+        <S.SettingsForArticle>
+          <S.Title>😂 {t('common.memes')}</S.Title>
+          <MemeSlider memes={memes} />
+        </S.SettingsForArticle>
+      </S.Section>
+      <S.Section>
         <S.ContainerForLinks>
-          <h4>🔗 {t('post.usefulLinks')}</h4>
+          <S.Title>🔗 {t('post.usefulLinks')}</S.Title>
           {/* Сделать топ - 3 и дальше сделать новую страницу! */}
           <S.WrapperGridLinksList>
             {categories.map((key) => {
@@ -120,7 +127,6 @@ const FeedPage: React.FC = () => {
                 </S.DividerLinksList>
               );
             })}
-            {/* Еще подумать где сделать блок с мемами(может сбоку) */}
           </S.WrapperGridLinksList>
         </S.ContainerForLinks>
       </S.Section>

@@ -4,7 +4,7 @@ export const CommentsWrapper = styled.div`
   max-width: 800px;
   margin: 20px auto;
   padding: 20px;
-  background-color: ${({ theme }) => theme.colors.backgroundSecond};
+  background-color: ${({ theme }) => theme.colors.primary};
   border-radius: 12px;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
 `;
@@ -77,11 +77,11 @@ export const AddCommentInput = styled.textarea`
 export const AddCommentButton = styled.button`
   align-self: flex-end;
   padding: 8px 16px;
-  background-color: ${({ theme }) => theme.colors.primary};
+  background-color: ${({ theme }) => theme.colors.svg};
   color: ${({ theme }) => theme.colors.textBlack};
   font-weight: 600;
   border: none;
-  border-radius: 8px;
+  border-radius: 18px;
   cursor: pointer;
   transition: 0.2s;
 

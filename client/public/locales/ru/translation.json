@@ -31,10 +31,10 @@
 
   "header": {
     "home": "Главная",
-    "signIn": "Вход",
+    "signIn": "Войти",
     "settings": "Настройки",
     "profile": "Аккаунт",
-    "login": "Войти",
+    "login": "Регистрация",
     "logout": "Выйти",
     "light": "Светлая",
     "dark": "Темная",
@@ -59,7 +59,11 @@
     "profileSettings": "Настройки профиля",
     "searchPlaceholder": "Поиск...",
     "fetchErrorOrUser": "Ошибка при загрузке  или нету пользователей",
-    "settingsPage": "Настройки"
+    "settingsPage": "Настройки",
+    "memes": "Мемы",
+    "addMeme": "Загрузить",
+    "selectFile": "Выберите файл",
+    "fileNotSelected": "Файл не выбран"
   },
 
   "editor": {

@@ -36,7 +36,7 @@
     "signIn": "Sign in",
     "settings": "Settings",
     "profile": "Profile",
-    "login": "Login",
+    "login": "Sign up",
     "logout": "Logout",
     "light": "Light",
     "dark": "Dark",
@@ -61,7 +61,11 @@
     "profileSettings": "Profile settings",
     "searchPlaceholder": "Search...",
     "fetchErrorOrUser": "Fetch error or dont have users",
-    "settingsPage": "Settings Page"
+    "settingsPage": "Settings Page",
+    "memes": "Meme",
+    "addMeme": "Download",
+    "selectFile": "Select a file",
+    "fileNotSelected": "File not selected"
   },
 
   "editor": {

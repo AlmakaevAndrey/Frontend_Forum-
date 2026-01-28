@@ -11,8 +11,11 @@ import * as S from './ProfilePage.styles';
 import MyButton from '../../../components/Button/Button';
 import { MyCustomButton } from '../../../components/Button/Button.styles';
 import { updateUserProfile } from '../../../auth/authSlice';
+import DOMPurify from 'dompurify';
+
 import { Post } from '../../../components/Post/types';
 import { useTranslation } from 'react-i18next';
+import { formatText } from '../../../utils/formatText';
 
 interface ProfilePageProps {
   variant?: 'profile' | 'settings';
@@ -100,12 +103,20 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
     }
   };
 
+  const postExcerpt = (post: Post) => (
+    <p
+      dangerouslySetInnerHTML={{
+        __html: DOMPurify.sanitize(formatText(post.excerpt)),
+      }}
+    />
+  );
+
   if (!token) return <div>{t('profile.notAuthorized')}</div>;
 
   return (
     <S.ProfileWrapper>
       <S.ProfileCard variant={variant}>
-        <h1>{t('profile.title')}</h1>
+        <S.Title>{t('profile.title')}</S.Title>
         <S.AvatarWrapper>
           {preview ? (
             <img src={preview} alt='preview' width={100} />
@@ -116,7 +127,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
               width={100}
             />
           ) : (
-            <span style={{ fontSize: 50 }}>👨‍💻</span>
+            <span>👨‍💻</span>
           )}
 
           <S.Input type='file' accept='image/*' onChange={selectAvatarChange} />
@@ -124,9 +135,9 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
             {updating ? t('profile.loading') : t('profile.upload')}
           </MyCustomButton>
         </S.AvatarWrapper>
-        <p>
-          {t('profile.username')} {user?.username}
-        </p>
+        <S.MyParagraph>
+          {t('profile.username')}: {user?.username}
+        </S.MyParagraph>
         <S.AvatarWrapper>
           <S.Input
             value={editingUsername}
@@ -134,55 +145,57 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
           />
           <MyButton onClick={handleUpdateUser}>{t('profile.change')}</MyButton>
         </S.AvatarWrapper>
-        <p>
-          {t('profile.email')} {user?.email}
-        </p>
+        <S.MyParagraph>
+          📩{t('profile.email')}: {user?.email}
+        </S.MyParagraph>
         {/* Нужно сделать аватар с функционалом */}
-        <p>
-          {t('profile.role')} {user?.role}
-        </p>
+        <S.MyParagraph>
+          👤{t('profile.role')}: {user?.role}
+        </S.MyParagraph>
       </S.ProfileCard>
 
       <S.PostsSection>
-        <h2>{t('profile.postsTitle')}</h2>
-        {isLoading && <p>{t('profile.Loading')}</p>}
-        {error && <p>{t('common.fetchError')}</p>}
+        <S.MyText>{t('profile.postsTitle')}</S.MyText>
+        {isLoading && <S.MyParagraph>{t('profile.Loading')}</S.MyParagraph>}
+        {error && <S.MyParagraph>{t('common.fetchError')}</S.MyParagraph>}
 
         {!isLoading && !error && (
           <>
             {Array.isArray(userPosts) && userPosts.length > 0 ? (
               userPosts.map((post) => (
                 <S.PostCard variant={variant} key={post._id}>
-                  {editingPostId === post._id ? (
-                    <>
-                      <S.Input
-                        value={editingTitle}
-                        onChange={(e) => setEditingTitle(e.target.value)}
-                      />
-                      <textarea
-                        value={editingExcerpt}
-                        onChange={(e) => setEditingExcerpt(e.target.value)}
-                      ></textarea>
-                      <MyButton onClick={() => handleSave(post._id)}>
-                        {t('buttons.save')}
-                      </MyButton>
-                      <MyButton onClick={() => setEditingPostId(null)}>
-                        {t('buttons.cancel')}
-                      </MyButton>
-                    </>
-                  ) : (
-                    <>
-                      <h3>{post.title}</h3>
-                      <p>{post.excerpt}</p>
-                      <MyButton onClick={() => handleEditClick(post)}>
-                        {t('profile.change')}
-                      </MyButton>
-                    </>
-                  )}
+                  <S.Wrapper>
+                    {editingPostId === post._id ? (
+                      <>
+                        <S.Input
+                          value={editingTitle}
+                          onChange={(e) => setEditingTitle(e.target.value)}
+                        />
+                        <textarea
+                          value={editingExcerpt}
+                          onChange={(e) => setEditingExcerpt(e.target.value)}
+                        ></textarea>
+                        <MyButton onClick={() => handleSave(post._id)}>
+                          {t('buttons.save')}
+                        </MyButton>
+                        <MyButton onClick={() => setEditingPostId(null)}>
+                          {t('buttons.cancel')}
+                        </MyButton>
+                      </>
+                    ) : (
+                      <>
+                        <S.MyPostTitle>{post.title}</S.MyPostTitle>
+                        {postExcerpt(post)}
+                        <MyButton onClick={() => handleEditClick(post)}>
+                          {t('profile.change')}
+                        </MyButton>
+                      </>
+                    )}
+                  </S.Wrapper>
                 </S.PostCard>
               ))
             ) : (
-              <p>{t('profile.noPosts')}</p>
+              <S.MyParagraph>{t('profile.noPosts')}</S.MyParagraph>
             )}
           </>
         )}

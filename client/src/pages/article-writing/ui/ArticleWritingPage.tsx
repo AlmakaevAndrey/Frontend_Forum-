@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import Editor from '../../../components/Editor/Editor';
 import { useTranslation } from 'react-i18next';
 
-const ArticleWriting: React.FC = () => {
+export const ArticleWriting: React.FC = () => {
   const { t } = useTranslation();
   const [title, setTitle] = useState('');
   const [excerpt, setExcerpt] = useState('');
@@ -27,7 +27,6 @@ const ArticleWriting: React.FC = () => {
 
     try {
       const newPost = await addPost({ title, excerpt }).unwrap();
-      showInfo(t('messages.postAdded'));
       navigate(`/article_read/${newPost._id}`);
     } catch (err) {
       showError(t('messages.notAuthorized'));
@@ -46,6 +45,7 @@ const ArticleWriting: React.FC = () => {
             onChange={(e) => setTitle(e.target.value)}
           />
           <Editor
+            data-testid='quill-editor'
             value={excerptHtml}
             onChange={(plainText, html) => {
               setExcerpt(plainText);

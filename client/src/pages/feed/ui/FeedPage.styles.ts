@@ -25,7 +25,8 @@ export const SettingsForArticle = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  padding: 20px;
+  padding: 0 20px 20px 20px;
+
   border-radius: 16px;
   background: ${({ theme }) => theme.colors.primary};
   box-shadow: 0 2px 8px ${({ theme }) => theme.colors.border};
@@ -166,6 +167,14 @@ export const WrapperGridLinksList = styled.div`
 `;
 
 export const DividerLinksList = styled.div``;
+
+export const Title = styled.h3`
+  font-size: 24px;
+
+  @media (max-width: 660px) {
+    font-size: 22px;
+  }
+`;
 
 export const LinksTitle = styled.h4`
   font-size: 15px;

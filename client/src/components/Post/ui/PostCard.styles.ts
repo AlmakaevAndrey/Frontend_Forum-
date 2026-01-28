@@ -17,16 +17,24 @@ export const Card = styled.div`
 `;
 
 export const Title = styled.h3`
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 600;
   color: ${({ theme }) => theme.colors.text};
+
+  @media (max-width: 560px) {
+    font-size: 20px;
+  }
 `;
 
 export const Excerpt = styled.p`
   width: 100%;
-  font-size: 16px;
+  font-size: 18px;
   color: ${({ theme }) => theme.colors.text};
   overflow-wrap: break-word;
+
+  @media (max-width: 560px) {
+    font-size: 16px;
+  }
 `;
 
 export const SpanItem = styled.span`
@@ -50,12 +58,15 @@ export const SpanItem = styled.span`
 export const Footer = styled.div`
   display: flex;
   justify-content: space-between;
-  font-size: 14px;
+  font-size: 16px;
   color: ${({ theme }) => theme.colors.text};
+  
 
-  @media (max-width: 460px) {
+  @media (max-width: 560px) {
     display: flex;
     flex-direction: column;
+    gap: 6px;
+    font-size: 14px;
   }
 
   span {

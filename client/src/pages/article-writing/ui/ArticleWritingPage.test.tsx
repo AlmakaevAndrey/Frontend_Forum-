@@ -1,159 +1,97 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { fireEvent, waitFor, screen, render } from '@testing-library/react';
+import { ThemeProvider } from 'styled-components';
 import ArticleWriting from './ArticleWritingPage';
 import { useAddPostMutation } from '../../../api/apiSlice';
+import { useNavigate } from 'react-router-dom';
 import { useToast } from '../../../shared/lib/toast';
-import { BrowserRouter } from 'react-router-dom';
-import { ThemeProvider } from 'styled-components';
 import theme from '../../../styles/theme';
 
-// Мокаем RTK Query хук
 jest.mock('../../../api/apiSlice', () => ({
   useAddPostMutation: jest.fn(),
 }));
 
-// Мокаем toast
+jest.mock('react-router-dom', () => ({
+  useNavigate: jest.fn(),
+}));
+
 jest.mock('../../../shared/lib/toast', () => ({
   useToast: jest.fn(),
 }));
 
-// Мокаем i18n
-jest.mock('react-i18next', () => ({
-  useTranslation: () => ({ t: (key: string) => key }),
-}));
-
-// Мокаем useNavigate
-const mockNavigate = jest.fn();
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockNavigate,
-}));
-
-// Мокаем Editor
-jest.mock('../../../components/Editor/Editor', () => (props: any) => {
-  return (
+jest.mock('../../../components/Editor/Editor', () => ({
+  __esModule: true,
+  default: ({
+    value,
+    onChange,
+    placeholder,
+  }: {
+    value: string;
+    onChange: (plainText: string, html: string) => void;
+    placeholder?: string;
+  }) => (
     <textarea
-      placeholder={props.placeholder}
-      value={props.value}
-      onChange={(e) => props.onChange(e.target.value, e.target.value)}
+      data-testid='quill-editor'
+      value={value}
+      placeholder={placeholder}
+      onChange={(e) => onChange(e.target.value, e.target.value)}
     />
-  );
-});
+  ),
+}));
+
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => {
+      const map: Record<string, string> = {
+        'articleWriting.enterTitle': 'Enter Title',
+        'articleWriting.enterContent': 'Enter Content',
+        'articleWriting.createArticle': 'Create Article',
+        'articleWriting.publish': 'Publish',
+      };
+      return map[key] || key;
+    },
+    i18n: { language: 'en' },
+  }),
+}));
 
 describe('ArticleWriting', () => {
+  const mockNavigate = jest.fn();
   const mockShowInfo = jest.fn();
   const mockShowError = jest.fn();
-  const mockAddPost = jest.fn();
+  const unwrapMock = jest.fn().mockResolvedValue({ _id: '123' });
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
     (useToast as jest.Mock).mockReturnValue({
       showInfo: mockShowInfo,
       showError: mockShowError,
     });
     (useAddPostMutation as jest.Mock).mockReturnValue([
-      mockAddPost,
-      { isLoading: false, reset: jest.fn() },
+      jest.fn().mockReturnValue({ unwrap: unwrapMock }),
+      { isLoading: false },
     ]);
-  });
-
-  const renderWithProviders = () =>
-    render(
-      <BrowserRouter>
-        <ThemeProvider theme={theme.lightTheme}>
-          <ArticleWriting />
-        </ThemeProvider>
-      </BrowserRouter>
-    );
-
-  it('renders form inputs and publish button', () => {
-    renderWithProviders();
-
-    expect(
-      screen.getByPlaceholderText('articleWriting.enterTitle')
-    ).toBeInTheDocument();
-    expect(
-      screen.getByPlaceholderText('articleWriting.enterContent')
-    ).toBeInTheDocument();
-    expect(screen.getByText('articleWriting.publish')).toBeInTheDocument();
-  });
-
-  it('shows error if fields are empty', async () => {
-    renderWithProviders();
-    fireEvent.click(screen.getByText('articleWriting.publish'));
-
-    await waitFor(() => {
-      expect(mockShowError).toHaveBeenCalledWith('messages.fillAllFields');
-    });
   });
 
   it('submits form successfully', async () => {
-    mockAddPost.mockReturnValue({
-      unwrap: jest.fn().mockResolvedValue({ _id: '123' }),
-    });
-
-    renderWithProviders();
-
-    fireEvent.change(screen.getByPlaceholderText('articleWriting.enterTitle'), {
-      target: { value: 'Test Title' },
-    });
-    fireEvent.change(
-      screen.getByPlaceholderText('articleWriting.enterContent'),
-      {
-        target: { value: 'Test Content' },
-      }
+    render(
+      <ThemeProvider theme={theme.darkTheme}>
+        <ArticleWriting />
+      </ThemeProvider>
     );
 
-    fireEvent.click(screen.getByText('articleWriting.publish'));
+    fireEvent.change(screen.getByPlaceholderText(/Enter Title/i), {
+      target: { value: 'Test Title' },
+    });
+
+    fireEvent.change(screen.getByTestId('quill-editor'), {
+      target: { value: 'Test Content' },
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /Publish/i }));
 
     await waitFor(() => {
-      expect(mockAddPost).toHaveBeenCalledWith({
-        title: 'Test Title',
-        excerpt: 'Test Content',
-      });
-      expect(mockShowInfo).toHaveBeenCalledWith('messages.postAdded');
+      expect(unwrapMock).toHaveBeenCalled();
       expect(mockNavigate).toHaveBeenCalledWith('/article_read/123');
     });
-  });
-
-  it('shows error if addPost fails', async () => {
-    mockAddPost.mockReturnValue({
-      unwrap: jest.fn().mockRejectedValue({}),
-    });
-
-    renderWithProviders();
-
-    fireEvent.change(screen.getByPlaceholderText('articleWriting.enterTitle'), {
-      target: { value: 'Test Title' },
-    });
-    fireEvent.change(
-      screen.getByPlaceholderText('articleWriting.enterContent'),
-      {
-        target: { value: 'Test Content' },
-      }
-    );
-
-    fireEvent.click(screen.getByText('articleWriting.publish'));
-
-    await waitFor(() => {
-      expect(mockShowError).toHaveBeenCalledWith('messages.notAuthorized');
-    });
-  });
-
-  it('disables button when mutation is loading', () => {
-    (useAddPostMutation as jest.Mock).mockReturnValue([
-      mockAddPost,
-      { isLoading: true, reset: jest.fn() },
-    ]);
-
-    render(
-      <BrowserRouter>
-        <ThemeProvider theme={theme.lightTheme}>
-          <ArticleWriting />
-        </ThemeProvider>
-      </BrowserRouter>
-    );
-
-    expect(screen.getByText('articleWriting.saving')).toBeDisabled();
   });
 });

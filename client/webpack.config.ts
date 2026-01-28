@@ -1,14 +1,15 @@
 import webpack from 'webpack';
+import path from 'path';
 import { buildWebpack } from './config/buildWebpack';
 import { BuildMode, BuildPaths } from './config/types/types';
-import path from 'node:path';
-import { platform } from 'node:os';
+import dotenv from 'dotenv';
 
+dotenv.config({ path: './client/.env' });
 interface EnvVariables {
   analyzer?: boolean;
   mode?: BuildMode;
   port?: number;
-  platform?: number;
+  platform?: 'mobile' | 'desktop';
 }
 
 export default (env: EnvVariables) => {
@@ -19,6 +20,7 @@ export default (env: EnvVariables) => {
     public: path.resolve(__dirname, 'public'),
     src: path.resolve(__dirname, 'src'),
   };
+
   const config: webpack.Configuration = buildWebpack({
     port: env.port ?? 3000,
     mode: env.mode ?? 'development',
@@ -26,24 +28,15 @@ export default (env: EnvVariables) => {
     analyzer: env.analyzer,
     platform: env.platform ?? 'desktop',
   });
-  module.exports = {
-    module: {
-      rules: [
-        {
-          test: /\.tsx?$/,
-          use: 'ts-loader',
-          exclude: /node_modules/,
-        },
-        {
-          test: /\.css$/i,
-          use: ['style-loader', 'css-loader'],
-        },
-      ],
-    },
-    resolve: {
-      extensions: ['.tsx', '.ts', '.js'],
-    },
-  };
+
+  config.plugins = [
+    ...(config.plugins || []),
+    new webpack.DefinePlugin({
+      __API_URL__: JSON.stringify(
+        process.env.REACT_APP_API_URL || 'http://localhost:5000'
+      ),
+    }),
+  ];
 
   return config;
 };

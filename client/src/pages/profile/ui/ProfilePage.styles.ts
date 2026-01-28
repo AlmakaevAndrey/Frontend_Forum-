@@ -10,6 +10,54 @@ export const ProfileWrapper = styled.div`
   margin: 160px auto;
 `;
 
+export const Title = styled.h1`
+  font-size: 30px;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+
+  @media (max-width: 700px) {
+    font-size: 24px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 22px;
+  }
+`;
+
+export const MyText = styled.h2`
+  font-size: 24px;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+
+  @media (max-width: 700px) {
+    font-size: 20px;
+  }
+`;
+
+export const MyPostTitle = styled.h2`
+  font-size: 22px;
+  font-weight: 600;
+
+  @media (max-width: 700px) {
+    font-size: 18px;
+  }
+`;
+
+export const MyParagraph = styled.p`
+  font-size: 20px;
+  font-weight: 500;
+
+  @media (max-width: 700px) {
+    font-size: 18px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 16px;
+  }
+`;
+
 export const ProfileCard = styled.div<ProfileProps>`
   background: ${({ variant, theme }) =>
     variant === 'profile' ? theme.colors.primary : theme.colors.background};
@@ -22,13 +70,18 @@ export const ProfileCard = styled.div<ProfileProps>`
   gap: 15px;
 
   @media (max-width: 480px) {
-    width: 330px;
+    width: 350px;
     padding: 10px 20px;
   }
 
+  div {
+    display: flex;
+    align-items: flex-start;
+  }
+
   img {
-    width: 100px;
-    height: 100px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     object-fit: cover;
   }
@@ -36,9 +89,15 @@ export const ProfileCard = styled.div<ProfileProps>`
   input {
     padding: 10px;
     border-radius: 8px;
-    border: 1px solid #ccc;
+    border: 1px solid #ffffffff;
     margin-right: 10px;
   }
+`;
+
+export const Wrapper = styled.div`
+  background-color: ${({ theme }) => theme.colors.background};
+  border-radius: 8px;
+  padding: 10px;
 `;
 
 export const SectionTitle = styled.h2`
@@ -46,6 +105,10 @@ export const SectionTitle = styled.h2`
   font-weight: 600;
   margin-bottom: 20px;
   color: ${({ theme }) => theme.colors.primary};
+
+  @media (max-width: 780px) {
+    font-size: 1rem;
+  }
 `;
 
 export const PostsSection = styled.div`
@@ -59,11 +122,11 @@ export const Input = styled.input`
   padding: 12px;
   font-size: 16px;
   border-radius: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid #ffffffff;
   margin-bottom: 20px;
   outline: none;
   &:focus {
-    border-color: ${({ theme }) => theme.colors.text};
+    border-color: ${({ theme }) => theme.colors.primary};
     box-shadow: 0px 0px 4px ${({ theme }) => theme.colors.text};
   }
 `;

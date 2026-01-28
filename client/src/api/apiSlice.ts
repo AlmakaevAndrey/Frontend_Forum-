@@ -4,6 +4,7 @@ import { NavigateFunction } from 'react-router-dom';
 import { Comment, Post } from '../components/Post/types';
 import { User } from '../components/User1/userTypes';
 import { logout } from '../auth/authSlice';
+import { Meme } from 'components/Meme/memeTypes';
 
 const axiosBaseQuery =
   ({ baseUrl, navigate }: { baseUrl: string; navigate?: NavigateFunction }) =>
@@ -27,6 +28,9 @@ const axiosBaseQuery =
         headers: {
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
           ...headers,
+          ...(data instanceof FormData
+            ? {}
+            : { 'Content-Type': 'application/json' }),
         },
         withCredentials: true,
       });
@@ -59,8 +63,8 @@ const API_URL =
 
 export const ApiSlice = createApi({
   reducerPath: 'api',
-  baseQuery: axiosBaseQuery({ baseUrl: API_URL }), // http://localhost:5000
-  tagTypes: ['Posts', 'Auth', 'Comments', 'User'],
+  baseQuery: axiosBaseQuery({ baseUrl: API_URL }),
+  tagTypes: ['Posts', 'Auth', 'Comments', 'User', 'Meme'],
   endpoints: (builder) => ({
     register: builder.mutation<
       any,
@@ -122,6 +126,9 @@ export const ApiSlice = createApi({
         url: `/posts/${id}/comments`,
         method: 'post',
         data: { text },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+        },
       }),
       invalidatesTags: (result, error, { id }) => [{ type: 'Comments', id }],
     }),
@@ -176,6 +183,72 @@ export const ApiSlice = createApi({
         return response;
       },
     }),
+
+    getMeme: builder.query<Meme, void>({
+      query: (id) => ({
+        url: `/memes/${id}`,
+        method: 'get',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+        },
+      }),
+      providesTags: ['Meme'],
+    }),
+
+    getMemes: builder.query<Meme[], void>({
+      query: () => ({
+        url: '/memes',
+        method: 'get',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+        },
+      }),
+      providesTags: ['Meme'],
+    }),
+
+    postMeme: builder.mutation<Meme[], void>({
+      query: (newPostMeme) => ({
+        url: '/memes',
+        method: 'post',
+        data: newPostMeme,
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+        },
+      }),
+      invalidatesTags: ['Meme'],
+    }),
+
+    postLikeOnMeme: builder.mutation<Meme[], string>({
+      query: (postMemeId) => ({
+        url: `/memes/${postMemeId}/like`,
+        method: 'post',
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+        },
+      }),
+      invalidatesTags: ['Meme'],
+    }),
+
+    addMeme: builder.mutation<Meme, { file: File }>({
+      query: ({ file }) => {
+        const formData = new FormData();
+        formData.append('image', file);
+        const token = localStorage.getItem('token');
+
+        return {
+          url: '/memes',
+          method: 'post',
+          data: formData,
+          headers: {
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+          withCredentials: true,
+        };
+      },
+      invalidatesTags: ['Meme'],
+    }),
   }),
 });
 
@@ -191,4 +264,9 @@ export const {
   useAddCommentMutation,
   useUpdatePostMutation,
   useUpdateUserMutation,
+  useGetMemeQuery,
+  useGetMemesQuery,
+  usePostLikeOnMemeMutation,
+  usePostMemeMutation,
+  useAddMemeMutation,
 } = ApiSlice;

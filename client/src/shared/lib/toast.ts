@@ -11,12 +11,17 @@ export const useToast = () => {
     (theme as any).mode === 'dark' ? 'dark' : 'light';
 
   const shownToasts = useRef<Set<string>>(new Set());
-  const lastShown: Record<string, number> = {};
+  const lastShown = useRef<Record<string, number>>({});
+
+  const isTest = process.env.NODE_ENV === 'test';
 
   const showSuccess = (key: string) => {
     const message = t(key);
-    if (shownToasts.current.has(message)) return;
-    shownToasts.current.add(message);
+
+    if (!isTest) {
+      if (shownToasts.current.has(message)) return;
+      shownToasts.current.add(message);
+    }
 
     toast.success(message, {
       position: 'top-right',
@@ -31,9 +36,13 @@ export const useToast = () => {
 
   const showError = (key: string) => {
     const message = t(key);
-    const now = Date.now();
-    if (lastShown[message] && now - lastShown[message] < 2000) return; // блочим часто
-    lastShown[message] = now;
+
+    if (!isTest) {
+      const now = Date.now();
+      if (lastShown.current[message] && now - lastShown.current[message] < 2000)
+        return;
+      lastShown.current[message] = now;
+    }
 
     toast.error(message, {
       position: 'top-right',
@@ -48,14 +57,22 @@ export const useToast = () => {
 
   const showInfo = (key: string) => {
     const message = t(key);
-    if (shownToasts.current.has(message)) return;
-    shownToasts.current.add(message);
+
+    if (!isTest) {
+      if (shownToasts.current.has(message)) return;
+      shownToasts.current.add(message);
+    }
 
     toast.info(message, {
       position: 'top-center',
       autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
       theme: themeMode,
     });
   };
+
   return { showSuccess, showError, showInfo };
 };

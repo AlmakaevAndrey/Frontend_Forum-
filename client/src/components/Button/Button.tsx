@@ -5,11 +5,17 @@ interface ButtonProps {
   children: ReactNode;
   onClick?: () => void;
   disabled?: boolean;
+  ['dataTestId']?: string;
 }
 
-const MyButton: React.FC<ButtonProps> = ({ children, onClick, disabled }) => {
+const MyButton: React.FC<ButtonProps> = ({
+  children,
+  onClick,
+  disabled,
+  ...rest
+}) => {
   return (
-    <MyCustomButton onClick={onClick} disabled={disabled}>
+    <MyCustomButton {...rest} onClick={onClick} disabled={disabled}>
       {children}
     </MyCustomButton>
   );

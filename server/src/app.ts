@@ -2,20 +2,48 @@ import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-
+import { existsSync } from 'fs';
 import authRoutes from './routes/auth';
 import postsRoutes from './routes/posts';
 import uploadRoutes from './routes/upload';
 import usersRoutes from './routes/user';
+import memesRoutes from './routes/memes';
 import path from 'path';
 
 dotenv.config();
 
 const app = express();
 
+const allowedOrigins = [
+  'https://frontend-forum.vercel.app', // прод-домен
+  'http://localhost:3000', // dev
+];
+
+function isVercelPreview(origin: string | string[]) {
+  return (
+    origin && origin.includes('vercel.app') && origin.includes('frontend-forum')
+  );
+}
+//
+// app.use((req, res, next) => {
+//   console.log(`➡️ ${req.method} ${req.url}`);
+//   next();
+// });
+
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+    origin: function (origin, callback) {
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      if (allowedOrigins.includes(origin) || isVercelPreview(origin)) {
+        return callback(null, true);
+      }
+
+      console.log('❌ CORS BLOCKED:', origin);
+      return callback(new Error('CORS blocked: ' + origin));
+    },
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
   })
@@ -30,24 +58,46 @@ app.use('/users', usersRoutes);
 app.use('/auth', authRoutes);
 app.use('/posts', postsRoutes);
 app.use('/upload', uploadRoutes);
+app.use('/memes', memesRoutes);
 
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../../client/build')));
+  const clientBuildPath = path.join(__dirname, '../../client/build');
 
-  app.use((req, res, next) => {
-    if (
-      !req.path.startsWith('/api') &&
-      !req.path.startsWith('/uploads') &&
-      !req.path.startsWith('/auth') &&
-      !req.path.startsWith('/users') &&
-      !req.path.startsWith('/posts') &&
-      !req.path.startsWith('/upload')
-    ) {
-      res.sendFile(path.join(__dirname, '../../client/build', 'index.html'));
-    } else {
-      next();
-    }
-  });
+  if (existsSync(clientBuildPath)) {
+    app.use(express.static(clientBuildPath));
+
+    app.use((req, res, next) => {
+      if (
+        !req.path.startsWith('/uploads') &&
+        !req.path.startsWith('/auth') &&
+        !req.path.startsWith('/users') &&
+        !req.path.startsWith('/posts') &&
+        !req.path.startsWith('/memes') &&
+        !req.path.startsWith('/upload')
+      ) {
+        res.sendFile(path.join(clientBuildPath, 'index.html'));
+      } else {
+        next();
+      }
+    });
+  } else {
+    console.warn('Client build folder not found, skipping static serving');
+  }
 }
+
+// Глобальный обработчик ошибок
+app.use(
+  (
+    err: any,
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+    console.error('🔴 Global error handler caught:', err);
+    res.status(err.status || 500).json({
+      message: err.message || 'Internal Server Error',
+    });
+  }
+);
 
 export default app;

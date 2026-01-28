@@ -33,6 +33,7 @@ const ArticleEditPage: React.FC = () => {
         setArticle(found);
         setTitle(found.title);
         setExcerpt(found.excerpt);
+        setExcerptHtml(found.excerpt);
       }
     }
   }, [posts, id]);
@@ -45,7 +46,6 @@ const ArticleEditPage: React.FC = () => {
         data: { title, excerpt },
       }).unwrap();
 
-      showInfo(t('articleEdit.updated'));
       navigate(`/article_read/${id}`);
     } catch (err) {
       if (err?.status === 401) {

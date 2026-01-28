@@ -21,7 +21,6 @@ const SignInPage: React.FC = () => {
       dispatch(
         loginSuccess({ user: res.user, token: res.token, role: res.user.role })
       );
-      showInfo(t('common.profile'));
     } catch (err: any) {
       showError(err?.data?.message || t('common.fetchError'));
     }

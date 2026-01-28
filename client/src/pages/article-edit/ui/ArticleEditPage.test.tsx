@@ -1,12 +1,15 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
+import { combineReducers, configureStore, Reducer } from '@reduxjs/toolkit';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import theme from '../../../styles/theme';
+
 import ArticleEditPage from './ArticleEditPage';
 import authReducer from '../../../auth/authSlice';
+import { ApiSlice } from '../../../api/apiSlice';
+
 import { useGetPostsQuery, useUpdatePostMutation } from '../../../api/apiSlice';
 import { useToast } from '../../../shared/lib/toast';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -14,6 +17,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 jest.mock('../../../api/apiSlice', () => ({
   useGetPostsQuery: jest.fn(),
   useUpdatePostMutation: jest.fn(),
+  ApiSlice: {
+    reducerPath: 'api',
+    reducer: (state = {}) => state,
+    middleware: () => (next: any) => (action: any) => next(action),
+  },
 }));
 
 jest.mock('../../../shared/lib/toast', () => ({
@@ -33,6 +41,7 @@ jest.mock('react-i18next', () => ({
 jest.mock('../../../components/Editor/Editor', () => () => (
   <div data-testid='editor'>Editor</div>
 ));
+
 jest.mock('../../../pages/ForbiddenPage/ui/ForbiddenPage', () => () => (
   <div data-testid='forbidden'>Forbidden</div>
 ));
@@ -47,12 +56,18 @@ const mockShowError = jest.fn();
   showError: mockShowError,
 });
 
-const createTestStore = (preloadedState?: Partial<{ auth: any }>) =>
+const mockApiReducer = (state = {}) => state;
+
+const rootReducer = combineReducers({
+  auth: authReducer,
+  api: mockApiReducer,
+});
+
+export const createTestStore = (preloadedState?: any) =>
   configureStore({
-    reducer: {
-      auth: authReducer,
-    },
+    reducer: rootReducer,
     preloadedState,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
   });
 
 describe('ArticleEditPage', () => {
@@ -63,10 +78,12 @@ describe('ArticleEditPage', () => {
 
   it('renders editor when user can edit', () => {
     const post = { _id: '123', title: 'Hello', excerpt: 'World', author: 'u1' };
+
     (useGetPostsQuery as jest.Mock).mockReturnValue({
       data: [post],
       isLoading: false,
     });
+
     (useUpdatePostMutation as jest.Mock).mockReturnValue([jest.fn()]);
 
     render(
@@ -87,8 +104,8 @@ describe('ArticleEditPage', () => {
     expect(screen.getByTestId('editor')).toBeInTheDocument();
   });
 
-  it('calls updatePost and navigates on save', async () => {
-    const post = { _id: '123', title: 'Title', excerpt: 'Text', author: 'u1' };
+  it('updates post and redirects', async () => {
+    const post = { _id: '123', title: 'A', excerpt: 'B', author: 'u1' };
     const mockUpdate = jest
       .fn()
       .mockReturnValue({ unwrap: () => Promise.resolve({}) });
@@ -116,8 +133,10 @@ describe('ArticleEditPage', () => {
     fireEvent.click(screen.getByText('buttons.save'));
 
     await waitFor(() => {
-      expect(mockUpdate).toHaveBeenCalled();
-      expect(mockShowInfo).toHaveBeenCalledWith('articleEdit.updated');
+      expect(mockUpdate).toHaveBeenCalledWith({
+        id: '123',
+        data: { title: 'A', excerpt: 'B' },
+      });
       expect(mockNavigate).toHaveBeenCalledWith('/article_read/123');
     });
   });

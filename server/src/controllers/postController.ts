@@ -19,6 +19,7 @@ export const getPosts = async (req: Request, res: Response) => {
         : { date: -1 as SortOrder, likes: -1 as SortOrder };
 
     const total = await Post.countDocuments(filter);
+
     const posts = await Post.find(filter)
       .sort(sortObj)
       .skip((page - 1) * limit)
@@ -47,17 +48,21 @@ export const createPost = async (req: Request, res: Response) => {
       return res.status(401).json({ message: 'Unauthorized' });
     }
 
-    const user = await User.findById(req.user?.id).select('username');
+    const user = await User.findById(req.user.id).select('username avatar');
+
     if (!user) return res.status(404).json({ message: 'User not found' });
 
     const parsed = postCreateSchema.parse(req.body);
+
     const newPost = new Post({
       ...parsed,
       author: user.username,
+      authorAvatar: user.avatar ? `/uploads/${user.avatar}` : '',
       userId: req.user.id,
     });
 
     const saved = await newPost.save();
+
     res.status(201).json(saved);
   } catch (err) {
     if (err instanceof Error) {

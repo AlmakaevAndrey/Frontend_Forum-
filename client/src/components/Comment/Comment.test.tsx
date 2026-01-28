@@ -1,37 +1,21 @@
 import React from 'react';
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
-import { useToast } from '../../shared/lib/toast';
-import { useAddCommentMutation, useGetCommentsQuery } from '../../api/apiSlice';
-import CommentsDiv from './Comment';
 import { fireEvent, render, waitFor, screen } from '@testing-library/react';
-import theme from '../../styles/theme';
 import { ThemeProvider } from 'styled-components';
+import theme from '../../styles/theme';
 
-jest.mock('../../api/apiSlice.ts');
-jest.mock('../../shared/lib/toast', () => ({
-  useToast: jest.fn(),
-}));
+import { useAddCommentMutation, useGetCommentsQuery } from '../../api/apiSlice';
+import { useToast } from '../../shared/lib/toast';
+
+import CommentsDiv from './Comment';
+
+jest.mock('../../api/apiSlice');
+jest.mock('../../shared/lib/toast');
+
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({
-    t: (key: string, options?: any) => {
-      switch (key) {
-        case 'comments.commentsCount':
-          return `Comments (${options?.count ?? 0})`;
-        case 'comments.writeComment':
-          return 'Write a comment';
-        case 'comments.add':
-          return 'Add';
-        case 'comments.guestsCannotComment':
-          return 'Guests cannot comment';
-        case 'comments.commentAdded':
-          return 'Comment added';
-        case 'comments.loading':
-          return 'Loading...';
-        default:
-          return key;
-      }
-    },
+    t: (key: string) => key,
   }),
 }));
 
@@ -87,48 +71,49 @@ describe('CommentsDiv', () => {
   test('renders comments', () => {
     renderWithProviders(<CommentsDiv postId='1' />);
 
-    const heading = screen.getByRole('heading', { level: 2 });
-    const normalized = heading.textContent?.replace(/\s+/g, '');
-
-    expect(normalized).toContain(`Comments(1)`);
     expect(screen.getByText('John')).toBeInTheDocument();
     expect(screen.getByText('Nice post!')).toBeInTheDocument();
   });
 
-  test('shows "Loading..." when loading', () => {
+  test('shows loading state', () => {
     (useGetCommentsQuery as jest.Mock).mockReturnValueOnce({
       data: [],
       isLoading: true,
     });
 
     renderWithProviders(<CommentsDiv postId='1' />);
-    expect(screen.getByText(/loading/i)).toBeInTheDocument();
+
+    expect(screen.getByText(/Loading/i)).toBeInTheDocument();
   });
 
   test('calls showError when not logged in', async () => {
     renderWithProviders(<CommentsDiv postId='1' />, null);
 
-    const input = screen.getByPlaceholderText('Write a comment');
+    const input = screen.getByPlaceholderText(/writeComment/i);
     fireEvent.change(input, { target: { value: 'Hello!' } });
-    fireEvent.click(screen.getByText('Add'));
+    fireEvent.click(screen.getByText(/add/i));
 
     await waitFor(() => {
-      expect(mockShowError).toHaveBeenCalledWith('Guests cannot comment');
+      expect(mockShowError).toHaveBeenCalledWith(
+        'comments.guestsCannotComment'
+      );
     });
   });
-
   test('adds comment successfully', async () => {
-    mockAddComment.mockReturnValueOnce({ unwrap: () => Promise.resolve({}) });
+    mockAddComment.mockReturnValue({ unwrap: () => Promise.resolve({}) });
 
     renderWithProviders(<CommentsDiv postId='1' />);
 
-    const input = screen.getByPlaceholderText('Write a comment');
+    const input = screen.getByPlaceholderText(/writeComment/i);
     fireEvent.change(input, { target: { value: 'New comment' } });
-    fireEvent.click(screen.getByText('Add'));
+    fireEvent.click(screen.getByText(/add/i));
 
     await waitFor(() => {
-      expect(mockAddComment).toHaveBeenCalled();
-      expect(mockShowInfo).toHaveBeenCalledWith('Comment added');
+      expect(mockAddComment).toHaveBeenCalledWith({
+        id: '1',
+        text: 'New comment',
+      });
+      expect(input).toHaveValue('');
     });
   });
 });

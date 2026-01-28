@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
 export const MyCustomButton = styled.button`
-  width: 80px;
-  padding: 0 4px;
+  width: 90px;
+  padding: 0 6px;
   height: 36px;
   border-radius: 20px;
   font-weight: 500;
@@ -31,5 +31,9 @@ export const MyCustomButton = styled.button`
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+  }
+  @media (max-width: 420px) {
+    font-size: 14px;
+    width: 80px;
   }
 `;

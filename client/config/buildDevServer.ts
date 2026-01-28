@@ -10,7 +10,7 @@ export function buildDevServer(option: BuildOptions): DevServerConfiguration {
     hot: true,
     proxy: [
       {
-        context: ['/auth', '/posts', '/comments', '/user'],
+        context: ['/auth', '/posts', '/comments', '/user', '/memes', 'uploads'],
         target: 'http://localhost:5000',
         changeOrigin: true,
         secure: false,

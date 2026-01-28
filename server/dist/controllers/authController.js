@@ -14,9 +14,12 @@ const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '1h';
 const register = async (req, res) => {
     try {
         const parsed = validators_1.registerSchema.parse(req.body);
-        const exists = await User_1.default.findOne({ email: parsed.email });
-        if (exists)
+        const existsEmail = await User_1.default.findOne({ email: parsed.email });
+        if (existsEmail)
             return res.status(400).json({ message: 'Email already in use' });
+        const existsUsername = await User_1.default.findOne({ username: parsed.username });
+        if (existsUsername)
+            return res.status(400).json({ message: 'Username already in use' });
         const user = new User_1.default(parsed);
         await user.save();
         const token = jsonwebtoken_1.default.sign({
@@ -24,9 +27,7 @@ const register = async (req, res) => {
             username: user.username,
             role: user.role,
             avatar: user.avatar,
-        }, JWT_SECRET, {
-            expiresIn: JWT_EXPIRES_IN,
-        });
+        }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
         res.cookie('token', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
@@ -39,6 +40,10 @@ const register = async (req, res) => {
         });
     }
     catch (err) {
+        if (err.code === 11000) {
+            const field = Object.keys(err.keyValue)[0];
+            return res.status(400).json({ message: `${field} already in use` });
+        }
         res.status(400).json({ message: err?.message || 'Validation failed' });
     }
 };
