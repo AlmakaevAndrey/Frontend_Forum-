@@ -6,6 +6,7 @@
   <img src="https://img.shields.io/badge/Webpack-Custom-orange" />
   <img src="https://img.shields.io/badge/Express-Node-green" />
   <img src="https://img.shields.io/badge/MongoDB-Atlas-darkgreen" />
+  <img src="https://img.shields.io/badge/Cloudinary-blue" />
 </p>
 
 <p align="center">
