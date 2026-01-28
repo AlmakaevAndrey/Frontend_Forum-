@@ -80,7 +80,10 @@ describe('FeedPage', () => {
       isError: false,
     });
 
-    (useAddMemeMutation as jest.Mock).mockReturnValue([jest.fn()]);
+    (useAddMemeMutation as jest.Mock).mockReturnValue([
+      jest.fn(),
+      { isLoading: false },
+    ]);
   });
 
   it('renders loading state', () => {
