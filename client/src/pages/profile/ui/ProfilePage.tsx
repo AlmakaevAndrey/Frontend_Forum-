@@ -127,7 +127,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
               width={100}
             />
           ) : (
-            <span>👨‍💻</span>
+            <S.Span>👨‍💻 </S.Span>
           )}
 
           <S.Input type='file' accept='image/*' onChange={selectAvatarChange} />
@@ -136,6 +136,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
           </MyCustomButton>
         </S.AvatarWrapper>
         <S.MyParagraph>
+          <S.Span>👤 </S.Span>
           {t('profile.username')}: {user?.username}
         </S.MyParagraph>
         <S.AvatarWrapper>
@@ -146,11 +147,13 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
           <MyButton onClick={handleUpdateUser}>{t('profile.change')}</MyButton>
         </S.AvatarWrapper>
         <S.MyParagraph>
-          📩{t('profile.email')}: {user?.email}
+          <S.Span>📩 </S.Span>
+          {t('profile.email')}: {user?.email}
         </S.MyParagraph>
         {/* Нужно сделать аватар с функционалом */}
         <S.MyParagraph>
-          👤{t('profile.role')}: {user?.role}
+          <S.Span>🔑 </S.Span>
+          {t('profile.role')}: {user?.role}
         </S.MyParagraph>
       </S.ProfileCard>
 

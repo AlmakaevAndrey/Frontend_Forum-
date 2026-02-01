@@ -39,7 +39,7 @@ export const Excerpt = styled.p`
 
 export const SpanItem = styled.span`
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 6px;
   white-space: normal;
 
@@ -55,12 +55,16 @@ export const SpanItem = styled.span`
   }
 `;
 
+export const Span = styled.span`
+  font-size: 22px;
+  display: flex;
+`;
+
 export const Footer = styled.div`
   display: flex;
   justify-content: space-between;
   font-size: 16px;
   color: ${({ theme }) => theme.colors.text};
-  
 
   @media (max-width: 560px) {
     display: flex;
@@ -71,7 +75,7 @@ export const Footer = styled.div`
 
   span {
     display: flex;
-    align-items: center;/
+    align-items: center;
     gap: 4px;
 
     first:child {

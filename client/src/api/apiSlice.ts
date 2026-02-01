@@ -4,10 +4,11 @@ import { NavigateFunction } from 'react-router-dom';
 import { Comment, Post } from '../components/Post/types';
 import { User } from '../components/User1/userTypes';
 import { logout } from '../auth/authSlice';
-import { Meme } from 'components/Meme/memeTypes';
+import { Meme } from '../components/Meme/memeTypes';
+import { getBaseUrl } from '../utils/resolveApiUrl';
 
 const axiosBaseQuery =
-  ({ baseUrl, navigate }: { baseUrl: string; navigate?: NavigateFunction }) =>
+  ({ navigate }: { navigate?: NavigateFunction }) =>
   async ({
     url,
     method,
@@ -21,6 +22,8 @@ const axiosBaseQuery =
   }) => {
     try {
       const token = localStorage.getItem('token');
+      const baseUrl = getBaseUrl();
+
       const result = await axios({
         url: baseUrl + url,
         method,
@@ -56,14 +59,14 @@ const axiosBaseQuery =
   };
 
 // const API_URL = (process.env.REACT_APP_API_URL as string) ?? '/';
-const API_URL =
-  process.env.REACT_APP_API_URL === '/' || !process.env.REACT_APP_API_URL
-    ? ''
-    : process.env.REACT_APP_API_URL;
+// const API_URL =
+//   process.env.REACT_APP_API_URL === '/' || !process.env.REACT_APP_API_URL
+//     ? ''
+//     : process.env.REACT_APP_API_URL;
 
 export const ApiSlice = createApi({
   reducerPath: 'api',
-  baseQuery: axiosBaseQuery({ baseUrl: API_URL }),
+  baseQuery: axiosBaseQuery({}),
   tagTypes: ['Posts', 'Auth', 'Comments', 'User', 'Meme'],
   endpoints: (builder) => ({
     register: builder.mutation<
@@ -162,12 +165,9 @@ export const ApiSlice = createApi({
         url: '/upload/update',
         method: 'put',
         data: formData,
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
-          'Content-Type': 'multipart/form-data',
-        },
+        withCredentials: true,
       }),
-      invalidatesTags: ['Auth'],
+      invalidatesTags: ['Auth', 'User'],
     }),
 
     getUsers: builder.query<User[], void>({

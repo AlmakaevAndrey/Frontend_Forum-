@@ -1,6 +1,5 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { useTranslation } from 'react-i18next';
 import { UserCard } from './UserCard';
 import { User } from '../userTypes';
 
@@ -10,11 +9,20 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-jest.mock('./UserCard.styles', () => ({
-  Card: (props: any) => <div data-testid='card'>{props.children}</div>,
-  Title: (props: any) => <h1 data-testid='title'>{props.children}</h1>,
-  SpanItem: (props: any) => <span data-testid='span'>{props.children}</span>,
-}));
+jest.mock('./UserCard.styles', () => {
+  const React = require('react');
+  return new Proxy(
+    {},
+    {
+      get: (_, prop) => (props: any) =>
+        React.createElement(
+          'div',
+          { 'data-testid': prop, ...props },
+          props.children
+        ),
+    }
+  );
+});
 
 describe('UserCard', () => {
   const mockUser: User = {
@@ -28,31 +36,33 @@ describe('UserCard', () => {
 
   it('renders without crashing', () => {
     render(<UserCard user={mockUser} />);
-    expect(screen.getByTestId('card')).toBeInTheDocument();
+    expect(screen.getByTestId('Card')).toBeInTheDocument();
   });
 
   it('displays the title with translation key', () => {
     render(<UserCard user={mockUser} />);
-    expect(screen.getByTestId('title')).toHaveTextContent('common.user');
+    expect(screen.getByTestId('Title')).toHaveTextContent('common.user');
   });
 
   it('renders user data correctly', () => {
     render(<UserCard user={mockUser} />);
-    const spans = screen.getAllByTestId('span');
 
-    expect(spans[0]).toHaveTextContent('avatar.png');
-    expect(spans[1]).toHaveTextContent('admin');
-    expect(spans[2]).toHaveTextContent('user@example.com');
-    expect(spans[3]).toHaveTextContent('testUser');
+    expect(screen.getAllByTestId('SpanItem')[0]).toHaveTextContent('admin');
+
+    expect(screen.getByTestId('Email')).toHaveTextContent('user@example.com');
+
+    expect(screen.getAllByTestId('SpanItem')[1]).toHaveTextContent('testUser');
   });
 
   it('renders "-" when user fields are empty', () => {
     const emptyUser = { avatar: '', role: '', email: '', username: '' };
     render(<UserCard user={emptyUser as User} />);
-    const spans = screen.getAllByTestId('span');
 
-    spans.forEach((span) => {
-      expect(span).toHaveTextContent('-');
+    const spanItems = screen.getAllByTestId('SpanItem');
+    spanItems.forEach((el) => {
+      expect(el).toHaveTextContent('-');
     });
+
+    expect(screen.getByTestId('Email')).toHaveTextContent('-');
   });
 });
