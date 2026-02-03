@@ -144,7 +144,7 @@
 
   "profile": {
     "title": "Профиль пользователя",
-    "username": "Имя пользователя",
+    "username": "Логин",
     "email": "Email",
     "role": "Роль",
     "change": "Сменить",

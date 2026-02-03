@@ -5,7 +5,6 @@ import { useLikePostMutation } from '../../../api/apiSlice';
 import { useTranslation } from 'react-i18next';
 import DOMPurify from 'dompurify';
 import { formatText } from '../../../utils/formatText';
-import dotenv from 'dotenv';
 
 interface PostProps {
   post: Post;
@@ -47,19 +46,20 @@ export const PostCard = memo(({ post, onClick }: PostProps) => {
               style={{ width: 30, height: 30, borderRadius: '50%' }}
             />
           ) : (
-            '👨‍💻'
+            <S.Span>👨‍💻 </S.Span>
           )}
           {post.author}
         </S.SpanItem>
         <S.SpanItem data-testid='span-item'>
-          📅
+          <S.Span>📅 </S.Span>
           {dateFormatted}
         </S.SpanItem>
         <S.SpanItem
           onClick={handleLikes}
           data-testid={`like-button-${post._id}`}
         >
-          🩷 {post.likes?.length ?? 0}
+          <S.Span>🩷 </S.Span>
+          {post.likes?.length ?? 0}
         </S.SpanItem>
       </S.Footer>
     </S.Card>

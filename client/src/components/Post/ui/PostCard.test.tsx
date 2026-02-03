@@ -21,6 +21,7 @@ jest.mock('./PostCard.styles', () => ({
   Excerpt: (props: any) => <p data-testid='excerpt' {...props} />,
   Footer: (props: any) => <div data-testid='footer' {...props} />,
   SpanItem: (props: any) => <span data-testid='span-item' {...props} />,
+  Span: (props: any) => <span {...props} />,
 }));
 
 describe('PostCard component', () => {
@@ -68,11 +69,12 @@ describe('PostCard component', () => {
     }).format(new Date(mockPost.date));
 
     expect(screen.getAllByTestId('span-item')[1]).toHaveTextContent(
-      `📅${formattedDate}`
+      `📅 ${formattedDate}`
     );
 
-    const likeElement = screen.queryByText(/🩷/);
-    expect(likeElement).toHaveTextContent('🩷 1');
+    const likeButton = screen.getByTestId(`like-button-${mockPost._id}`);
+    expect(likeButton).toHaveTextContent('🩷');
+    expect(likeButton).toHaveTextContent('1');
   });
 
   it('calls onClick when card is clicked', () => {

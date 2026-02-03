@@ -22,6 +22,20 @@ export const Title = styled.h3`
   color: ${({ theme }) => theme.colors.text};
 `;
 
+export const Avatar = styled.img`
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid ${({ theme }) => theme.colors.primary};
+`;
+
+export const Info = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+`;
+
 export const SpanItem = styled.span`
   display: flex;
   align-items: center;
@@ -38,4 +52,22 @@ export const SpanItem = styled.span`
   &:hover {
     color: ${({ theme }) => theme.colors.primary || '#007bff'};
   }
+`;
+
+export const Email = styled.span`
+  max-width: 240px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+`;
+
+export const Row = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+`;
+
+export const Label = styled.span`
+  opacity: 0.6;
 `;

@@ -74,6 +74,11 @@ export const ProfileCard = styled.div<ProfileProps>`
     padding: 10px 20px;
   }
 
+  @media (max-width: 400px) {
+    width: 296px;
+    padding: 10px 20px;
+  }
+
   div {
     display: flex;
     align-items: flex-start;
@@ -162,6 +167,10 @@ export const PostCard = styled.div<ProfileProps>`
     width: 330px;
     padding: 12px;
   }
+  @media (max-width: 400px) {
+    width: 300px;
+    padding: 12px;
+  }
 
   h3 {
     font-size: 1.25rem;
@@ -197,9 +206,12 @@ export const StyledButton = styled.button`
   }
 `;
 
+export const Span = styled.span`
+  font-size: 22px;
+`;
+
 export const AvatarWrapper = styled.div`
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 15px;
 `;
