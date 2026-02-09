@@ -11,23 +11,20 @@ import { Logo } from '../../assets/svg/Frontend_Forum';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../auth/authSlice';
 import { RootState } from 'api/store';
+import { useTranslation } from 'react-i18next';
 import Nav from '../../components/Nav/Nav';
 import BurgerIcon from '../../assets/svg/burger-menu-right-svgrepo-com.svg';
-import { useTranslation } from 'react-i18next';
+import { ThemeToggle } from '../ThemeToggle/ThemeToggle';
 
 interface HeaderProps {
   isDarkProps: boolean;
-  toggleTheme: () => void;
+  onThemeChange: (isDark: boolean) => void;
   handleLogout: () => void;
   handleLogin: () => void;
   children?: React.ReactNode;
 }
 
-const Header: React.FC<HeaderProps> = ({
-  isDarkProps,
-  toggleTheme,
-  children,
-}) => {
+const Header: React.FC<HeaderProps> = ({ isDarkProps, onThemeChange }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { token } = useSelector((state: RootState) => state.auth);
@@ -42,6 +39,7 @@ const Header: React.FC<HeaderProps> = ({
   const handleLogin = () => {
     navigate('/signup');
   };
+
   return (
     <HeaderWrapper>
       <HeaderDivider>
@@ -56,10 +54,7 @@ const Header: React.FC<HeaderProps> = ({
           ) : (
             <MyButton onClick={handleLogout}>{t('header.logout')}</MyButton>
           )}
-
-          <MyButton key={i18n.language} onClick={toggleTheme}>
-            {isDarkProps ? t('header.light') : t('header.dark')}
-          </MyButton>
+          <ThemeToggle onThemeChange={onThemeChange} />
           <Nav
             token={token}
             handleLogin={handleLogin}

@@ -13,6 +13,7 @@ const SignUnPage: React.FC = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const [register, { isLoading: isRegister }] = useRegisterMutation();
   const [login, { isLoading: isLoggingIn }] = useLoginMutation();
@@ -62,13 +63,23 @@ const SignUnPage: React.FC = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <S.SignUpInput
-          type='password'
-          placeholder={t('signUp.password')}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+        <S.InputWrapper>
+          <S.SignUpInput
+            type='password'
+            placeholder={t('signUp.password')}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          {password && (
+            <S.ShowButton
+              type='button'
+              onClick={() => setShowPassword((prev) => !prev)}
+            >
+              {showPassword ? '🙈' : '👁️'}
+            </S.ShowButton>
+          )}
+        </S.InputWrapper>
         <S.MySignUpButton disabled={isRegister || isLoggingIn}>
           {isRegister || isLoggingIn ? t('common.loading') : t('signUp.signUp')}
         </S.MySignUpButton>

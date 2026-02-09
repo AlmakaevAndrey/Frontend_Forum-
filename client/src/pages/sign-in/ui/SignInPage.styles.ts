@@ -49,6 +49,35 @@ export const SignInForm = styled.form`
   }
 `;
 
+export const InputWrapper = styled.div`
+  position: relative;
+  width: fit-content;
+`;
+
+export const ShowButton = styled.button`
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 20px;
+  width: 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  opacity: 0.5;
+  z-index: 2;
+
+  &:hover {
+    opacity: 1;
+  }
+`;
+
 export const SignInInput = styled.input`
   width: 400px;
   height: 40px;

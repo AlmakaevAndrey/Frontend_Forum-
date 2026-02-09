@@ -2,6 +2,8 @@ import styled, { useTheme } from 'styled-components';
 
 interface LogoProps {
   fillColor?: string;
+  type?: string;
+  'data-testid'?: string;
 }
 
 const StyledSVG = styled.svg`
@@ -10,12 +12,17 @@ const StyledSVG = styled.svg`
   }
 `;
 
-export const ArticleLogo: React.FC<LogoProps> = ({ fillColor }) => {
+export const ArticleLogo: React.FC<LogoProps> = ({
+  type,
+  fillColor,
+  'data-testid': dataTestId,
+}) => {
   const theme = useTheme();
 
   const color = fillColor || theme.colors.text;
   return (
     <StyledSVG
+      type={type}
       height='40px'
       width='40px'
       viewBox='0 0 512 512'

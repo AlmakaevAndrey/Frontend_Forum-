@@ -1,4 +1,5 @@
 import React, {
+  HtmlHTMLAttributes,
   Suspense,
   useCallback,
   useEffect,
@@ -63,13 +64,28 @@ const FeedPage: React.FC = () => {
         <S.SettingsForArticle>
           <S.Title>{t('feed.settingsTitle')}</S.Title>
           <S.WrapperForArticleDiv>
-            <S.InputInArticle
-              aria-label={t('post.searchSetting')}
-              type='text'
-              placeholder={t('common.searchPlaceholder')}
-              value={query}
-              onChange={handleQueryChange}
-            />
+            <S.InputWrapper>
+              <S.InputInArticle
+                aria-label={t('post.searchSetting')}
+                type='text'
+                placeholder={t('common.searchPlaceholder')}
+                value={query}
+                onChange={handleQueryChange}
+              />
+
+              {query && (
+                <S.ClearButton
+                  type='button'
+                  onClick={() =>
+                    handleQueryChange({
+                      target: { value: '' },
+                    } as React.ChangeEvent<HTMLInputElement>)
+                  }
+                >
+                  ❌
+                </S.ClearButton>
+              )}
+            </S.InputWrapper>
             <S.SelectInArticle onChange={handleSortChange}>
               <S.OptionInArticle value='date'>
                 {t('post.sortByDate')}

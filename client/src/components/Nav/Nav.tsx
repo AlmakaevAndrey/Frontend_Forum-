@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { t } from 'i18next';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../api/store';
-import { MyCustomButton } from '../../components/Button/Button.styles';
+import LanguageToggle from '../LanguageToggler/LanguageToggler';
 
 interface NavProps {
   token: string | null;
@@ -18,11 +18,10 @@ interface NavProps {
 const Nav: React.FC<NavProps> = ({ token, children }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { i18n } = useTranslation();
-
-  const { user, role } = useSelector((state: RootState) => state.auth);
+  const { role } = useSelector((state: RootState) => state.auth);
 
   const closeMenu = () => setIsOpen(false);
-  const currentLang = i18n.language === 'en' ? 'RU' : 'EN';
+  const currentLang = i18n.language === 'ru';
 
   return (
     <S.NavWrapper>
@@ -34,14 +33,11 @@ const Nav: React.FC<NavProps> = ({ token, children }) => {
       <S.Overlay data-testid='overlay' $isOpen={isOpen} onClick={closeMenu} />
 
       <S.Navigation $isOpen={isOpen}>
-        <MyCustomButton
+        <LanguageToggle
           data-testid='change-language'
-          onClick={() =>
-            i18n.changeLanguage(i18n.language === 'en' ? 'ru' : 'en')
-          }
-        >
-          {currentLang}
-        </MyCustomButton>
+          value={currentLang}
+          onChange={(val) => i18n.changeLanguage(val ? 'ru' : 'en')}
+        />
 
         <Link to='/' data-testid='link-home' onClick={closeMenu}>
           {t('header.home')}
@@ -69,7 +65,7 @@ const Nav: React.FC<NavProps> = ({ token, children }) => {
             data-testid='link-article-writing'
             onClick={closeMenu}
           >
-            <ArticleLogo />
+            <ArticleLogo type='checkbox' data-testid='toggle-theme' />
           </Link>
         )}
       </S.Navigation>

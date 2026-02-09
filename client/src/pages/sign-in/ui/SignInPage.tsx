@@ -10,6 +10,7 @@ const SignInPage: React.FC = () => {
   const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [login, { isLoading }] = useLoginMutation();
   const dispatch = useDispatch();
   const { showInfo, showError } = useToast();
@@ -29,6 +30,7 @@ const SignInPage: React.FC = () => {
     <S.ContentWrapper>
       <S.SignInForm action='action' onSubmit={handleLogin}>
         <S.TitleText>{t('signIn.title')}</S.TitleText>
+
         <S.SignInInput
           type='email'
           placeholder={t('common.email')}
@@ -36,13 +38,23 @@ const SignInPage: React.FC = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <S.SignInInput
-          type='password'
-          placeholder={t('signUp.password')}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+        <S.InputWrapper>
+          <S.SignInInput
+            type={showPassword ? 'text' : 'password'}
+            placeholder={t('signUp.password')}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          {password && (
+            <S.ShowButton
+              type='button'
+              onClick={() => setShowPassword((prev) => !prev)}
+            >
+              {showPassword ? '🙈' : '👁️'}
+            </S.ShowButton>
+          )}
+        </S.InputWrapper>
         <S.MySignInButton disabled={isLoading}>
           {isLoading ? t('common.loading') : t('signIn.signIn')}
         </S.MySignInButton>
