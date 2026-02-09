@@ -33,8 +33,8 @@ const Content = styled.main`
 `;
 
 const App: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
-  const [isDark, setIsDark] = useState(false);
   const dispatch = useDispatch();
+  const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
     dispatch(loadUser());
@@ -47,7 +47,7 @@ const App: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
       <AppContainer>
         <Header
           isDarkProps={isDark}
-          toggleTheme={() => setIsDark(!isDark)}
+          onThemeChange={setIsDark}
           handleLogout={function (): void {
             throw new Error('Function not implemented.');
           }}

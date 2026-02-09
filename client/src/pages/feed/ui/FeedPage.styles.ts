@@ -67,7 +67,7 @@ export const ContainerForArticle = styled.div`
 
 export const InputInArticle = styled.input`
   width: 600px;
-  padding: 10px 14px;
+  padding: 10px 40px 10px 12px;
   border: 2px solid ${({ theme }) => theme.colors.border};
   border-radius: 8px;
   font-size: 16px;
@@ -80,16 +80,45 @@ export const InputInArticle = styled.input`
 
   @media (max-width: 515px) {
     width: 200px;
-    padding: 10px 14px;
+    padding: 10px 40px 10px 12px;
   }
 
-  input:focus {
+  &:focus {
     border-color: #0070f3;
     box-shadow: 0 0 0 3px ${({ theme }) => theme.colors.border};
   }
 
-  input::placeholder {
+  &::placeholder {
     color: #888;
+  }
+`;
+
+export const InputWrapper = styled.div`
+  position: relative;
+  width: fit-content;
+`;
+
+export const ClearButton = styled.button`
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 20px;
+  width: 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  opacity: 0.5;
+  z-index: 2;
+
+  &:hover {
+    opacity: 1;
   }
 `;
 

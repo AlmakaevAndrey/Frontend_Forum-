@@ -9,6 +9,8 @@ export const NavWrapper = styled.div`
   display: flex;
   align-items: center;
   position: relative;
+  padding: 0 0 0 10px;
+
   z-index: 1000;
 `;
 
