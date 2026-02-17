@@ -198,7 +198,9 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
                 </S.PostCard>
               ))
             ) : (
-              <S.MyParagraph>{t('profile.noPosts')}</S.MyParagraph>
+              <S.MyParagraphOnCenter>
+                {t('profile.noPosts')}
+              </S.MyParagraphOnCenter>
             )}
           </>
         )}

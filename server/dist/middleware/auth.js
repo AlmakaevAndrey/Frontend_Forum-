@@ -9,11 +9,12 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 dotenv_1.default.config();
 const JWT_SECRET = process.env.JWT_SECRET || 'secret';
 const authenticate = (req, res, next) => {
-    const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
-    console.log('Token', token);
-    if (!token) {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return res.status(401).json({ message: 'No token provided' });
     }
+    const token = authHeader.split(' ')[1];
+    console.log('Token', token);
     try {
         const decoded = jsonwebtoken_1.default.verify(token, JWT_SECRET);
         req.user = decoded;

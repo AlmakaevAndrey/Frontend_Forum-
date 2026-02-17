@@ -91,9 +91,10 @@ export const Footer = styled.div`
 `;
 
 export const Overlay = styled.div`
-  position: absolute;
+  position: fixed;
   inset: 0;
   border-radius: 16px;
+  z-index: 999;
 
   background: rgba(0, 0, 0, 0.35);
   backdrop-filter: blur(6px);
@@ -102,4 +103,22 @@ export const Overlay = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+export const ModalImage = styled.img`
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+  transform: scale(0.9);
+  opacity: 0;
+  animation: fadeIn 0.2s forwards;
+
+  @keyframes fadeIn {
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
 `;

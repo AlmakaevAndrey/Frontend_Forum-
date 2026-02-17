@@ -3,7 +3,6 @@ import * as S from './MemeSlider.styled';
 import { Meme } from '../Meme/memeTypes';
 import MemeArticle from '../../components/Meme/MemeArticle';
 import { useAddMemeMutation } from '../../api/apiSlice';
-import { t } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import Loader from '../../components/Loader/Loader';
 

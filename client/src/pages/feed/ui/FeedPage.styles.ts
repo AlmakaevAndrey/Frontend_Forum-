@@ -34,11 +34,6 @@ export const SettingsForArticle = styled.div`
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease;
-
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 6px 20px ${({ theme }) => theme.colors.border};
-  }
 `;
 
 export const ContainerForArticle = styled.div`
@@ -58,11 +53,6 @@ export const ContainerForArticle = styled.div`
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease;
-
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 6px 20px ${({ theme }) => theme.colors.border};
-  }
 `;
 
 export const InputInArticle = styled.input`
@@ -173,11 +163,6 @@ export const ContainerForLinks = styled.div`
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease;
-
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 6px 20px ${({ theme }) => theme.colors.border};
-  }
 `;
 
 export const WrapperGridLinksList = styled.div`

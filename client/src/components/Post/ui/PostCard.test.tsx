@@ -62,11 +62,9 @@ describe('PostCard component', () => {
     expect(authorSpan).toHaveTextContent(mockPost.author);
     expect(authorSpan).toHaveTextContent('👨‍💻');
 
-    const formattedDate = new Intl.DateTimeFormat('en', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    }).format(new Date(mockPost.date));
+    const formattedDate = new Intl.DateTimeFormat('en').format(
+      new Date(mockPost.date)
+    );
 
     expect(screen.getAllByTestId('span-item')[1]).toHaveTextContent(
       `📅 ${formattedDate}`

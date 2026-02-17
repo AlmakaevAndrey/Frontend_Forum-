@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Meme } from './memeTypes';
 import * as S from './MemeArticle.styles';
 import { useTranslation } from 'react-i18next';
@@ -12,6 +12,8 @@ interface memeProps {
 
 export const MemeArticle: React.FC<memeProps> = ({ memes, disabled }) => {
   const [likeMeme] = usePostLikeOnMemeMutation();
+  const [openImage, setOpenImage] = useState<string | null>(null);
+
   const { t, i18n } = useTranslation();
 
   const handleLikes = async () => {
@@ -20,6 +22,14 @@ export const MemeArticle: React.FC<memeProps> = ({ memes, disabled }) => {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const openImgHandler = (url: string) => {
+    setOpenImage(url);
+  };
+
+  const closeImgHandler = () => {
+    setOpenImage(null);
   };
 
   if (!memes) return <Loader />;
@@ -32,10 +42,19 @@ export const MemeArticle: React.FC<memeProps> = ({ memes, disabled }) => {
 
   return (
     <S.MemeCard>
-      <S.MemeImg src={memes.imgURL} alt='meme' />
+      <S.MemeImg
+        src={memes.imgURL}
+        alt='meme'
+        onClick={() => openImgHandler(memes.imgURL)}
+      />
       {disabled && (
         <S.Overlay>
           <Loader />
+        </S.Overlay>
+      )}
+      {openImage && (
+        <S.Overlay onClick={closeImgHandler}>
+          <S.ModalImage src={openImage} alt='Full meme' />
         </S.Overlay>
       )}
       <S.Footer>

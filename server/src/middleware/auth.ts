@@ -23,11 +23,14 @@ export const authenticate = (
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
-  console.log('Token', token);
-  if (!token) {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({ message: 'No token provided' });
   }
+
+  const token = authHeader.split(' ')[1];
+  console.log('Token', token);
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET) as {

@@ -23,18 +23,21 @@ export const PostCard = memo(({ post, onClick }: PostProps) => {
     likePost(post._id);
   };
 
-  const dateFormatted = new Intl.DateTimeFormat(i18n.language, {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  }).format(new Date(post.date));
+  const getShortenedExcerpt = (excerpt: string, maxLength: number) =>
+    excerpt.length > maxLength ? excerpt.slice(0, maxLength) + '...' : excerpt;
+
+  const dateFormatted = new Intl.DateTimeFormat(i18n.language).format(
+    new Date(post.date)
+  );
 
   return (
     <S.Card onClick={onClick}>
       <S.Title>{post.title}</S.Title>
       <S.Excerpt
         dangerouslySetInnerHTML={{
-          __html: DOMPurify.sanitize(formatText(post.excerpt)),
+          __html: DOMPurify.sanitize(
+            formatText(getShortenedExcerpt(post.excerpt, 90))
+          ),
         }}
       />
       <S.Footer>

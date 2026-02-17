@@ -57,6 +57,20 @@ export const MyParagraph = styled.p`
     font-size: 16px;
   }
 `;
+export const MyParagraphOnCenter = styled.p`
+  font-size: 20px;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+
+  @media (max-width: 700px) {
+    font-size: 18px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 16px;
+  }
+`;
 
 export const ProfileCard = styled.div<ProfileProps>`
   background: ${({ variant, theme }) =>

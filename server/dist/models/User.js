@@ -45,6 +45,7 @@ exports.UserSchema = new mongoose_1.Schema({
     password: { type: String, required: true },
     role: { type: String, enum: ['admin', 'user', 'guest'], default: 'user' },
     avatar: { type: String, default: '' },
+    refreshToken: { type: String },
 });
 exports.UserSchema.pre('save', async function (next) {
     if (!this.isModified('password'))

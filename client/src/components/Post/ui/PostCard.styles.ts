@@ -6,9 +6,13 @@ export const Card = styled.div`
   background: ${({ theme }) => theme.colors.background};
   box-shadow: 0 2px 6px ${({ theme }) => theme.colors.border};
   display: flex;
+  justify-content: space-between;
   flex-direction: column;
   gap: 12px;
   cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 
   &:hover {
     transform: translateY(-4px);
