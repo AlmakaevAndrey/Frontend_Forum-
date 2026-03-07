@@ -5,6 +5,8 @@ import {
   useAddMemeMutation,
   useGetMemesQuery,
   useGetPostsQuery,
+  useGeneratePostMutation,
+  useAddPostMutation, // <-- добавили импорт
 } from '../../../api/apiSlice';
 import { useToast } from '../../../shared/lib/toast';
 import { BrowserRouter } from 'react-router-dom';
@@ -12,20 +14,26 @@ import { ThemeProvider } from 'styled-components';
 import theme from '../../../styles/theme';
 import { Post } from '../../../components/Post/types';
 
+// Мокаем API
 jest.mock('../../../api/apiSlice', () => ({
   useGetPostsQuery: jest.fn(),
   useGetMemesQuery: jest.fn(),
   useAddMemeMutation: jest.fn(),
+  useGeneratePostMutation: jest.fn(),
+  useAddPostMutation: jest.fn(), // <-- добавили мок
 }));
 
+// Мокаем тосты
 jest.mock('../../../shared/lib/toast', () => ({
   useToast: jest.fn(),
 }));
 
+// Мокаем i18next
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key }),
 }));
 
+// Мокаем PostList
 jest.mock('../../../components/PostList/ui/PostList', () => ({
   PostList: ({ posts }: { posts: Post[] }) => (
     <div data-testid='post-list'>
@@ -38,6 +46,7 @@ jest.mock('../../../components/PostList/ui/PostList', () => ({
 
 describe('FeedPage', () => {
   const mockShowError = jest.fn();
+  const mockAddPost = jest.fn(); // <-- добавили мок-функцию для useAddPostMutation
 
   const mockPosts: Post[] = [
     {
@@ -70,18 +79,34 @@ describe('FeedPage', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+
+    // Мокаем тост
     (useToast as jest.Mock).mockReturnValue({
       showError: mockShowError,
     });
 
+    // Мокаем мемы
     (useGetMemesQuery as jest.Mock).mockReturnValue({
       data: [],
       isLoading: false,
       isError: false,
     });
 
+    // Мокаем добавление мемов
     (useAddMemeMutation as jest.Mock).mockReturnValue([
       jest.fn(),
+      { isLoading: false },
+    ]);
+
+    // Мокаем генерацию постов
+    (useGeneratePostMutation as jest.Mock).mockReturnValue([
+      jest.fn(),
+      { isLoading: false },
+    ]);
+
+    // Мокаем добавление постов
+    (useAddPostMutation as jest.Mock).mockReturnValue([
+      mockAddPost,
       { isLoading: false },
     ]);
   });

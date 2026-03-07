@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, screen, fireEvent, within } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
@@ -10,6 +9,7 @@ import {
   useUpdateUserMutation,
   useGetPostsQuery,
   useUpdatePostMutation,
+  useDeletePostMutation,
 } from '../../../api/apiSlice';
 import authReducer, { AuthState } from '../../../auth/authSlice';
 import { Post } from '../../../components/Post/types';
@@ -30,6 +30,7 @@ const mockShowError = jest.fn();
 
 const mockUpdateUser = jest.fn();
 const mockUpdatePost = jest.fn();
+const mockDeletePost = jest.fn();
 
 (useUpdateUserMutation as jest.Mock).mockReturnValue([
   mockUpdateUser,
@@ -38,6 +39,11 @@ const mockUpdatePost = jest.fn();
 
 (useUpdatePostMutation as jest.Mock).mockReturnValue([
   mockUpdatePost,
+  { isLoading: false },
+]);
+
+(useDeletePostMutation as jest.Mock).mockReturnValue([
+  mockDeletePost,
   { isLoading: false },
 ]);
 

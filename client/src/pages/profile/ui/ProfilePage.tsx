@@ -34,7 +34,6 @@ export const ProfilePage: React.FC = () => {
   const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
 
-  // Выбор аватара
   const selectAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -43,7 +42,6 @@ export const ProfilePage: React.FC = () => {
     }
   };
 
-  // Обновление пользователя
   const handleUpdateUser = async () => {
     try {
       const formData = new FormData();
@@ -59,7 +57,6 @@ export const ProfilePage: React.FC = () => {
     }
   };
 
-  // Фильтр постов текущего пользователя
   const userPosts = useMemo<Post[]>(() => {
     if (!posts || !user?.id) return [];
     return posts.filter((p) => {
