@@ -1,46 +1,40 @@
-import { RootState } from '../../../api/store';
 import React, { useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../../../api/store';
+import * as S from './ProfilePage.styles';
+import MyButton from '../../../components/Button/Button';
 import { useToast } from '../../../shared/lib/toast';
+import DOMPurify from 'dompurify';
 import {
+  useDeletePostMutation,
   useGetPostsQuery,
   useUpdatePostMutation,
   useUpdateUserMutation,
 } from '../../../api/apiSlice';
-import * as S from './ProfilePage.styles';
-import MyButton from '../../../components/Button/Button';
-import { MyCustomButton } from '../../../components/Button/Button.styles';
 import { updateUserProfile } from '../../../auth/authSlice';
-import DOMPurify from 'dompurify';
-
 import { Post } from '../../../components/Post/types';
 import { useTranslation } from 'react-i18next';
 import { formatText } from '../../../utils/formatText';
 
-interface ProfilePageProps {
-  variant?: 'profile' | 'settings';
-}
-
-export const ProfilePage: React.FC<ProfilePageProps> = ({
-  variant = 'profile',
-}) => {
-  const { t } = useTranslation();
-  const { token, role, user } = useSelector((state: RootState) => state.auth);
+export const ProfilePage: React.FC = () => {
+  const { token, user } = useSelector((state: RootState) => state.auth);
   const { showInfo, showError } = useToast();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const { data: posts = [], isLoading, error } = useGetPostsQuery();
   const [updatePost] = useUpdatePostMutation();
+  const [deletePost] = useDeletePostMutation();
   const [updateUser, { isLoading: updating }] = useUpdateUserMutation();
 
   const [editingPostId, setEditingPostId] = useState<string | null>(null);
   const [editingTitle, setEditingTitle] = useState('');
   const [editingExcerpt, setEditingExcerpt] = useState('');
   const [editingUsername, setEditUsername] = useState(user?.username || '');
-
   const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
 
+  // Выбор аватара
   const selectAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -49,40 +43,34 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
     }
   };
 
+  // Обновление пользователя
   const handleUpdateUser = async () => {
     try {
       const formData = new FormData();
       formData.append('username', editingUsername);
-
-      if (selectedAvatar) {
-        formData.append('avatar', selectedAvatar);
-      }
-
+      if (selectedAvatar) formData.append('avatar', selectedAvatar);
       const response = await updateUser(formData).unwrap();
       dispatch(updateUserProfile(response.user));
-
       showInfo(t('profile.userUpdated'));
       setSelectedAvatar(null);
       setPreview(null);
-    } catch (error) {
+    } catch (err) {
       showError(t('profile.avatarUpdateError'));
     }
   };
 
+  // Фильтр постов текущего пользователя
   const userPosts = useMemo<Post[]>(() => {
     if (!posts || !user?.id) return [];
-
     return posts.filter((p) => {
       if (!p.author) return false;
-
       if (typeof p.author === 'object') {
         const authorObj = p.author as any;
         return authorObj._id === user.id || authorObj.id === user.id;
       }
-
       return p.author === user.username;
     });
-  }, [posts, user?.id, user?.username]);
+  }, [posts, user]);
 
   const handleEditClick = (post: Post) => {
     setEditingPostId(post._id);
@@ -98,24 +86,26 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
       }).unwrap();
       showInfo(t('profile.postUpdated'));
       setEditingPostId(null);
-    } catch (error) {
+    } catch {
       showError(t('profile.postUpdateError'));
     }
   };
 
-  const postExcerpt = (post: Post) => (
-    <p
-      dangerouslySetInnerHTML={{
-        __html: DOMPurify.sanitize(formatText(post.excerpt)),
-      }}
-    />
-  );
+  const handleDelete = async (id: string) => {
+    try {
+      await deletePost(id).unwrap();
+      showInfo(t('profile.postDeleted'));
+      setEditingPostId(null);
+    } catch {
+      showError(t('profile.postDeleteError'));
+    }
+  };
 
   if (!token) return <div>{t('profile.notAuthorized')}</div>;
 
   return (
     <S.ProfileWrapper>
-      <S.ProfileCard variant={variant}>
+      <S.ProfileCard variant='profile'>
         <S.Title>{t('profile.title')}</S.Title>
         <S.AvatarWrapper>
           {preview ? (
@@ -127,18 +117,20 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
               width={100}
             />
           ) : (
-            <S.Span>👨‍💻 </S.Span>
+            <S.Span>👨‍💻</S.Span>
           )}
 
           <S.Input type='file' accept='image/*' onChange={selectAvatarChange} />
-          <MyCustomButton onClick={handleUpdateUser} disabled={updating}>
+          <MyButton onClick={handleUpdateUser} disabled={updating}>
             {updating ? t('profile.loading') : t('profile.upload')}
-          </MyCustomButton>
+          </MyButton>
         </S.AvatarWrapper>
+
         <S.MyParagraph>
           <S.Span>👤 </S.Span>
           {t('profile.username')}: {user?.username}
         </S.MyParagraph>
+
         <S.AvatarWrapper>
           <S.Input
             value={editingUsername}
@@ -146,11 +138,11 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
           />
           <MyButton onClick={handleUpdateUser}>{t('profile.change')}</MyButton>
         </S.AvatarWrapper>
+
         <S.MyParagraph>
           <S.Span>📩 </S.Span>
           {t('profile.email')}: {user?.email}
         </S.MyParagraph>
-        {/* Нужно сделать аватар с функционалом */}
         <S.MyParagraph>
           <S.Span>🔑 </S.Span>
           {t('profile.role')}: {user?.role}
@@ -162,48 +154,54 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
         {isLoading && <S.MyParagraph>{t('profile.Loading')}</S.MyParagraph>}
         {error && <S.MyParagraph>{t('common.fetchError')}</S.MyParagraph>}
 
-        {!isLoading && !error && (
-          <>
-            {Array.isArray(userPosts) && userPosts.length > 0 ? (
-              userPosts.map((post) => (
-                <S.PostCard variant={variant} key={post._id}>
-                  <S.Wrapper>
-                    {editingPostId === post._id ? (
-                      <>
-                        <S.Input
-                          value={editingTitle}
-                          onChange={(e) => setEditingTitle(e.target.value)}
-                        />
-                        <textarea
-                          value={editingExcerpt}
-                          onChange={(e) => setEditingExcerpt(e.target.value)}
-                        ></textarea>
-                        <MyButton onClick={() => handleSave(post._id)}>
-                          {t('buttons.save')}
-                        </MyButton>
-                        <MyButton onClick={() => setEditingPostId(null)}>
-                          {t('buttons.cancel')}
-                        </MyButton>
-                      </>
-                    ) : (
-                      <>
-                        <S.MyPostTitle>{post.title}</S.MyPostTitle>
-                        {postExcerpt(post)}
-                        <MyButton onClick={() => handleEditClick(post)}>
-                          {t('profile.change')}
-                        </MyButton>
-                      </>
-                    )}
-                  </S.Wrapper>
-                </S.PostCard>
-              ))
-            ) : (
-              <S.MyParagraphOnCenter>
-                {t('profile.noPosts')}
-              </S.MyParagraphOnCenter>
-            )}
-          </>
+        {userPosts.length === 0 && !isLoading && !error && (
+          <S.MyParagraphOnCenter>{t('profile.noPosts')}</S.MyParagraphOnCenter>
         )}
+
+        {userPosts.map((post) => (
+          <S.PostCard key={post._id} variant='profile'>
+            {editingPostId === post._id ? (
+              <>
+                <S.Input
+                  value={editingTitle}
+                  onChange={(e) => setEditingTitle(e.target.value)}
+                />
+                <S.TextArea
+                  value={editingExcerpt}
+                  onChange={(e) => setEditingExcerpt(e.target.value)}
+                />
+                <div style={{ display: 'flex', gap: 10 }}>
+                  <MyButton onClick={() => handleSave(post._id)}>
+                    {t('buttons.save')}
+                  </MyButton>
+                  <MyButton onClick={() => setEditingPostId(null)}>
+                    {t('buttons.cancel')}
+                  </MyButton>
+                  <MyButton onClick={() => handleDelete(post._id)}>
+                    {t('buttons.delete')}
+                  </MyButton>
+                </div>
+              </>
+            ) : (
+              <>
+                <S.MyPostTitle>{post.title}</S.MyPostTitle>
+                <S.MyParagraph
+                  dangerouslySetInnerHTML={{
+                    __html: DOMPurify.sanitize(formatText(post.excerpt)),
+                  }}
+                />
+                <div style={{ display: 'flex', gap: 10 }}>
+                  <MyButton onClick={() => handleEditClick(post)}>
+                    {t('profile.change')}
+                  </MyButton>
+                  <MyButton onClick={() => handleDelete(post._id)}>
+                    {t('buttons.delete')}
+                  </MyButton>
+                </div>
+              </>
+            )}
+          </S.PostCard>
+        ))}
       </S.PostsSection>
     </S.ProfileWrapper>
   );

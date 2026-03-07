@@ -90,7 +90,9 @@
   "buttons": {
     "edit": "Edit",
     "cancel": "Cancel",
-    "save": "Save"
+    "save": "Save",
+    "delete": "Delete",
+    "confirm": "Confirm"
   },
 
   "messages": {
@@ -155,6 +157,9 @@
     "loading": "Loading...",
     "postsTitle": "My Posts",
     "noPosts": "You have no posts yet",
+    "confirmDelete": "Are you sure you want to delete this post?",
+    "postDeleteError": "Error deleting post",
+    "postDeleted": "Post deleted successfully",
     "edit": "Edit",
     "save": "Save",
     "cancel": "Cancel",

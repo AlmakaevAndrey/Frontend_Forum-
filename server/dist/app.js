@@ -13,6 +13,7 @@ const posts_1 = __importDefault(require("./routes/posts"));
 const upload_1 = __importDefault(require("./routes/upload"));
 const user_1 = __importDefault(require("./routes/user"));
 const memes_1 = __importDefault(require("./routes/memes"));
+const aiRoutes_1 = __importDefault(require("./routes/aiRoutes"));
 const path_1 = __importDefault(require("path"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
@@ -50,6 +51,7 @@ app.use('/auth', auth_1.default);
 app.use('/posts', posts_1.default);
 app.use('/upload', upload_1.default);
 app.use('/memes', memes_1.default);
+app.use('/ai', aiRoutes_1.default);
 if (process.env.NODE_ENV === 'production') {
     const clientBuildPath = path_1.default.join(__dirname, '../../client/build');
     if ((0, fs_1.existsSync)(clientBuildPath)) {

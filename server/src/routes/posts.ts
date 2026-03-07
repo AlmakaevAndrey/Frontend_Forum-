@@ -7,6 +7,7 @@ import {
   commentPost,
   commentGetPost,
   updatePost,
+  deletePost,
 } from '../controllers/postController';
 import { authenticate, authorize } from '../middleware/auth';
 
@@ -19,6 +20,7 @@ router.get('/:id/comments', authenticate, commentGetPost);
 router.post('/', authenticate, authorize('user', 'admin'), createPost);
 router.post('/:id/comments', authenticate, commentPost);
 router.patch('/:id/like', authenticate, likePost);
+router.delete('/:id', authenticate, authorize('user', 'admin'), deletePost);
 router.put('/:id', authenticate, updatePost);
 
 export default router;

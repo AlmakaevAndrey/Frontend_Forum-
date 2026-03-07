@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updatePost = exports.commentGetPost = exports.commentPost = exports.likePost = exports.createPost = exports.getPost = exports.getPosts = void 0;
+exports.updatePost = exports.commentGetPost = exports.commentPost = exports.likePost = exports.createPost = exports.deletePost = exports.getPost = exports.getPosts = void 0;
 const Post_1 = __importDefault(require("../models/Post"));
 const validators_1 = require("../utils/validators");
 const mongoose_1 = __importDefault(require("mongoose"));
@@ -43,6 +43,23 @@ const getPost = async (req, res) => {
     }
 };
 exports.getPost = getPost;
+const deletePost = async (req, res) => {
+    try {
+        const post = await Post_1.default.findById(req.params.id);
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+        if (post.author.toString() !== req.user.id && req.user.role !== 'admin') {
+            return res.status(403).json({ message: 'Forbidden' });
+        }
+        await post.deleteOne();
+        res.json({ success: true, message: 'Post deleted' });
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+exports.deletePost = deletePost;
 const createPost = async (req, res) => {
     try {
         if (!req.user) {

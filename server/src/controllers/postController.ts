@@ -3,6 +3,7 @@ import Post from '../models/Post';
 import { postCreateSchema } from '../utils/validators';
 import mongoose, { SortOrder } from 'mongoose';
 import User, { IUser } from '../models/User';
+import { success } from 'zod';
 
 export const getPosts = async (req: Request, res: Response) => {
   try {
@@ -37,6 +38,24 @@ export const getPost = async (req: Request, res: Response) => {
     const post = await Post.findById(req.params.id);
     if (!post) return res.status(404).json({ message: 'Not found' });
     res.json(post);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+export const deletePost = async (req: Request, res: Response) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+    if (post.author.toString() !== req.user!.id && req.user!.role !== 'admin') {
+      return res.status(403).json({ message: 'Forbidden' });
+    }
+
+    await post.deleteOne();
+
+    res.json({ success: true, message: 'Post deleted' });
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
   }

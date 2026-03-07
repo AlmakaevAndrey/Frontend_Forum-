@@ -10,5 +10,6 @@ router.get('/:id/comments', auth_1.authenticate, postController_1.commentGetPost
 router.post('/', auth_1.authenticate, (0, auth_1.authorize)('user', 'admin'), postController_1.createPost);
 router.post('/:id/comments', auth_1.authenticate, postController_1.commentPost);
 router.patch('/:id/like', auth_1.authenticate, postController_1.likePost);
+router.delete('/:id', auth_1.authenticate, (0, auth_1.authorize)('user', 'admin'), postController_1.deletePost);
 router.put('/:id', auth_1.authenticate, postController_1.updatePost);
 exports.default = router;

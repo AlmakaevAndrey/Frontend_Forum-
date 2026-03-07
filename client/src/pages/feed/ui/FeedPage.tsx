@@ -1,6 +1,4 @@
 import React, {
-  HtmlHTMLAttributes,
-  Suspense,
   useCallback,
   useEffect,
   useMemo,
@@ -15,6 +13,7 @@ import { useToast } from '../../../shared/lib/toast';
 import { filteredAndSortPosts } from '../../../utils/postUtils';
 import { Loader } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import MemeGenerate from '../../../components/MemeGenerate/MemeGenerate';
 import MemeSlider from '../../../components/MemeSlider/MemeSlider';
 
 const categories: readonly string[] = [
@@ -103,6 +102,7 @@ const FeedPage: React.FC = () => {
           {isLoading && <Loader data-testid='loader-svg' />}
           {isError && <p>{t('post.errorLoadingPosts')}</p>}
           {!isLoading && !isError && <PostList posts={filteredPosts} />}
+          <MemeGenerate />
         </S.ContainerForArticle>
       </S.Section>
       <S.Section>

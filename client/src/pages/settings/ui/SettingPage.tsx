@@ -49,7 +49,7 @@ const SettingPage: React.FC<ProfilePageProps> = ({ variant = 'profile' }) => {
         </S.SidebarItem>
       </S.Sidebar>
       <S.Content>
-        {activeTab === 'profile' && <ProfilePage variant='settings' />}
+        {activeTab === 'profile' && <ProfilePage />}
         {activeTab === 'users' && (
           <>
             {users && users.length > 0 ? (

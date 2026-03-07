@@ -1,3 +1,4 @@
+import { success } from 'zod';
 import axios from 'axios';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { NavigateFunction } from 'react-router-dom';
@@ -113,6 +114,20 @@ export const ApiSlice = createApi({
       }),
       invalidatesTags: ['Posts'],
     }),
+
+    deletePost: builder.mutation<{ success: boolean; message: string }, string>(
+      {
+        query: (postId) => ({
+          url: `/posts/${postId}`,
+          method: 'delete',
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+          },
+        }),
+        invalidatesTags: ['Posts'],
+      }
+    ),
 
     getComments: builder.query<Comment[], string>({
       query: (postId) => ({
@@ -249,6 +264,20 @@ export const ApiSlice = createApi({
       },
       invalidatesTags: ['Meme'],
     }),
+
+    generatePost: builder.mutation<
+      { title: string; content: string },
+      { topic: string; difficulty: 'easy' | 'medium' | 'hard' }
+    >({
+      query: (body) => ({
+        url: '/ai/generate-post',
+        method: 'post',
+        data: body,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+        },
+      }),
+    }),
   }),
 });
 
@@ -256,6 +285,7 @@ export const {
   useRegisterMutation,
   useLoginMutation,
   useAddPostMutation,
+  useDeletePostMutation,
   useGetPostQuery,
   useGetPostsQuery,
   useGetUsersQuery,
@@ -269,4 +299,5 @@ export const {
   usePostLikeOnMemeMutation,
   usePostMemeMutation,
   useAddMemeMutation,
+  useGeneratePostMutation,
 } = ApiSlice;

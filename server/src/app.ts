@@ -8,6 +8,7 @@ import postsRoutes from './routes/posts';
 import uploadRoutes from './routes/upload';
 import usersRoutes from './routes/user';
 import memesRoutes from './routes/memes';
+import memesAiRoutes from './routes/aiRoutes';
 import path from 'path';
 
 dotenv.config();
@@ -59,6 +60,7 @@ app.use('/auth', authRoutes);
 app.use('/posts', postsRoutes);
 app.use('/upload', uploadRoutes);
 app.use('/memes', memesRoutes);
+app.use('/ai', memesAiRoutes);
 
 if (process.env.NODE_ENV === 'production') {
   const clientBuildPath = path.join(__dirname, '../../client/build');
