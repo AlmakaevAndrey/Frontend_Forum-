@@ -5,6 +5,7 @@ import {
   useAddPostMutation,
 } from '../../api/apiSlice';
 import Loader from '../../components/Loader/Loader';
+import { t } from 'i18next';
 
 const MemeGenerate: React.FC = () => {
   const [topic, setTopic] = useState('');
@@ -76,10 +77,12 @@ const MemeGenerate: React.FC = () => {
 
   return (
     <S.Wrapper>
+      <S.Title>{t('common.postGenerated')}</S.Title>
+
       <S.Input
         value={topic}
         onChange={(e) => setTopic(e.target.value)}
-        placeholder='Enter post topic...'
+        placeholder={t('common.enterMemeTopic')}
         disabled={isLoading || isSaving}
       />
 
@@ -104,7 +107,7 @@ const MemeGenerate: React.FC = () => {
         onClick={generateHandler}
         disabled={!topic.trim() || isLoading || isSaving}
       >
-        {isLoading ? <Loader /> : '✨ Generate with AI'}
+        {isLoading ? <Loader /> : t('common.generateMeme')}
       </S.AddMemeButton>
 
       {preview && (
@@ -114,11 +117,11 @@ const MemeGenerate: React.FC = () => {
 
           <S.ButtonGroup>
             <S.AddMemeButton onClick={saveHandler} disabled={isSaving}>
-              {isSaving ? <Loader /> : '💾 Save as Post'}
+              {isSaving ? <Loader /> : t('common.saveMeme')}
             </S.AddMemeButton>
 
             <S.CancelButton onClick={cancelHandler} disabled={isSaving}>
-              Cancel
+              {t('buttons.cancel')}
             </S.CancelButton>
           </S.ButtonGroup>
         </S.Preview>

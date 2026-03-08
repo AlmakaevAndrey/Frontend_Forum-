@@ -7,12 +7,14 @@ interface SidebarItemProps {
 export const SettingsWrapper = styled.div`
   display: flex;
   width: 100%;
-  margin: 100px;
-  background: ${({ theme }) => theme.colors.background};
+  min-height: 100vh;
+  margin: 0 auto; // центрируем горизонтально
+  background-color: ${({ theme }) => theme.colors.background};
   color: ${({ theme }) => theme.colors.text};
   transition:
     background 0.3s ease,
     color 0.3s ease;
+
   @media (max-width: 768px) {
     flex-direction: column;
   }
@@ -25,6 +27,7 @@ export const Sidebar = styled.aside`
   min-height: 100vh;
   background: ${({ theme }) => theme.colors.background};
   border-right: 1px solid ${({ theme }) => theme.colors.border};
+  margin: 80px 0 0 0;
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
   padding: 20px;
   gap: 10px;
@@ -76,7 +79,7 @@ export const Content = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
-  background: ${({ theme }) => theme.colors.primary};
+  background: ${({ theme }) => theme.colors.backgroundSecond};
   border-radius: 0 12px 12px 0;
   animation: fadeIn 0.4s ease;
 
@@ -94,5 +97,17 @@ export const Content = styled.div`
   @media (max-width: 768px) {
     border-radius: 0;
     padding: 20px;
+  }
+`;
+
+export const PostsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+  padding-bottom: 20px;
+
+  & > * {
+    width: 100%;
   }
 `;

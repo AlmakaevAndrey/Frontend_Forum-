@@ -106,6 +106,22 @@ export const CancelButton = styled(AddMemeButton)`
   }
 `;
 
+export const AddMemeWrapper = styled.div`
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  img {
+    max-width: 400px; // ограничиваем ширину
+    max-height: 400px; // ограничиваем высоту
+    width: auto;
+    height: auto;
+    border-radius: 8px;
+    object-fit: contain;
+  }
+`;
+
 export const Preview = styled.div`
   margin-top: 20px;
   padding: 20px;

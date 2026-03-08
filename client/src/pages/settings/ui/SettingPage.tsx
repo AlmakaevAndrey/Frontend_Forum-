@@ -1,7 +1,7 @@
 import ProfilePage from '../../../pages/profile/ui/ProfilePage';
 import React, { useEffect, useState } from 'react';
 import * as S from './SettingPage.styles';
-import { PostList } from '../../../components/PostList/ui/PostList';
+import { PostCard } from '../../../components/Post/ui/PostCard';
 import { UserList } from '../../../components/User/ui/UserList';
 import { useGetPostsQuery, useGetUsersQuery } from '../../../api/apiSlice';
 import { useToast } from '../../../shared/lib/toast';
@@ -59,7 +59,13 @@ const SettingPage: React.FC<ProfilePageProps> = ({ variant = 'profile' }) => {
             )}
           </>
         )}
-        {activeTab === 'posts' && <PostList posts={posts} />}
+        {activeTab === 'posts' && (
+          <S.PostsGrid>
+            {posts.map((post) => (
+              <PostCard key={post._id} post={post} />
+            ))}
+          </S.PostsGrid>
+        )}
       </S.Content>
     </S.SettingsWrapper>
   );

@@ -65,7 +65,12 @@
     "memes": "Meme",
     "addMeme": "Download",
     "selectFile": "Select a file",
-    "fileNotSelected": "File not selected"
+    "fileNotSelected": "File not selected",
+    "postGenerated": "🤖 Post generation with AI",
+    "memeGenerated": "😁 Meme generation with AI",
+    "generateMeme": "✨ Generate Meme",
+    "saveMeme": "💾 Save Meme",
+    "enterMemeTopic": "Enter meme topic..."
   },
 
   "editor": {

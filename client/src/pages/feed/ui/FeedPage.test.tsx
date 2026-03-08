@@ -6,7 +6,8 @@ import {
   useGetMemesQuery,
   useGetPostsQuery,
   useGeneratePostMutation,
-  useAddPostMutation, // <-- добавили импорт
+  useAddPostMutation,
+  useGenerateImageMemeMutation, // <-- импорт хука генерации мемов
 } from '../../../api/apiSlice';
 import { useToast } from '../../../shared/lib/toast';
 import { BrowserRouter } from 'react-router-dom';
@@ -20,7 +21,8 @@ jest.mock('../../../api/apiSlice', () => ({
   useGetMemesQuery: jest.fn(),
   useAddMemeMutation: jest.fn(),
   useGeneratePostMutation: jest.fn(),
-  useAddPostMutation: jest.fn(), // <-- добавили мок
+  useAddPostMutation: jest.fn(),
+  useGenerateImageMemeMutation: jest.fn(), // <-- добавлено
 }));
 
 // Мокаем тосты
@@ -46,7 +48,7 @@ jest.mock('../../../components/PostList/ui/PostList', () => ({
 
 describe('FeedPage', () => {
   const mockShowError = jest.fn();
-  const mockAddPost = jest.fn(); // <-- добавили мок-функцию для useAddPostMutation
+  const mockAddPost = jest.fn();
 
   const mockPosts: Post[] = [
     {
@@ -94,6 +96,12 @@ describe('FeedPage', () => {
 
     // Мокаем добавление мемов
     (useAddMemeMutation as jest.Mock).mockReturnValue([
+      jest.fn(),
+      { isLoading: false },
+    ]);
+
+    // Мокаем генерацию мемов
+    (useGenerateImageMemeMutation as jest.Mock).mockReturnValue([
       jest.fn(),
       { isLoading: false },
     ]);

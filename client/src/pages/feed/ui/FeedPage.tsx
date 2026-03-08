@@ -15,6 +15,7 @@ import { Loader } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import MemeGenerate from '../../../components/MemeGenerate/MemeGenerate';
 import MemeSlider from '../../../components/MemeSlider/MemeSlider';
+import ImageMemeGenerator from '../../../components/ImageMemeGenerator/ImageMemeGenerator';
 
 const categories: readonly string[] = [
   'docs',
@@ -109,6 +110,7 @@ const FeedPage: React.FC = () => {
         <S.SettingsForArticle>
           <S.Title>😂 {t('common.memes')}</S.Title>
           <MemeSlider memes={memes} />
+          <ImageMemeGenerator />
         </S.SettingsForArticle>
       </S.Section>
       <S.Section>

@@ -278,6 +278,24 @@ export const ApiSlice = createApi({
         },
       }),
     }),
+
+    generateImageMeme: builder.mutation<
+      {
+        image: string;
+        top: string;
+        bottom: string;
+      },
+      { topic: string; difficulty: 'easy' | 'medium' | 'hard' }
+    >({
+      query: (body) => ({
+        url: '/ai/generate-meme',
+        method: 'post',
+        data: body,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+        },
+      }),
+    }),
   }),
 });
 
@@ -300,4 +318,5 @@ export const {
   usePostMemeMutation,
   useAddMemeMutation,
   useGeneratePostMutation,
+  useGenerateImageMemeMutation,
 } = ApiSlice;

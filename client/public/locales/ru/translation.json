@@ -63,7 +63,12 @@
     "memes": "Мемы",
     "addMeme": "Загрузить",
     "selectFile": "Выберите файл",
-    "fileNotSelected": "Файл не выбран"
+    "fileNotSelected": "Файл не выбран",
+    "postGenerated": "🤖 Создания поста с поощью ИИ",
+    "memeGenerated": "😁 Создания мема с поощью ИИ",
+    "generateMeme": "✨ Создать Мем",
+    "saveMeme": "💾 Сохранить Мем",
+    "enterMemeTopic": "Введите тему для мема..."
   },
 
   "editor": {
