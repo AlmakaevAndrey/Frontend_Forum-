@@ -55,7 +55,7 @@ export const DifficultyButton = styled.button`
   transition: all 0.2s;
 
   &:hover:not(:disabled) {
-    background: ${({ theme }) => theme.colors.backgroundInput};
+    background: ${({ theme }) => theme.colors.secondary};
   }
 
   &.active {

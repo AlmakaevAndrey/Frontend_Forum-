@@ -113,7 +113,7 @@ export const generateMeme = async (req: Request, res: Response) => {
     ];
     const color = colors[Math.floor(Math.random() * colors.length)];
 
-    const fontSize = Math.floor(Math.random() * 21) + 10;
+    const fontSize = Math.floor(img.height / 30);
 
     const prompt = `
 You are a meme generator for programmers.
@@ -160,7 +160,7 @@ Bottom: meme bottom text
     const ctx = canvas.getContext('2d');
     ctx.drawImage(img, 0, 0);
 
-    ctx.font = `${fontSize}px Impact`;
+    ctx.font = `${fontSize}px sans-serif`;
     ctx.fillStyle = color.fill;
     ctx.strokeStyle = color.stroke;
     ctx.lineWidth = Math.ceil(fontSize / 15);
