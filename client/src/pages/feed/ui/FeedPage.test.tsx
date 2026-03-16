@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import FeedPage from './FeedPage';
 import {
@@ -7,7 +6,7 @@ import {
   useGetPostsQuery,
   useGeneratePostMutation,
   useAddPostMutation,
-  useGenerateImageMemeMutation, // <-- импорт хука генерации мемов
+  useGenerateImageMemeMutation,
 } from '../../../api/apiSlice';
 import { useToast } from '../../../shared/lib/toast';
 import { BrowserRouter } from 'react-router-dom';
@@ -22,7 +21,7 @@ jest.mock('../../../api/apiSlice', () => ({
   useAddMemeMutation: jest.fn(),
   useGeneratePostMutation: jest.fn(),
   useAddPostMutation: jest.fn(),
-  useGenerateImageMemeMutation: jest.fn(), // <-- добавлено
+  useGenerateImageMemeMutation: jest.fn(),
 }));
 
 // Мокаем тосты
@@ -44,6 +43,12 @@ jest.mock('../../../components/PostList/ui/PostList', () => ({
       ))}
     </div>
   ),
+}));
+
+// Мокаем Skeleton с data-testid
+jest.mock('../../../components/Skeleton/ui/Skeleton', () => ({
+  __esModule: true,
+  default: () => <div data-testid='skeleton'>Loading...</div>,
 }));
 
 describe('FeedPage', () => {
@@ -73,6 +78,7 @@ describe('FeedPage', () => {
       title: 'Test Post 2',
       excerpt: 'Another test post',
       author: 'Jane Smith',
+      authorAvatar: 'avatar.png',
       likes: [],
       date: '2025-11-04T10:00:00Z',
       comments: [],
@@ -82,37 +88,31 @@ describe('FeedPage', () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
-    // Мокаем тост
     (useToast as jest.Mock).mockReturnValue({
       showError: mockShowError,
     });
 
-    // Мокаем мемы
     (useGetMemesQuery as jest.Mock).mockReturnValue({
       data: [],
       isLoading: false,
       isError: false,
     });
 
-    // Мокаем добавление мемов
     (useAddMemeMutation as jest.Mock).mockReturnValue([
       jest.fn(),
       { isLoading: false },
     ]);
 
-    // Мокаем генерацию мемов
     (useGenerateImageMemeMutation as jest.Mock).mockReturnValue([
       jest.fn(),
       { isLoading: false },
     ]);
 
-    // Мокаем генерацию постов
     (useGeneratePostMutation as jest.Mock).mockReturnValue([
       jest.fn(),
       { isLoading: false },
     ]);
 
-    // Мокаем добавление постов
     (useAddPostMutation as jest.Mock).mockReturnValue([
       mockAddPost,
       { isLoading: false },
@@ -134,7 +134,7 @@ describe('FeedPage', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByTestId('loader-svg')).toBeInTheDocument();
+    expect(screen.getByTestId('skeleton')).toBeInTheDocument();
   });
 
   it('renders error state', () => {
