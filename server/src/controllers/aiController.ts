@@ -160,7 +160,7 @@ Bottom: meme bottom text
     const ctx = canvas.getContext('2d');
     ctx.drawImage(img, 0, 0);
 
-    ctx.font = `${fontSize}px sans-serif`;
+    ctx.font = `${fontSize}px Roboto`;
     ctx.fillStyle = color.fill;
     ctx.strokeStyle = color.stroke;
     ctx.lineWidth = Math.ceil(fontSize / 15);

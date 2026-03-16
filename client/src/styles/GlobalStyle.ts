@@ -7,6 +7,12 @@ html, body, #root {
     padding: 0;
 }
 
+@font-face {
+  font-family: 'Roboto';
+  src: url('/fonts/roboto-v49-latin-regular.woff2') format('woff2');
+  font-display: swap;
+}
+
 * {
     box-sizing: border-box;
 }

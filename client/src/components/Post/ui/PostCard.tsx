@@ -46,7 +46,9 @@ export const PostCard = memo(({ post, onClick }: PostProps) => {
             <img
               src={`${API_URL}${encodeURI(post.authorAvatar)}`}
               alt={post.author}
-              style={{ width: 30, height: 30, borderRadius: '50%' }}
+              width={30}
+              height={30}
+              style={{ borderRadius: '50%' }}
             />
           ) : (
             <S.Span>👨‍💻 </S.Span>

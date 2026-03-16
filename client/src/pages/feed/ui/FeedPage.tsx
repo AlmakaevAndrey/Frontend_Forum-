@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 import MemeGenerate from '../../../components/MemeGenerate/MemeGenerate';
 import MemeSlider from '../../../components/MemeSlider/MemeSlider';
 import ImageMemeGenerator from '../../../components/ImageMemeGenerator/ImageMemeGenerator';
+import Skeleton from '../../../components/Skeleton/ui/Skeleton';
 
 const categories: readonly string[] = [
   'docs',
@@ -30,7 +31,9 @@ const FeedPage: React.FC = () => {
   const [sort, setSort] = useState<'date' | 'likes'>('date');
 
   const { data: posts = [], isLoading, isError } = useGetPostsQuery();
-  const { data: memes = [] } = useGetMemesQuery();
+  const { data: memes = [] } = useGetMemesQuery(undefined, {
+    skip: !posts.length,
+  });
   const { showInfo, showError } = useToast();
   const prevState = useRef({ isLoading: false, isError: false });
 
@@ -100,9 +103,11 @@ const FeedPage: React.FC = () => {
       <S.Section>
         <S.ContainerForArticle>
           <S.Title>✍ {t('post.posts')}</S.Title>
-          {isLoading && <Loader data-testid='loader-svg' />}
+
+          {isLoading && <Skeleton />}
           {isError && <p>{t('post.errorLoadingPosts')}</p>}
           {!isLoading && !isError && <PostList posts={filteredPosts} />}
+
           <MemeGenerate />
         </S.ContainerForArticle>
       </S.Section>

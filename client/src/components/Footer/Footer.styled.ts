@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const FooterWrapper = styled.footer`
   width: 100%;
+  min-height: 80px;
   height: 80px;
   display: flex;
   flex-direction: row;

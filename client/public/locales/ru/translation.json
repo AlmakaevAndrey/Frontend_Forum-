@@ -64,8 +64,8 @@
     "addMeme": "Загрузить",
     "selectFile": "Выберите файл",
     "fileNotSelected": "Файл не выбран",
-    "postGenerated": "🤖 Создания поста с поощью ИИ",
-    "memeGenerated": "😁 Создания мема с поощью ИИ",
+    "postGenerated": "🤖 Создания поста с помощью ИИ",
+    "memeGenerated": "😁 Создания мема с помощью ИИ",
     "generateMeme": "✨ Создать Мем",
     "saveMeme": "💾 Сохранить Мем",
     "enterMemeTopic": "Введите тему для мема..."
