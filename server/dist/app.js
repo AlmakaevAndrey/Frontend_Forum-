@@ -17,10 +17,10 @@ const aiRoutes_1 = __importDefault(require("./routes/aiRoutes"));
 const path_1 = __importDefault(require("path"));
 const canvas_1 = require("canvas");
 dotenv_1.default.config();
-(0, canvas_1.registerFont)(path_1.default.join(__dirname, '../fonts/Roboto-Regular.ttf'), {
+(0, canvas_1.registerFont)(path_1.default.join(__dirname, '../src/fonts/roboto-v49-latin-200.woff2'), {
     family: 'Roboto',
 });
-(0, canvas_1.registerFont)(path_1.default.join(__dirname, '../fonts/Roboto-Bold.ttf'), {
+(0, canvas_1.registerFont)(path_1.default.join(__dirname, '../src/fonts/roboto-v49-latin-700.woff2'), {
     family: 'Roboto',
 });
 const app = (0, express_1.default)();

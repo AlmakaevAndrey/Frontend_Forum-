@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { Request, Response } from 'express';
 import cloudinary from '../config/cloudinary';
-import { createCanvas, loadImage } from 'canvas';
+import { createCanvas, loadImage, registerFont } from 'canvas';
+import path from 'path';
 
 interface GroqResponse {
   choices: Array<{
@@ -18,6 +19,9 @@ interface GroqResponse {
     };
   }>;
 }
+
+const fontPath = path.join(__dirname, '../fonts/roboto-v49-latin-200.woff2');
+registerFont(fontPath, { family: 'Roboto' });
 
 export const generatePost = async (req: Request, res: Response) => {
   if (!process.env.GROQ_API_KEY) {

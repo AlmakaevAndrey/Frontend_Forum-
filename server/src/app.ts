@@ -14,10 +14,10 @@ import { registerFont } from 'canvas';
 
 dotenv.config();
 
-registerFont(path.join(__dirname, '../fonts/Roboto-Regular.ttf'), {
+registerFont(path.join(__dirname, '../src/fonts/roboto-v49-latin-200.woff2'), {
   family: 'Roboto',
 });
-registerFont(path.join(__dirname, '../fonts/Roboto-Bold.ttf'), {
+registerFont(path.join(__dirname, '../src/fonts/roboto-v49-latin-700.woff2'), {
   family: 'Roboto',
 });
 

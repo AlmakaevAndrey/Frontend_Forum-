@@ -24,7 +24,7 @@ jest.mock('../../../api/apiSlice', () => ({
   useGenerateImageMemeMutation: jest.fn(),
 }));
 
-// Мокаем тосты
+// Мокаем тост
 jest.mock('../../../shared/lib/toast', () => ({
   useToast: jest.fn(),
 }));
