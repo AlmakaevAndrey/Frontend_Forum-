@@ -10,16 +10,8 @@ import usersRoutes from './routes/user';
 import memesRoutes from './routes/memes';
 import memesAiRoutes from './routes/aiRoutes';
 import path from 'path';
-import { registerFont } from 'canvas';
 
 dotenv.config();
-
-registerFont(path.join(__dirname, '../src/fonts/roboto-v49-latin-200.woff2'), {
-  family: 'Roboto',
-});
-registerFont(path.join(__dirname, '../src/fonts/roboto-v49-latin-700.woff2'), {
-  family: 'Roboto',
-});
 
 const app = express();
 

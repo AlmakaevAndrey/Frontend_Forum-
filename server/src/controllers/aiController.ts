@@ -20,8 +20,15 @@ interface GroqResponse {
   }>;
 }
 
-const fontPath = path.join(__dirname, '../fonts/roboto-v49-latin-200.woff2');
-registerFont(fontPath, { family: 'Roboto' });
+let fontFamily = 'sans-serif';
+
+try {
+  const fontPath = path.join(__dirname, '../assets/Roboto-Regular.ttf');
+  registerFont(fontPath, { family: 'Roboto' });
+  fontFamily = 'Roboto';
+} catch (e) {
+  console.warn('Font not found, fallback to system font');
+}
 
 export const generatePost = async (req: Request, res: Response) => {
   if (!process.env.GROQ_API_KEY) {
@@ -162,9 +169,10 @@ Bottom: meme bottom text
 
     const canvas = createCanvas(img.width, img.height);
     const ctx = canvas.getContext('2d');
+
     ctx.drawImage(img, 0, 0);
 
-    ctx.font = `${fontSize}px Roboto`;
+    ctx.font = `${fontSize}px ${fontFamily}`;
     ctx.fillStyle = color.fill;
     ctx.strokeStyle = color.stroke;
     ctx.lineWidth = Math.ceil(fontSize / 15);
